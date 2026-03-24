@@ -1,4 +1,7 @@
-
+/**
+ * Validates `Authorization: Bearer <access_token>` using Supabase Auth.
+ * Use the same JWT the Next.js app gets from `session.access_token` (see SupabaseAuthBridge).
+ */
 import { createClient } from '@supabase/supabase-js';
 import type { MiddlewareHandler } from 'hono';
 

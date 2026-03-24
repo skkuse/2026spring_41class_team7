@@ -1,6 +1,7 @@
 
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useApi } from '../../lib/api-context';
@@ -17,6 +18,7 @@ export default function BillingPage() {
   const paywallTargetRef = useRef<HTMLDivElement | null>(null);
 
   const api = useApi();
+  const { authToken } = api;
   const {
     loading,
     error: billingError,
@@ -120,11 +122,19 @@ export default function BillingPage() {
 
         <section className="rounded-xl border border-border bg-card p-5 space-y-3">
           <h2 className="text-xl font-semibold">API Provider (GET/POST)</h2>
-          <p className="text-sm text-muted-foreground">Set Supabase bearer token once, then all `api.get` and `api.post` include it.</p>
+          <p className="text-sm text-muted-foreground">
+            After you <Link href="/login" className="text-primary underline">sign in</Link>, the Supabase session access token is attached to every{' '}
+            <code className="text-xs">api.get</code> / <code className="text-xs">api.post</code> automatically. Override below only if you need to debug.
+          </p>
+          {authToken ? (
+            <p className="text-xs font-mono text-muted-foreground break-all">Active token: {authToken.slice(0, 24)}…</p>
+          ) : (
+            <p className="text-xs text-amber-400">No token yet — sign in or paste a JWT.</p>
+          )}
           <input
             value={tokenInput}
             onChange={(e) => setTokenInput(e.target.value)}
-            placeholder="Paste Supabase access token"
+            placeholder="Optional: paste access token (override)"
             className="w-full rounded border border-border bg-black/30 px-3 py-2"
           />
           <div className="flex gap-2 flex-wrap">

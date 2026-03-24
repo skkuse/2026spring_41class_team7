@@ -1,0 +1,29 @@
+{
+  "name": "api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "lint": "echo 'No lint configured for api'",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "latest",
+    "@prisma/client": "^6.19.2",
+    "@scalar/hono-api-reference": "latest",
+    "@supabase/supabase-js": "^2.100.0",
+    "@team7/contracts": "workspace:*",
+    "hono": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "prisma": "^6.19.2",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}

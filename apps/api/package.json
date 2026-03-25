@@ -8,6 +8,9 @@
     "prisma:migrate": "prisma migrate dev",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:fixtures": "node scripts/build-test-fixtures.mjs",
+    "test:resume:local": "node scripts/test-resume-parse-local.mjs",
     "lint": "echo 'No lint configured for api'",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -18,12 +21,18 @@
     "@supabase/supabase-js": "^2.100.0",
     "@team7/contracts": "workspace:*",
     "hono": "latest",
+    "mammoth": "^1.12.0",
+    "openai": "^6.32.0",
+    "pdf-parse": "^2.4.5",
     "zod": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
+    "jszip": "^3.10.1",
+    "pdf-lib": "^1.17.1",
     "prisma": "^6.19.2",
     "tsx": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vitest": "^4.1.1"
   }
 }

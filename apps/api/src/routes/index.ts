@@ -14,6 +14,10 @@ import { listInvoicesHandler } from './invoices/list-invoices.handler.js';
 import { listInvoicesRoute } from './invoices/list-invoices.route.js';
 import { getMeHandler } from './profile/get-me.handler.js';
 import { getMeRoute } from './profile/get-me.route.js';
+import { postProjectGithubHandler } from './ai-extract/post-project-github.handler.js';
+import { postProjectGithubRoute } from './ai-extract/post-project-github.route.js';
+import { postResumeParseHandler } from './ai-extract/post-resume-parse.handler.js';
+import { postResumeParseRoute } from './ai-extract/post-resume-parse.route.js';
 
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
@@ -23,4 +27,6 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getMeRoute, getMeHandler);
   app.openapi(listDocumentsRoute, listDocumentsHandler);
   app.openapi(listInvoicesRoute, listInvoicesHandler);
+  app.openapi(postResumeParseRoute, postResumeParseHandler);
+  app.openapi(postProjectGithubRoute, postProjectGithubHandler);
 };

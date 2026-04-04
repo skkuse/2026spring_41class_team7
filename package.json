@@ -6,9 +6,11 @@
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "jobclaw": "jobclaw"
   },
   "devDependencies": {
+    "jobclaw": "workspace:*",
     "turbo": "latest",
     "typescript": "latest"
   }

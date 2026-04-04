@@ -5,7 +5,7 @@
   --background: #0d0d0f;
   --foreground: #fafafa;
   --primary: #00e5ff;
-  --primary-foreground: #000000;
+  --primary-foreground: #050505;
   --secondary: #1e1e21;
   --secondary-foreground: #e4e4e7;
   --muted: #1e1e21;
@@ -16,21 +16,86 @@
   --card: #141416;
   --card-foreground: #fafafa;
   --border: #2c2c30;
+  --chart-1: #00e5ff;
+  --chart-2: #7b61ff;
+  --chart-3: #ff00aa;
+  --chart-4: #ffaa00;
+  --chart-5: #00ff94;
+  --input: #141416;
+  --popover: #141416;
+  --popover-foreground: #fafafa;
+  --ring: #00e5ff;
 }
 
-html, body {
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-input: var(--input);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-ring: var(--ring);
+}
+
+@keyframes onboarding-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-onboarding-enter {
+  animation: onboarding-enter 700ms ease-out forwards;
+}
+
+html,
+body {
   background: var(--background);
   color: var(--foreground);
 }
 
-body {
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+.font-heading {
+  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
 }
 
-.bg-background { background-color: var(--background); }
-.text-foreground { color: var(--foreground); }
-.text-muted-foreground { color: var(--muted-foreground); }
-.bg-card { background-color: var(--card); }
-.border-border { border-color: var(--border); }
-.bg-primary { background-color: var(--primary); }
-.text-primary { color: var(--primary); }
+/* Dashboard home (Geist / Space Grotesk / JetBrains / Playfair via layout CSS variables) */
+.font-home-sans {
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+}
+.font-home-heading {
+  font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+}
+.font-home-mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+}
+.font-home-serif {
+  font-family: var(--font-playfair), ui-serif, Georgia, serif;
+}
+
+.pb-nav-safe {
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+.pb-tabbar-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

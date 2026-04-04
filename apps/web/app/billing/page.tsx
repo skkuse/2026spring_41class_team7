@@ -123,7 +123,7 @@ export default function BillingPage() {
         <section className="rounded-xl border border-border bg-card p-5 space-y-3">
           <h2 className="text-xl font-semibold">API Provider (GET/POST)</h2>
           <p className="text-sm text-muted-foreground">
-            After you <Link href="/login" className="text-primary underline">sign in</Link>, the Supabase session access token is attached to every{' '}
+            After you <Link href="/onboarding" className="text-primary underline">sign in</Link>, the Supabase session access token is attached to every{' '}
             <code className="text-xs">api.get</code> / <code className="text-xs">api.post</code> automatically. Override below only if you need to debug.
           </p>
           {authToken ? (

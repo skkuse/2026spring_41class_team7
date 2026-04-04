@@ -7,6 +7,6 @@ export const meResponse200Schema = z.object({
   email: z.string().email().openapi({ example: 'hkang@dev.system' }),
   role: z.string().openapi({ example: 'Lead Platform Engineer' }),
   location: z.string().openapi({ example: 'Seoul, KR' }),
-  website: z.string().nullable().openapi({ example: 'https://signal.cv/hkang' }),
+  website: z.string().nullable().openapi({ example: 'https://jobscript.app/hkang' }),
   isPro: z.boolean().openapi({ example: true }),
 });

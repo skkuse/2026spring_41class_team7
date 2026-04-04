@@ -1,0 +1,93 @@
+{
+  "generatedAt": "2026-04-04T18:53:42.255Z",
+  "repoRoot": "/home/hskan/hskang9/2026spring_41class_team7",
+  "timeline": {
+    "start": "2026-03-25T10:20:50+09:00",
+    "end": "2026-03-25T10:20:50+09:00"
+  },
+  "agent1": {
+    "skills": [
+      "Databases / ORM",
+      "HTTP APIs",
+      "Monorepo tooling",
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Testing",
+      "TypeScript"
+    ],
+    "libraries": [
+      "@hono/zod-openapi",
+      "@iconify/react",
+      "@prisma/client",
+      "@revenuecat/purchases-js",
+      "@scalar/hono-api-reference",
+      "@supabase/ssr",
+      "@supabase/supabase-js",
+      "@tailwindcss/postcss",
+      "@team7/contracts",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "hono",
+      "ink",
+      "jszip",
+      "lucide-react",
+      "mammoth",
+      "next",
+      "openai",
+      "pdf-lib",
+      "pdf-parse",
+      "prisma",
+      "react",
+      "react-dom",
+      "tailwindcss",
+      "tsx",
+      "turbo",
+      "typescript",
+      "vitest",
+      "zod"
+    ],
+    "manifests": {
+      "packageJson": [
+        "/home/hskan/hskang9/2026spring_41class_team7/apps/api/package.json",
+        "/home/hskan/hskang9/2026spring_41class_team7/apps/cli/package.json",
+        "/home/hskan/hskang9/2026spring_41class_team7/apps/web/package.json",
+        "/home/hskan/hskang9/2026spring_41class_team7/package.json",
+        "/home/hskan/hskang9/2026spring_41class_team7/packages/contracts/package.json"
+      ],
+      "cargoToml": []
+    }
+  },
+  "agent2": {
+    "promptSource": "fallback",
+    "scores": {
+      "structure": 0,
+      "tests": 0,
+      "documentation": 0,
+      "dependencies_hygiene": 0
+    },
+    "checklist": [
+      {
+        "id": "c1",
+        "label": "structure",
+        "status": "not_done"
+      },
+      {
+        "id": "c2",
+        "label": "tests",
+        "status": "not_done"
+      },
+      {
+        "id": "c3",
+        "label": "documentation",
+        "status": "not_done"
+      },
+      {
+        "id": "c4",
+        "label": "dependencies_hygiene",
+        "status": "not_done"
+      }
+    ]
+  }
+}

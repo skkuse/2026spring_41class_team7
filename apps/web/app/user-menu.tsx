@@ -54,8 +54,16 @@ export function UserMenu() {
   }
 
   return (
-    <Link href="/login" className="text-sm font-medium text-primary hover:underline">
-      Sign in
-    </Link>
+    <div className="flex flex-wrap items-center justify-end gap-2">
+      <Link
+        href="/onboarding"
+        className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+      >
+        Google / LinkedIn
+      </Link>
+      <Link href="/onboarding" className="text-sm font-medium text-primary hover:underline">
+        Sign in
+      </Link>
+    </div>
   );
 }

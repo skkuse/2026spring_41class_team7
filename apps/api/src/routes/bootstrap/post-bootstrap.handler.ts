@@ -24,7 +24,7 @@ export const postBootstrapHandler: RouteHandler<typeof postBootstrapRoute, Env> 
           email: 'hkang@dev.system',
           role: 'Lead Platform Engineer',
           location: 'Seoul, KR',
-          website: 'https://signal.cv/hkang',
+          website: 'https://jobscript.app/hkang',
           isPro: true,
         },
         select: { id: true },

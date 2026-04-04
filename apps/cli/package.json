@@ -1,0 +1,27 @@
+{
+  "name": "jobclaw",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "jobclaw": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.tsx",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "lint": "echo 'No lint configured for jobclaw'",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "ink": "^5.2.1",
+    "ink-big-text": "^2.0.0",
+    "ink-gradient": "^3.0.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "^18.3.18",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}

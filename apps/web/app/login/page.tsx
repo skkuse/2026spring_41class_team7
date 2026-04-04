@@ -1,13 +1,13 @@
-import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 
-import { LoginForm } from './login-form';
+type Search = { error?: string };
 
-export default function LoginPage() {
-  return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-6">
-      <Suspense fallback={<div className="text-muted-foreground">Loading…</div>}>
-        <LoginForm />
-      </Suspense>
-    </main>
-  );
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<Search>;
+}) {
+  const sp = await searchParams;
+  const suffix = sp.error ? `?error=${encodeURIComponent(sp.error)}` : '';
+  redirect(`/onboarding${suffix}`);
 }

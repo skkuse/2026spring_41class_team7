@@ -50,7 +50,7 @@ flowchart LR
 | Server Supabase client | `apps/web/lib/supabase/server.ts` | `createServerClient` for Route Handlers (e.g. OAuth callback) |
 | Session refresh | `apps/web/middleware.ts` | Calls `getUser()` so short-lived sessions stay valid via cookies |
 | OAuth / magic link return | `apps/web/app/auth/callback/route.ts` | `exchangeCodeForSession` then redirect |
-| Login UI | `apps/web/app/login/login-form.tsx` | Sign in, sign up, Google OAuth |
+| Auth UI | `apps/web/components/onboarding.tsx` | OAuth (Google, LinkedIn); `/login` redirects here |
 | Token + RC user sync | `apps/web/lib/supabase-auth-bridge.tsx` | Pushes `access_token` → API context, `user.id` → billing/RevenueCat |
 | API bearer verification | `apps/api/src/middlewares/auth.ts` | `requireAuth`: validates JWT, sets `c.set('userId', …)` |
 | Protected routes | `apps/api/src/routes/index.ts` | `app.use('/v1/*', requireAuth)` before `app.openapi(...)` |
@@ -71,7 +71,7 @@ The bridge must sit **inside** both `ApiProvider` and `BillingProvider` so it ca
 sequenceDiagram
   autonumber
   actor User
-  participant Login as /login (client)
+  participant Login as /onboarding (client)
   participant SB as Supabase Auth
   participant MW as Next middleware
   participant Bridge as SupabaseAuthBridge
@@ -107,7 +107,7 @@ sequenceDiagram
 sequenceDiagram
   autonumber
   actor User
-  participant Login as /login
+  participant Login as /onboarding
   participant SB as Supabase Auth
   participant Google as Google OAuth
   participant CB as /auth/callback
@@ -123,7 +123,7 @@ sequenceDiagram
   User->>CB: GET /auth/callback?code=…
   CB->>SB: exchangeCodeForSession(code)
   SB-->>CB: Session cookies set
-  CB-->>User: Redirect to / (or next)
+  CB-->>User: Redirect to /home (or `next` query)
 
   User->>Bridge: Session available
   Bridge->>Bridge: setAuthToken + setAppUserId

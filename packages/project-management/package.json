@@ -1,0 +1,32 @@
+{
+  "name": "project-management",
+  "version": "2.2.0",
+  "private": true,
+  "type": "module",
+  "description": "CLI for bookmarking and opening local project paths and URLs.",
+  "main": "./dist/cli.js",
+  "types": "./dist/cli.d.ts",
+  "bin": {
+    "project-management": "./dist/cli.js",
+    "projects": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "didyoumean": "^1.2.1",
+    "gitignore-parser": "^0.0.2",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/prompts": "^2.4.9",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}

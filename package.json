@@ -9,7 +9,8 @@
     "assess:api": "pnpm build:cli && pnpm exec jobclaw assess apps/api --type node-backend --out apps/api/assessments/latest.md",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "jobclaw": "jobclaw"
+    "jobclaw": "jobclaw",
+    "projects": "pnpm --filter project-management exec tsx src/cli.ts"
   },
   "devDependencies": {
     "jobclaw": "workspace:*",

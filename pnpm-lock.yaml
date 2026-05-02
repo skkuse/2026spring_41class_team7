@@ -165,11 +165,11 @@ importers:
         specifier: latest
         version: 6.0.2
 
-  packages/projectman:
+  packages/project-management:
     dependencies:
       commander:
-        specifier: ^3.0.1
-        version: 3.0.2
+        specifier: ^12.1.0
+        version: 12.1.0
       didyoumean:
         specifier: ^1.2.1
         version: 1.2.2
@@ -177,8 +177,21 @@ importers:
         specifier: ^0.0.2
         version: 0.0.2
       prompts:
-        specifier: ^2.3.0
+        specifier: ^2.4.2
         version: 2.4.2
+    devDependencies:
+      '@types/node':
+        specifier: latest
+        version: 25.6.0
+      '@types/prompts':
+        specifier: ^2.4.9
+        version: 2.4.9
+      tsx:
+        specifier: latest
+        version: 4.21.0
+      typescript:
+        specifier: latest
+        version: 6.0.3
 
 packages:
 
@@ -1177,8 +1190,9 @@ packages:
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
 
-  commander@3.0.2:
-    resolution: {integrity: sha512-Gar0ASD4BDyKC4hl4DwHqDrmvjoxWKZigVnAbn5H1owvm4CxCPdb0HQDehwNYMJpla5+M2tPmPARzhtYuwpHow==}
+  commander@12.1.0:
+    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
 
   confbox@0.2.4:
     resolution: {integrity: sha512-ysOGlgTFbN2/Y6Cg3Iye8YKulHw+R2fNXHrgSmXISQdMnomY6eNDprVdW9R5xBguEqI954+S6709UyiO7B+6OQ==}
@@ -1856,6 +1870,11 @@ packages:
 
   typescript@6.0.2:
     resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -2620,7 +2639,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 25.5.2
+      '@types/node': 25.6.0
 
   '@vitest/expect@4.1.1':
     dependencies:
@@ -2755,7 +2774,7 @@ snapshots:
 
   color-name@1.1.4: {}
 
-  commander@3.0.2: {}
+  commander@12.1.0: {}
 
   confbox@0.2.4: {}
 
@@ -3429,6 +3448,8 @@ snapshots:
       tagged-tag: 1.0.0
 
   typescript@6.0.2: {}
+
+  typescript@6.0.3: {}
 
   underscore@1.13.8: {}
 

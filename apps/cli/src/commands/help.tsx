@@ -11,8 +11,7 @@ export default function Help({ showLogo }: { showLogo?: boolean }) {
       <Text>jobclaw publish [path] — Publish scan + latest assessment (requires both under .jobclaw/)</Text>
       <Text>jobclaw publish-scan — Publish scan-only (same free-publish quota)</Text>
       <Text>jobclaw doctor — Verify configuration from init</Text>
-      <Text>jobclaw pm … — Portfolio project management(add/open projects for AI eval)</Text>
-      <Text dimColor>  alias: jobclaw projects · sources in packages/projectman</Text>
+      <Text>jobclaw projects … — Bookmark & open folders or URLs (add, open, getpath, …)</Text>
       <Text> </Text>
       <Text dimColor>https://jobclaw.fyi</Text>
     </Box>

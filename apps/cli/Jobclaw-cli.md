@@ -84,23 +84,19 @@ After the scan file is saved, runs the **Node.js backend** rubric (OpenAPI, Zod,
 
 ---
 
-## `jobclaw pm` / `jobclaw projects` (ProjectMan)
+## `jobclaw projects`
 
-Jobclaw runs **ProjectMan** from this monorepo: **`packages/projectman/`** (vendored MIT sources, originally from [saurabhdaware/projectman](https://github.com/saurabhdaware/projectman)). The jobclaw package depends on it via `workspace:*`. ProjectMan bookmarking and opening favorite directories pairs well with **`jobclaw assess`** when you rotate through repos for AI evaluation.
+Bookmark and open local directories or URLs from the terminal; useful when rotating through repos alongside **`jobclaw assess`**.
 
-**Project list file:** `~/.jobclaw/jobclaw-projects.json` (not upstream’s `~/.projectman/settings.json`). `jobclaw pm edit` opens this file.
+**Project list file:** `~/.jobclaw/jobclaw-projects.json`. Run **`jobclaw projects edit`** to open that JSON in your default editor.
 
-**Examples** (same CLI surface as upstream `pm`):
+**Examples**:
 
 ```bash
-cd /path/to/repo && jobclaw pm add
-jobclaw pm open
-cd "$(jobclaw pm getpath)"
+cd /path/to/repo && jobclaw projects add
+jobclaw projects open
+cd "$(jobclaw projects getpath)"
 ```
-
-- **Upstream reference:** [github.com/saurabhdaware/projectman](https://github.com/saurabhdaware/projectman) (compare when updating the vendored tree)
-
-Aliases: `jobclaw pm`, `jobclaw projectman`, and `jobclaw projects` all invoke ProjectMan with the remaining arguments.
 
 ---
 
@@ -113,4 +109,4 @@ Aliases: `jobclaw pm`, `jobclaw projectman`, and `jobclaw projects` all invoke P
 | `publish`            | Requires **scan + assessment** artifacts; local record + jobclaw.fyi URL |
 | `publish-scan`       | **Scan-only** publish record (same quota as `publish`)                   |
 | `doctor`             | Validate `init` configuration and surface gaps                          |
-| `pm` / `projects`    | Run vendored ProjectMan in `packages/projectman` (workspace dependency) |
+| `projects`           | Bookmark & open saved folders or URLs (`~/.jobclaw/jobclaw-projects.json`) |

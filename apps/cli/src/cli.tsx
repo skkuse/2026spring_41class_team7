@@ -11,7 +11,7 @@ import PublishAssessmentCommand from "./commands/publish-assessment.js";
 import AssessCommand from "./commands/assess.js";
 import { loadConfig } from "./lib/config.js";
 import { doctorExitCodeFromCfg } from "./lib/doctor-check.js";
-import { runProjectman } from "./lib/run-projectman.js";
+import { runSavedProjects } from "./lib/saved-projects/run-saved-projects.js";
 
 export async function dispatch(argv: string[]): Promise<void> {
   const [cmd, ...rest] = argv;
@@ -111,10 +111,8 @@ export async function dispatch(argv: string[]): Promise<void> {
       await inst.waitUntilExit();
       return;
     }
-    case "pm":
-    case "projectman":
     case "projects": {
-      process.exitCode = await runProjectman(rest);
+      process.exitCode = await runSavedProjects(rest);
       return;
     }
     default: {

@@ -88,11 +88,32 @@ Analyzes the current repository and produces structured results for publishing o
 
 ---
 
+## `jobclaw pm` / `jobclaw projects` (ProjectMan)
+
+Jobclaw runs **ProjectMan** from this monorepo: **`packages/projectman/`** (vendored MIT sources, originally from [saurabhdaware/projectman](https://github.com/saurabhdaware/projectman)). The jobclaw package depends on it via `workspace:*`. ProjectMan bookmarking and opening favorite directories pairs well with `jobclaw scan` when you rotate through repos for AI evaluation.
+
+**Project list file:** `~/.jobclaw/jobclaw-projects.json` (not upstream’s `~/.projectman/settings.json`). `jobclaw pm edit` opens this file.
+
+**Examples** (same CLI surface as upstream `pm`):
+
+```bash
+cd /path/to/repo && jobclaw pm add
+jobclaw pm open
+cd "$(jobclaw pm getpath)"
+```
+
+- **Upstream reference:** [github.com/saurabhdaware/projectman](https://github.com/saurabhdaware/projectman) (compare when updating the vendored tree)
+
+Aliases: `jobclaw pm`, `jobclaw projectman`, and `jobclaw projects` all invoke ProjectMan with the remaining arguments.
+
+---
+
 ## Command summary
 
-| Command   | Purpose                                                                 |
-| --------- | ----------------------------------------------------------------------- |
-| `init`    | OpenAI API key, terms & privacy acceptance                              |
-| `scan`    | Git timeline + two agents (deps/skills JSON + server-eval checklist)   |
-| `publish` | Push scan results public; show jobclaw.fyi URL; 5-free-then-subscribe   |
-| `doctor`  | Validate `init` configuration and surface gaps                          |
+| Command              | Purpose                                                                 |
+| -------------------- | ----------------------------------------------------------------------- |
+| `init`               | OpenAI API key, terms & privacy acceptance                              |
+| `scan`               | Git timeline + two agents (deps/skills JSON + server-eval checklist)   |
+| `publish`            | Push scan results public; show jobclaw.fyi URL; 5-free-then-subscribe   |
+| `doctor`             | Validate `init` configuration and surface gaps                          |
+| `pm` / `projects`    | Run vendored ProjectMan in `packages/projectman` (workspace dependency) |

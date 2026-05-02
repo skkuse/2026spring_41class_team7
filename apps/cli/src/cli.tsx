@@ -8,8 +8,10 @@ import { restoreStdinAfterInk } from "./lib/readline-tty.js";
 import DoctorView from "./commands/doctor.js";
 import ScanCommand from "./commands/scan.js";
 import PublishCommand from "./commands/publish.js";
+import AssessCommand from "./commands/assess.js";
 import { loadConfig } from "./lib/config.js";
 import { doctorExitCodeFromCfg } from "./lib/doctor-check.js";
+import { runProjectman } from "./lib/run-projectman.js";
 
 export async function dispatch(argv: string[]): Promise<void> {
   const [cmd, ...rest] = argv;
@@ -22,12 +24,7 @@ export async function dispatch(argv: string[]): Promise<void> {
     return;
   }
 
-  if (
-    cmd === "help" ||
-    cmd === "-h" ||
-    cmd === "--help" ||
-    rest[0] === "--help"
-  ) {
+  if (cmd === "help" || cmd === "-h" || cmd === "--help") {
     const inst = render(<Help />);
     setImmediate(() => inst.unmount());
     await inst.waitUntilExit();
@@ -97,6 +94,26 @@ export async function dispatch(argv: string[]): Promise<void> {
         />,
       );
       await inst.waitUntilExit();
+      return;
+    }
+    case "assess": {
+      const inst = render(
+        <AssessCommand
+          cwd={root}
+          args={rest}
+          onDone={(code) => {
+            process.exitCode = code;
+            inst.unmount();
+          }}
+        />,
+      );
+      await inst.waitUntilExit();
+      return;
+    }
+    case "pm":
+    case "projectman":
+    case "projects": {
+      process.exitCode = await runProjectman(rest);
       return;
     }
     default: {

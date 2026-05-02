@@ -18,7 +18,7 @@ In this monorepo, `apps/api` runs as a **Node** process (`tsx` / `node`). The us
 |--------|------------------|
 | **Browser / Next.js** | Chooses files, calls your API, optionally uploads bytes directly to R2 when using presigned URLs. |
 | **Hono API** | Verifies **Supabase JWT** (`requireAuth`), decides **who** may upload **what**, creates **DB rows** (e.g. Prisma `Document`), issues **presigned URLs** or performs **server-side** `PutObject`. |
-| **PostgreSQL (Prisma)** | Stores **metadata**: filename, status, tags, **`r2ObjectKey`** (or similar), size, MIME type, `profileId` / `userId` scope. |
+| **PostgreSQL (Prisma)** | Stores **metadata**: filename, status, tags, **`r2ObjectKey`** (or similar), size, MIME type, `projectId` (and thus `profileId` via `Project`) / `userId` scope. |
 | **Cloudflare R2** | Stores **raw file bytes** only. |
 
 R2 does **not** replace Postgres for listing “my documents” in the app—you still query the DB and use the stored object key when you need a download URL or server-side processing.
@@ -122,9 +122,9 @@ Use **`PutObject`**, **`GetObject`**, **`DeleteObject`**, and **`HeadObject`** a
 
 ## Mapping to this repo’s data model
 
-`prisma/schema.prisma` already has a **`Document`** model tied to **`Profile`**. To link a row to R2, add a field such as:
+`prisma/schema.prisma` has **`Document`** rows under **`Project`** (which belongs to **`Profile`**). To link a row to R2, add a field such as:
 
-- `r2ObjectKey String? @unique` — canonical key, e.g. `profiles/{profileId}/documents/{documentId}/resume.pdf`
+- `r2ObjectKey String? @unique` — canonical key, e.g. `profiles/{profileId}/projects/{projectId}/documents/{documentId}/analysis.pdf`
 
 **Naming convention:** Always prefix keys with **`profileId` or `userId`** so listing and access checks are straightforward and you never expose cross-tenant paths.
 

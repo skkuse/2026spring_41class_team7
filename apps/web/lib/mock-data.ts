@@ -1,8 +1,8 @@
 
 export const documents = [
-  { id: '1', name: 'H_KANG_RESUME_V2', date: 'Oct 24, 2023', size: '2.4MB', tags: ['Systems', 'Rust'] },
-  { id: '2', name: 'BACKEND_LEAD_SITE', date: 'Oct 12, 2023', size: 'Draft', tags: ['Portfolio', 'Next.js'] },
-  { id: '3', name: 'STRIPE_OFFER_DOC', date: 'Sep 30, 2023', size: '1.1MB', tags: ['Fintech', 'Go'] },
+  { id: '1', name: 'H_KANG_RESUME_V2', projectName: 'Career & positioning', date: 'Oct 24, 2023', size: '2.4MB', tags: ['Systems', 'Rust'] },
+  { id: '2', name: 'BACKEND_LEAD_SITE', projectName: 'Portfolio platform', date: 'Oct 12, 2023', size: 'Draft', tags: ['Portfolio', 'Next.js'] },
+  { id: '3', name: 'STRIPE_OFFER_DOC', projectName: 'Payments integration', date: 'Sep 30, 2023', size: '1.1MB', tags: ['Fintech', 'Go'] },
 ];
 
 export const stats = {

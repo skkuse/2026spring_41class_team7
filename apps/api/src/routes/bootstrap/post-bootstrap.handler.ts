@@ -30,29 +30,44 @@ export const postBootstrapHandler: RouteHandler<typeof postBootstrapRoute, Env> 
         select: { id: true },
       }));
 
-    const existingDocumentCount = await tx.document.count({ where: { profileId: profile.id } });
+    const existingDocumentCount = await tx.document.count({
+      where: { project: { profileId: profile.id } },
+    });
     const existingInvoiceCount = await tx.invoice.count({ where: { profileId: profile.id } });
 
     let documentsCreated = 0;
     if (existingDocumentCount === 0) {
+      const career = await tx.project.create({
+        data: { profileId: profile.id, name: 'Career & positioning' },
+        select: { id: true },
+      });
+      const portfolio = await tx.project.create({
+        data: { profileId: profile.id, name: 'Portfolio platform' },
+        select: { id: true },
+      });
+      const payments = await tx.project.create({
+        data: { profileId: profile.id, name: 'Payments integration' },
+        select: { id: true },
+      });
+
       const docs = await tx.document.createMany({
         data: [
           {
-            profileId: profile.id,
+            projectId: career.id,
             name: 'H_KANG_RESUME_V2',
             status: 'ACTIVE',
             sizeLabel: '2.4MB',
             tags: ['Systems', 'Rust'],
           },
           {
-            profileId: profile.id,
+            projectId: portfolio.id,
             name: 'BACKEND_LEAD_SITE',
             status: 'DRAFT',
             sizeLabel: 'Draft',
             tags: ['Portfolio', 'Next.js'],
           },
           {
-            profileId: profile.id,
+            projectId: payments.id,
             name: 'STRIPE_OFFER_DOC',
             status: 'ACTIVE',
             sizeLabel: '1.1MB',

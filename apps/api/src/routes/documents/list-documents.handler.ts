@@ -20,7 +20,7 @@ export const listDocumentsHandler: RouteHandler<typeof listDocumentsRoute, Env> 
   }
 
   const where: Prisma.DocumentWhereInput = {
-    profileId: profile.id,
+    project: { profileId: profile.id },
     ...(status ? { status } : {}),
     ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
   };
@@ -39,13 +39,23 @@ export const listDocumentsHandler: RouteHandler<typeof listDocumentsRoute, Env> 
         sizeLabel: true,
         tags: true,
         createdAt: true,
+        project: { select: { id: true, name: true } },
       },
     }),
   ]);
 
   return c.json(
     {
-      items: rows.map((row) => ({ ...row, createdAt: row.createdAt.toISOString() })),
+      items: rows.map((row) => ({
+        id: row.id,
+        name: row.name,
+        status: row.status,
+        sizeLabel: row.sizeLabel,
+        tags: row.tags,
+        createdAt: row.createdAt.toISOString(),
+        projectId: row.project.id,
+        projectName: row.project.name,
+      })),
       page,
       pageLimit,
       total,

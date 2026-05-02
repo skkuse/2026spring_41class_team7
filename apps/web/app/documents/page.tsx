@@ -29,6 +29,7 @@ export default function DocumentsPage() {
         {filtered.map((doc) => (
           <article key={doc.id} className="border border-border bg-card/60 rounded p-5 flex flex-col gap-4">
             <div>
+              <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{doc.projectName}</p>
               <h3 className="font-mono text-sm font-bold">{doc.name}</h3>
               <p className="text-xs text-muted-foreground">{doc.date} · {doc.size}</p>
             </div>

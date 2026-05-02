@@ -8,6 +8,8 @@ export const documentItemSchema = z.object({
   sizeLabel: z.string().nullable().openapi({ example: '2.4MB' }),
   tags: z.array(z.string()).openapi({ example: ['Systems', 'Rust'] }),
   createdAt: z.string().datetime().openapi({ example: '2023-10-24T00:00:00.000Z' }),
+  projectId: z.string().openapi({ example: 'ckxproj001' }),
+  projectName: z.string().openapi({ example: 'Career & positioning' }),
 });
 
 export const listDocumentsResponse200Schema = z.object({

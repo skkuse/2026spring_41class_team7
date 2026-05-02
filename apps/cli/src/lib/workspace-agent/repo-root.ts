@@ -1,4 +1,6 @@
 import path from "node:path";
+import type { AssessmentKind } from "../assessment-kinds.js";
+import { parseAssessmentKind } from "../assessment-kinds.js";
 
 /**
  * Repository root for CLI-style tools: optional directory argument, otherwise `cwd`.
@@ -18,6 +20,10 @@ export type ParsedAssessArgv = {
   jsonOnly: boolean;
   help: boolean;
   outPath?: string;
+  /** Set from `--type` / `-t` when valid. */
+  assessmentType?: AssessmentKind;
+  /** User passed `--type <x>` but `<x>` is not a known assessment. */
+  invalidAssessmentType?: string;
 };
 
 /**
@@ -30,11 +36,20 @@ export function parseAssessCommandArgv(cwd: string, argv: string[]): ParsedAsses
   let jsonOnly = false;
   let help = false;
   let outPath: string | undefined;
+  let assessmentType: AssessmentKind | undefined;
+  let invalidAssessmentType: string | undefined;
   const rest = [...argv];
   while (rest.length > 0) {
     const a = rest.shift()!;
     if (a === "--model" && rest[0]) {
       model = rest.shift();
+      continue;
+    }
+    if ((a === "--type" || a === "-t") && rest[0]) {
+      const raw = rest.shift()!;
+      const k = parseAssessmentKind(raw);
+      if (k) assessmentType = k;
+      else invalidAssessmentType = raw;
       continue;
     }
     if (a === "--out" && rest[0]) {
@@ -54,5 +69,13 @@ export function parseAssessCommandArgv(cwd: string, argv: string[]): ParsedAsses
     }
     repoRoot = path.resolve(cwd, a);
   }
-  return { repoRoot, model, jsonOnly, help, outPath };
+  return {
+    repoRoot,
+    model,
+    jsonOnly,
+    help,
+    outPath,
+    assessmentType,
+    invalidAssessmentType,
+  };
 }

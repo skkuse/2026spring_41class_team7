@@ -1,18 +1,28 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createInterface } from "node:readline/promises";
+import path from "node:path";
 import { Box, Text, useInput } from "ink";
-import {
-  attemptPublish,
-  recordSubscription,
-  FREE_PUBLISH_LIMIT,
-} from "../lib/publish-logic.js";
+import { attemptPublishAssessment } from "../lib/publish-assessment-logic.js";
+import { FREE_PUBLISH_LIMIT, recordSubscription } from "../lib/publish-logic.js";
 
 const SUBSCRIBE_URL = "https://jobclaw.fyi/subscribe";
 
-export type PublishProps = {
+export type PublishAssessmentProps = {
   cwd: string;
+  args: string[];
   onFinish: (code: number) => void;
 };
+
+function parsePublishAssessmentArgs(cwd: string, argv: string[]): {
+  projectRoot: string;
+} {
+  let projectRoot = path.resolve(cwd);
+  for (const a of argv) {
+    if (a.startsWith("-")) continue;
+    projectRoot = path.resolve(cwd, a);
+  }
+  return { projectRoot };
+}
 
 type View =
   | { phase: "working" }
@@ -20,7 +30,12 @@ type View =
   | { phase: "done"; url: string; detail: string }
   | { phase: "error"; message: string };
 
-export default function PublishCommand({ cwd, onFinish }: PublishProps) {
+export default function PublishAssessmentCommand({
+  cwd,
+  args,
+  onFinish,
+}: PublishAssessmentProps) {
+  const { projectRoot } = parsePublishAssessmentArgs(cwd, args);
   const [view, setView] = useState<View>({ phase: "working" });
   const finished = useRef(false);
   const nonTtyBlockedHandled = useRef(false);
@@ -35,7 +50,7 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
   );
 
   const run = useCallback(async () => {
-    const out = await attemptPublish(cwd);
+    const out = await attemptPublishAssessment({ cwd, projectRoot });
     if (out.kind === "blocked") {
       setView({ phase: "blocked" });
       return;
@@ -51,7 +66,7 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
       detail: out.detail,
     });
     finish(0);
-  }, [cwd, finish]);
+  }, [cwd, projectRoot, finish]);
 
   useEffect(() => {
     void run();
@@ -75,7 +90,7 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
         if (ans === "y" || ans === "Y") {
           await recordSubscription();
           finished.current = false;
-          const out = await attemptPublish(cwd);
+          const out = await attemptPublishAssessment({ cwd, projectRoot });
           if (out.kind === "error") {
             setView({ phase: "error", message: out.message });
             finish(1);
@@ -95,35 +110,35 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
         rl.close();
       }
     })();
-  }, [view.phase, cwd]);
+  }, [view.phase, cwd, projectRoot, finish]);
 
   useInput(
     (input, key) => {
       if (view.phase !== "blocked") return;
-    const yes = input === "y" || input === "Y" || key.return;
-    const no = input === "n" || input === "N" || key.escape;
-    if (yes) {
-      void (async () => {
-        await recordSubscription();
-        setView({ phase: "working" });
-        finished.current = false;
-        const out = await attemptPublish(cwd);
-        if (out.kind === "error") {
-          setView({ phase: "error", message: out.message });
-          finish(1);
-          return;
-        }
-        if (out.kind === "blocked") {
-          setView({ phase: "blocked" });
-          return;
-        }
-        setView({ phase: "done", url: out.url, detail: out.detail });
-        finish(0);
-      })();
-    } else if (no) {
-      setView({ phase: "error", message: "Publish cancelled." });
-      finish(1);
-    }
+      const yes = input === "y" || input === "Y" || key.return;
+      const no = input === "n" || input === "N" || key.escape;
+      if (yes) {
+        void (async () => {
+          await recordSubscription();
+          setView({ phase: "working" });
+          finished.current = false;
+          const out = await attemptPublishAssessment({ cwd, projectRoot });
+          if (out.kind === "error") {
+            setView({ phase: "error", message: out.message });
+            finish(1);
+            return;
+          }
+          if (out.kind === "blocked") {
+            setView({ phase: "blocked" });
+            return;
+          }
+          setView({ phase: "done", url: out.url, detail: out.detail });
+          finish(0);
+        })();
+      } else if (no) {
+        setView({ phase: "error", message: "Publish cancelled." });
+        finish(1);
+      }
     },
     { isActive: view.phase === "blocked" && process.stdin.isTTY },
   );
@@ -132,9 +147,10 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
     return (
       <Box flexDirection="column">
         <Text bold color="cyan">
-          jobclaw publish-scan
+          jobclaw publish
         </Text>
-        <Text>Publishing…</Text>
+        <Text>Publishing latest assessment…</Text>
+        <Text dimColor>{projectRoot}</Text>
       </Box>
     );
   }
@@ -161,7 +177,7 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
     return (
       <Box flexDirection="column">
         <Text bold color="cyan">
-          jobclaw publish-scan
+          jobclaw publish
         </Text>
         <Text color="red">{view.message}</Text>
       </Box>
@@ -171,7 +187,7 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
   return (
     <Box flexDirection="column">
       <Text bold color="cyan">
-        jobclaw publish-scan
+        jobclaw publish
       </Text>
       <Text color="green">{view.detail}</Text>
       <Text bold>{view.url}</Text>

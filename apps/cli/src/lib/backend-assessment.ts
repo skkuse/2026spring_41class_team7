@@ -145,7 +145,12 @@ export type RunBackendAssessmentOptions = {
 
 export async function runBackendAssessment(
   options: RunBackendAssessmentOptions,
-): Promise<{ result: BackendAssessmentResult; rawJson: string; contextChars: number }> {
+): Promise<{
+  result: BackendAssessmentResult;
+  rawJson: string;
+  contextChars: number;
+  model: string;
+}> {
   const apiKey = getOpenAiApiKey();
   if (!apiKey) {
     throw new Error(
@@ -212,6 +217,7 @@ ${context}`;
     result,
     rawJson: content,
     contextChars: context.length,
+    model,
   };
 }
 

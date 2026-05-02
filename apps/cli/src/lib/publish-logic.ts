@@ -36,7 +36,7 @@ export async function attemptPublish(cwd: string): Promise<PublishOutcome> {
   } catch {
     return {
       kind: "error",
-      message: "No scan result. Run jobclaw scan in this repo first.",
+      message: "No scan result. Run jobclaw assess in this repo first (it writes scan-result.json).",
     };
   }
 

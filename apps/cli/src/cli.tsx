@@ -6,8 +6,8 @@ import { JobclawFilledLogoStatic } from "./commands/filled-logo.js";
 import { runInitCredentialsPrompts } from "./lib/init-credentials.js";
 import { restoreStdinAfterInk } from "./lib/readline-tty.js";
 import DoctorView from "./commands/doctor.js";
-import ScanCommand from "./commands/scan.js";
 import PublishCommand from "./commands/publish.js";
+import PublishAssessmentCommand from "./commands/publish-assessment.js";
 import AssessCommand from "./commands/assess.js";
 import { loadConfig } from "./lib/config.js";
 import { doctorExitCodeFromCfg } from "./lib/doctor-check.js";
@@ -70,11 +70,12 @@ export async function dispatch(argv: string[]): Promise<void> {
       process.exitCode = code;
       return;
     }
-    case "scan": {
+    case "publish": {
       const inst = render(
-        <ScanCommand
+        <PublishAssessmentCommand
           cwd={root}
-          onDone={(code) => {
+          args={rest}
+          onFinish={(code) => {
             process.exitCode = code;
             inst.unmount();
           }}
@@ -83,7 +84,7 @@ export async function dispatch(argv: string[]): Promise<void> {
       await inst.waitUntilExit();
       return;
     }
-    case "publish": {
+    case "publish-scan": {
       const inst = render(
         <PublishCommand
           cwd={root}

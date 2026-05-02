@@ -42,7 +42,7 @@ export async function runInitCredentialsPrompts(): Promise<number> {
       "Paste your secret key here. It is stored only in ~/.jobclaw/secrets.json (mode 600), not in the repo.\n",
     );
     output.write(
-      "Press Enter with nothing typed to skip — scan will use fallback scores until a key is set.\n\n",
+      "Press Enter with nothing typed to skip — assess will use fallback scores for evaluation steps until a key is set.\n\n",
     );
 
     const openaiLine = (await rl.question("OpenAI API key: ")).trim();

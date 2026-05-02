@@ -6,7 +6,7 @@
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "build:cli": "pnpm --filter jobclaw build",
-    "assess:api": "pnpm build:cli && pnpm exec jobclaw assess apps/api --out apps/api/assessments/latest.md",
+    "assess:api": "pnpm build:cli && pnpm exec jobclaw assess apps/api --type node-backend --out apps/api/assessments/latest.md",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "jobclaw": "jobclaw"

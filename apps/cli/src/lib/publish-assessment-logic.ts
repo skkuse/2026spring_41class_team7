@@ -10,7 +10,7 @@ import { getSession } from "./auth-store.js";
 
 const JOBCLAW_API_URL =
   process.env.JOBCLAW_API_URL?.replace(/\/$/, "") ??
-  "https://jobclaw-api.up.railway.app";
+  "https://jobclaw-api-production.up.railway.app";
 
 export type PublishAssessmentOutcome =
   | { kind: "blocked" }

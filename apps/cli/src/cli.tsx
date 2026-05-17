@@ -12,6 +12,9 @@ import AssessCommand from "./commands/assess.js";
 import { loadConfig } from "./lib/config.js";
 import { doctorExitCodeFromCfg } from "./lib/doctor-check.js";
 import { runSavedProjects } from "./lib/saved-projects/run-saved-projects.js";
+import { getSession } from './lib/auth-store.js';
+import LoginCommand from './commands/login.js';
+import LogoutCommand from './commands/logout.js';
 
 export async function dispatch(argv: string[]): Promise<void> {
   const [cmd, ...rest] = argv;
@@ -61,9 +64,34 @@ export async function dispatch(argv: string[]): Promise<void> {
       process.exitCode = await runInitCredentialsPrompts();
       return;
     }
+    case 'login': {
+      const inst = render(
+        <LoginCommand
+          onDone={(code) => {
+            process.exitCode = code;
+            inst.unmount();
+          }}
+        />,
+      );
+      await inst.waitUntilExit();
+      return;
+    }
+    case 'logout': {
+      const inst = render(
+        <LogoutCommand
+          onDone={(code) => {
+            process.exitCode = code;
+            inst.unmount();
+          }}
+        />,
+      );
+      await inst.waitUntilExit();
+      return;
+    }
     case "doctor": {
       const cfg = await loadConfig();
-      const code = doctorExitCodeFromCfg(cfg);
+      const session = await getSession();
+      const code = doctorExitCodeFromCfg(cfg, !!session);
       const inst = render(<DoctorView cfg={cfg} />);
       setImmediate(() => inst.unmount());
       await inst.waitUntilExit();

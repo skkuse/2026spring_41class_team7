@@ -1,11 +1,15 @@
 import type { JobclawConfig } from "./config.js";
 import { getOpenAiApiKey } from "./credentials.js";
 
-export function doctorExitCodeFromCfg(cfg: JobclawConfig | null): number {
+export function doctorExitCodeFromCfg(
+  cfg: JobclawConfig | null,
+  loggedIn: boolean,
+): number {
   const ok =
     cfg !== null &&
     cfg.termsAccepted &&
     cfg.privacyAccepted &&
-    !!getOpenAiApiKey();
+    !!getOpenAiApiKey() &&
+    loggedIn;
   return ok ? 0 : 1;
 }

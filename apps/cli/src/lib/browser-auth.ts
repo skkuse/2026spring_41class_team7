@@ -25,11 +25,12 @@ export async function runOAuthFlow(
   authUrl.searchParams.set('redirect_to', redirectTo);
 
   const urlStr = authUrl.toString();
-  onUrl?.(urlStr);
-  openBrowser(urlStr);
 
   try {
-    const code = await waitForCallback(port);
+    const code = await waitForCallback(port, () => {
+      onUrl?.(urlStr);
+      openBrowser(urlStr);
+    });
     const session = await exchangeCode(code, verifier, redirectTo);
     return { ok: true, session };
   } catch (e) {
@@ -60,7 +61,7 @@ function openBrowser(url: string): void {
   });
 }
 
-function waitForCallback(port: number): Promise<string> {
+function waitForCallback(port: number, onListening: () => void): Promise<string> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       server.close();
@@ -93,10 +94,15 @@ function waitForCallback(port: number): Promise<string> {
         );
         clearTimeout(timer);
         server.close(() => resolve(code));
+        return;
       }
+
+      res.writeHead(400).end();
     });
 
-    server.listen(port);
+    server.listen(port, () => {
+      onListening();
+    });
     server.on('error', (e) => {
       clearTimeout(timer);
       reject(e);

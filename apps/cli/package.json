@@ -13,6 +13,7 @@
     "dev": "tsx watch src/index.tsx",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
+    "test": "vitest run",
     "lint": "echo 'No lint configured for jobclaw'",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -29,6 +30,7 @@
     "@types/prompts": "^2.4.9",
     "@types/react": "^18.3.18",
     "tsx": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vitest": "latest"
   }
 }

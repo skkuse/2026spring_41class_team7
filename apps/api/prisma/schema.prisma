@@ -68,3 +68,26 @@ enum DocumentStatus {
   DRAFT
   ARCHIVED
 }
+
+/// CLI assessment result published by a logged-in user.
+model Assessment {
+  id               String   @id @default(cuid())
+  userId           String
+  repoUrl          String
+  repoOwner        String
+  repoName         String
+  assessmentType   String
+  overallScore     Int
+  scores           Json
+  scorecard        Json
+  findings         String[]
+  gapsAndRisks     String[]
+  nextSteps        String[]
+  executiveSummary String
+  model            String
+  contextChars     Int
+  generatedAt      DateTime
+  createdAt        DateTime @default(now())
+
+  @@index([userId, createdAt])
+}

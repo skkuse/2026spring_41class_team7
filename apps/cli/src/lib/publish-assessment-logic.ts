@@ -6,6 +6,11 @@ import { latestAssessmentFile } from "./assessment-record.js";
 import type { AssessmentRecordFile } from "./assessment-record.js";
 import { FREE_PUBLISH_LIMIT } from "./publish-logic.js";
 import type { ScanResultFile } from "./scan-types.js";
+import { getSession } from "./auth-store.js";
+
+const JOBCLAW_API_URL =
+  process.env.JOBCLAW_API_URL?.replace(/\/$/, "") ??
+  "https://jobclaw-api.up.railway.app";
 
 export type PublishAssessmentOutcome =
   | { kind: "blocked" }
@@ -78,22 +83,62 @@ export async function attemptPublishAssessment(input: {
     };
   }
 
-  const slug = await gitOriginSlug(input.cwd);
-  const user = cfg.githubUsername ?? slug?.username ?? "your-github-username";
-  const repo = slug?.repo ?? "your-repo";
+  const session = await getSession();
+  if (!session) {
+    return { kind: "error", message: "Run jobclaw login first to publish assessments." };
+  }
 
-  cfg = {
-    ...cfg,
-    publishCount: cfg.publishCount + 1,
+  const slug = await gitOriginSlug(input.cwd);
+  const repoUrl =
+    slug
+      ? `https://github.com/${slug.username}/${slug.repo}`
+      : `https://github.com/unknown/unknown`;
+
+  const payload = {
+    repoUrl,
+    assessmentType: record.assessmentType ?? "node-backend",
+    overallScore: record.result.overallScore,
+    scores: record.result.scores,
+    scorecard: record.result.scorecard,
+    findings: record.result.findings,
+    gapsAndRisks: record.result.gapsAndRisks,
+    nextSteps: record.result.nextSteps,
+    executiveSummary: record.result.executiveSummary,
+    model: record.model,
+    contextChars: record.contextChars,
+    generatedAt: record.generatedAt,
   };
+
+  let apiUrl: string;
+  let apiId: string;
+  try {
+    const res = await fetch(`${JOBCLAW_API_URL}/v1/assessments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => res.statusText);
+      return { kind: "error", message: `API error ${res.status}: ${text}` };
+    }
+    const data = (await res.json()) as { id: string; url: string };
+    apiUrl = data.url;
+    apiId = data.id;
+  } catch (err) {
+    return { kind: "error", message: `Could not reach Jobclaw API: ${String(err)}` };
+  }
+
+  cfg = { ...cfg, publishCount: cfg.publishCount + 1 };
   await saveConfig(cfg);
 
-  const publicUrl = `https://jobclaw.fyi/${user}/${repo}`;
   return {
     kind: "ok",
-    url: publicUrl,
+    url: apiUrl,
     publishCount: cfg.publishCount,
     recordPath,
-    detail: `Published (local record). Scan ${scan.generatedAt}; assessment ${record.savedAs}${record.assessmentType ? ` (${record.assessmentType})` : ""} @ ${record.generatedAt} — ${cfg.publishCount} total publish(es).`,
+    detail: `Published (id: ${apiId}). Scan ${scan.generatedAt}; assessment ${record.savedAs}${record.assessmentType ? ` (${record.assessmentType})` : ""} @ ${record.generatedAt} — ${cfg.publishCount} total publish(es).`,
   };
 }

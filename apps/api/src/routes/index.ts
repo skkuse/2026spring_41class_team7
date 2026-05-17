@@ -18,6 +18,10 @@ import { postProjectGithubHandler } from './ai-extract/post-project-github.handl
 import { postProjectGithubRoute } from './ai-extract/post-project-github.route.js';
 import { postResumeParseHandler } from './ai-extract/post-resume-parse.handler.js';
 import { postResumeParseRoute } from './ai-extract/post-resume-parse.route.js';
+import { postAssessmentHandler } from './assessments/post-assessment.handler.js';
+import { postAssessmentRoute } from './assessments/post-assessment.route.js';
+import { listAssessmentsHandler } from './assessments/list-assessments.handler.js';
+import { listAssessmentsRoute } from './assessments/list-assessments.route.js';
 
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
@@ -29,4 +33,6 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(listInvoicesRoute, listInvoicesHandler);
   app.openapi(postResumeParseRoute, postResumeParseHandler);
   app.openapi(postProjectGithubRoute, postProjectGithubHandler);
+  app.openapi(postAssessmentRoute, postAssessmentHandler);
+  app.openapi(listAssessmentsRoute, listAssessmentsHandler);
 };

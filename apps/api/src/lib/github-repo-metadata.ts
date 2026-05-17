@@ -1,3 +1,18 @@
+import { execSync } from 'node:child_process';
+
+function resolveGithubToken(): string | undefined {
+  const envToken = process.env.GITHUB_TOKEN?.trim();
+  if (envToken) return envToken;
+  try {
+    const out = execSync('gh auth token', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim();
+    return out || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export type GithubRepoSnapshot = {
   owner: string;
   repo: string;
@@ -57,7 +72,7 @@ export async function fetchGithubRepoSnapshot(repoUrl: string): Promise<GithubRe
   }
 
   const { owner, repo } = parsed;
-  const token = process.env.GITHUB_TOKEN?.trim();
+  const token = resolveGithubToken();
 
   const repoRes = await ghFetch(`/repos/${owner}/${repo}`, token);
   if (repoRes.status === 404) {

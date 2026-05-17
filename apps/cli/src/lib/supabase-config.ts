@@ -1,9 +1,10 @@
-// Replace these with your actual Supabase project values before publishing.
-// The anon key is intentionally public — it is safe to hardcode.
+// Publishable key is safe to hardcode (public by design).
 // Both can be overridden with env vars for local testing.
 export const SUPABASE_URL =
   (process.env.SUPABASE_URL ?? '').replace(/\/$/, '') ||
-  'https://YOUR_PROJECT_REF.supabase.co';
+  'https://fdzlalvfqhefnsgvmeby.supabase.co';
 
 export const SUPABASE_ANON_KEY =
-  process.env.SUPABASE_ANON_KEY ?? 'YOUR_SUPABASE_ANON_KEY';
+  process.env.SUPABASE_ANON_KEY ??
+  process.env.SUPABASE_PUBLISHABLE_KEY ??
+  'sb_publishable_L3927rknhsyTb_4_IkQInA_9TYk39FH';

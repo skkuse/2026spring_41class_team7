@@ -1,3 +1,4 @@
+import { serve } from '@hono/node-server';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { apiReference } from '@scalar/hono-api-reference';
 import { cors } from 'hono/cors';
@@ -61,7 +62,6 @@ app.get(
 
 app.get('/', (c) => c.text('API running. See /ui for docs.'));
 
-export default {
-  fetch: app.fetch,
-  port: 3001,
-};
+const port = parseInt(process.env.PORT ?? '3001', 10);
+serve({ fetch: app.fetch, port });
+console.log(`Server running on port ${port}`);

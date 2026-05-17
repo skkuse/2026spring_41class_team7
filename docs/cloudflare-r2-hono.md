@@ -157,4 +157,4 @@ Flow:
 | Best default for large uploads? | **Presigned PUT** from browser → R2, with Hono creating DB metadata and signing. |
 | What does Cloudflare configure? | Bucket, API tokens, optional CORS for direct browser uploads, optional public domain for public assets. |
 
-When you implement routes (e.g. `POST /v1/documents/upload-sessions`), register them in `apps/api/src/routes/index.ts` behind `requireAuth`, mirror types in `@team7/contracts` if you expose them to the web app, and extend Prisma with a migration for `r2ObjectKey` (or equivalent).
+When you implement routes (e.g. `POST /v1/documents/upload-sessions`), register them in `apps/api/src/routes/index.ts` behind `requireAuth`, mirror types in `@team7/shared-types` if you expose them to the web app, and extend Prisma with a migration for `r2ObjectKey` (or equivalent).

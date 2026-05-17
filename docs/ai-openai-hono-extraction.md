@@ -280,4 +280,4 @@ curl -sS -X POST "${API_BASE:-http://localhost:3001}/v1/projects/analyze-github"
 | OpenAI client + model | `apps/api/src/lib/openai-client.ts` |
 | Env examples | `apps/api/.env.example` |
 
-If you need **shared TypeScript types** in the Next.js app, consider re-exporting or duplicating these shapes in `packages/contracts` so web and API stay aligned with the same field names as in `ai-extract.schema.ts`.
+If you need **shared TypeScript types** in the Next.js app, consider re-exporting or duplicating these shapes in `packages/shared-types` so web and API stay aligned with the same field names as in `ai-extract.schema.ts`.

@@ -15,11 +15,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@hono/node-server": "latest",
     "@hono/zod-openapi": "latest",
     "@prisma/client": "^6.19.2",
     "@scalar/hono-api-reference": "latest",
     "@supabase/supabase-js": "^2.100.0",
-    "@team7/contracts": "workspace:*",
+    "@team7/shared-types": "workspace:*",
     "hono": "latest",
     "mammoth": "^1.12.0",
     "openai": "^6.32.0",

@@ -25,7 +25,7 @@
       "@supabase/ssr",
       "@supabase/supabase-js",
       "@tailwindcss/postcss",
-      "@team7/contracts",
+      "@team7/shared-types",
       "@types/node",
       "@types/react",
       "@types/react-dom",
@@ -54,7 +54,7 @@
         "/home/hskan/hskang9/2026spring_41class_team7/apps/cli/package.json",
         "/home/hskan/hskang9/2026spring_41class_team7/apps/web/package.json",
         "/home/hskan/hskang9/2026spring_41class_team7/package.json",
-        "/home/hskan/hskang9/2026spring_41class_team7/packages/contracts/package.json"
+        "/home/hskan/hskang9/2026spring_41class_team7/packages/shared-types/package.json"
       ],
       "cargoToml": []
     }

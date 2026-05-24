@@ -1,0 +1,279 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1779652408292,
+  "projectRoot": "/home/hskan/hskang9/2026spring_41class_team7",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "pnpm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": null,
+    "lintCommand": "pnpm lint",
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "dev": "turbo run dev --parallel",
+      "build": "turbo run build",
+      "build:cli": "pnpm --filter jobclaw build",
+      "assess:api": "pnpm build:cli && pnpm exec jobclaw assess apps/api --type node-backend --out apps/api/assessments/latest.md",
+      "lint": "turbo run lint",
+      "typecheck": "turbo run typecheck",
+      "jobclaw": "jobclaw",
+      "projects": "pnpm --filter project-management exec tsx src/cli.ts"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": true,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "apps": {
+      "path": "apps",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779652408284,
+      "keyFiles": []
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 4,
+      "lastAccessed": 1779652408285,
+      "keyFiles": [
+        "SRS.md",
+        "ai-openai-hono-extraction.md",
+        "cloudflare-r2-hono.md",
+        "supabase-auth.md"
+      ]
+    },
+    "packages": {
+      "path": "packages",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779652408288,
+      "keyFiles": []
+    },
+    "apps/api": {
+      "path": "apps/api",
+      "purpose": "API routes",
+      "fileCount": 4,
+      "lastAccessed": 1779652408290,
+      "keyFiles": [
+        "package.json",
+        "tsconfig.json",
+        "vitest.config.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "apps/web/lib/billing-context.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1779652726514,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/landing.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1779652834995,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/layout.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1779652711226,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/revenuecat.ts",
+      "accessCount": 4,
+      "lastAccessed": 1779652713240,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 3,
+      "lastAccessed": 1779652538181,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/package.json",
+      "accessCount": 3,
+      "lastAccessed": 1779652538625,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/package.json",
+      "accessCount": 3,
+      "lastAccessed": 1779652538866,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/onboarding.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1779652714490,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/billing/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1779652717141,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 3,
+      "lastAccessed": 1779653364879,
+      "type": "file"
+    },
+    {
+      "path": "packages/shared-types/package.json",
+      "accessCount": 2,
+      "lastAccessed": 1779652538314,
+      "type": "file"
+    },
+    {
+      "path": "packages/project-management/package.json",
+      "accessCount": 2,
+      "lastAccessed": 1779652539823,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/example/get-example.handler.ts",
+      "accessCount": 2,
+      "lastAccessed": 1779652540433,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/mock-data.ts",
+      "accessCount": 2,
+      "lastAccessed": 1779652692193,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/dev/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1779652693024,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/globals.css",
+      "accessCount": 2,
+      "lastAccessed": 1779652830939,
+      "type": "file"
+    },
+    {
+      "path": ".env",
+      "accessCount": 2,
+      "lastAccessed": 1779653052928,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/index.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1779652568903,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/cli.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1779652574957,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/commands/filled-logo.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1779652589762,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/auth/callback/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1779652909954,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/supabase/client.ts",
+      "accessCount": 1,
+      "lastAccessed": 1779652910815,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/supabase/server.ts",
+      "accessCount": 1,
+      "lastAccessed": 1779652911237,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/middleware.ts",
+      "accessCount": 1,
+      "lastAccessed": 1779652911672,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/supabase-auth-bridge.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1779652912494,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/auth/social-auth-buttons.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1779652912718,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/.env.example",
+      "accessCount": 1,
+      "lastAccessed": 1779652924514,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/.env.local",
+      "accessCount": 1,
+      "lastAccessed": 1779653039036,
+      "type": "file"
+    },
+    {
+      "path": "LICENSE",
+      "accessCount": 1,
+      "lastAccessed": 1779653092695,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/prompts/assessments/node-backend-assessment.prompt.md",
+      "accessCount": 1,
+      "lastAccessed": 1779653227225,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/lib/assessment-kinds.ts",
+      "accessCount": 1,
+      "lastAccessed": 1779653227568,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

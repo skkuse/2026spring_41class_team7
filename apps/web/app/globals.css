@@ -2,29 +2,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0d0d0f;
-  --foreground: #fafafa;
-  --primary: #00e5ff;
-  --primary-foreground: #050505;
-  --secondary: #1e1e21;
-  --secondary-foreground: #e4e4e7;
-  --muted: #1e1e21;
-  --muted-foreground: #8b8b93;
-  --accent: #1e1e21;
-  --accent-foreground: #fafafa;
-  --destructive: #ef4444;
-  --card: #141416;
-  --card-foreground: #fafafa;
-  --border: #2c2c30;
-  --chart-1: #00e5ff;
-  --chart-2: #7b61ff;
-  --chart-3: #ff00aa;
-  --chart-4: #ffaa00;
-  --chart-5: #00ff94;
-  --input: #141416;
-  --popover: #141416;
-  --popover-foreground: #fafafa;
-  --ring: #00e5ff;
+  --background: #1c1917;
+  --foreground: #f5ede4;
+  --primary: #d97757;
+  --primary-foreground: #1c1917;
+  --secondary: #2a2724;
+  --secondary-foreground: #e8ddd5;
+  --muted: #2a2724;
+  --muted-foreground: #9a9390;
+  --accent: #332f2c;
+  --accent-foreground: #f5ede4;
+  --destructive: #e05252;
+  --card: #242220;
+  --card-foreground: #f5ede4;
+  --border: #3a3632;
+  --chart-1: #d97757;
+  --chart-2: #e8a87c;
+  --chart-3: #c9956a;
+  --chart-4: #b5885a;
+  --chart-5: #7aaa8f;
+  --input: #242220;
+  --popover: #242220;
+  --popover-foreground: #f5ede4;
+  --ring: #d97757;
 }
 
 @theme inline {

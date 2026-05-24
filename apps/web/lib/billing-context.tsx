@@ -4,9 +4,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import type { CustomerInfo, Offerings } from '@revenuecat/purchases-js';
 
-import { DEFAULT_RC_APP_USER_ID, hasJobscriptPro, initRevenueCat, JOBSCRIPT_PRO_ENTITLEMENT } from './revenuecat';
+import { DEFAULT_RC_APP_USER_ID, hasJobclawPro, initRevenueCat, JOBCLAW_PRO_ENTITLEMENT } from './revenuecat';
 
-const RC_USER_STORAGE_KEY = 'team7_rc_app_user_id';
+const RC_USER_STORAGE_KEY = 'jobclaw_rc_app_user_id';
 
 function readStoredAppUserId(): string {
   if (typeof window === 'undefined') return DEFAULT_RC_APP_USER_ID;
@@ -23,7 +23,7 @@ type BillingContextValue = {
   error: string | null;
   customerInfo: CustomerInfo | null;
   offerings: Offerings | null;
-  jobscriptProActive: boolean;
+  jobclawProActive: boolean;
   entitlementName: string;
   refresh: () => Promise<CustomerInfo>;
   appUserId: string;
@@ -97,8 +97,8 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
       error,
       customerInfo,
       offerings,
-      entitlementName: JOBSCRIPT_PRO_ENTITLEMENT,
-      jobscriptProActive: hasJobscriptPro(customerInfo),
+      entitlementName: JOBCLAW_PRO_ENTITLEMENT,
+      jobclawProActive: hasJobclawPro(customerInfo),
       refresh,
       appUserId,
       setAppUserId,

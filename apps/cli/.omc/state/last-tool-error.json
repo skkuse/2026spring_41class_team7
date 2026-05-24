@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd apps/cli && pnpm test --run 2>&1\",\"description\":\"Run CLI tests\"}",
+  "error": "Exit code 1\n/bin/bash: line 1: cd: apps/cli: No such file or directory",
+  "timestamp": "2026-05-17T18:59:36.616Z",
+  "retry_count": 1
+}

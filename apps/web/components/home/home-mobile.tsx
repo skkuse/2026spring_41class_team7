@@ -35,7 +35,7 @@ export function HomeMobile() {
           <div className="flex flex-col gap-4">
             <Link
               href="/builder"
-              className="rounded bg-primary py-5 text-center font-mono text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(0,229,255,0.2)] transition-opacity hover:opacity-90 active:scale-[0.98]"
+              className="rounded bg-primary py-5 text-center font-mono text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(217,119,87,0.2)] transition-opacity hover:opacity-90 active:scale-[0.98]"
             >
               Create New Asset
             </Link>

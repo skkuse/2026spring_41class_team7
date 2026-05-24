@@ -122,7 +122,7 @@ export function BuilderMobile({
           <button
             type="button"
             onClick={onRun}
-            className="w-full rounded-sm bg-primary py-5 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_40px_rgba(0,229,255,0.2)] transition-opacity hover:opacity-95 active:scale-[0.99]"
+            className="w-full rounded-sm bg-primary py-5 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_40px_rgba(217,119,87,0.2)] transition-opacity hover:opacity-95 active:scale-[0.99]"
           >
             Run Engine
           </button>

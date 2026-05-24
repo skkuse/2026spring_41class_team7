@@ -76,11 +76,11 @@ export function Onboarding() {
       </div>
       <div className="relative z-10 w-full max-w-md animate-onboarding-enter">
         <div className="mb-12 flex flex-col items-center">
-          <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary shadow-[0_0_30px_rgba(0,229,255,0.4)]">
+          <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary shadow-[0_0_30px_rgba(217,119,87,0.4)]">
             <Icon icon="solar:bolt-bold" className="text-3xl text-primary-foreground" />
           </div>
           <span className="font-heading text-3xl font-black tracking-tighter">
-            Job<span className="text-primary">Script</span>
+            Job<span className="text-primary">claw</span>
           </span>
         </div>
         <div className="mb-10 text-center">
@@ -141,7 +141,7 @@ export function Onboarding() {
               icon="solar:arrow-left-linear"
               className="transition-transform group-hover:-translate-x-1"
             />
-            Back to JobScript
+            Back to Jobclaw
           </Link>
         </div>
       </div>

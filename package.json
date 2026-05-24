@@ -1,5 +1,5 @@
 {
-  "name": "team7-monorepo",
+  "name": "jobclaw-monorepo",
   "private": true,
   "packageManager": "pnpm@10.30.0",
   "scripts": {
@@ -10,7 +10,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "jobclaw": "jobclaw",
-    "projects": "pnpm --filter project-management exec tsx src/cli.ts"
+    "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts"
   },
   "devDependencies": {
     "jobclaw": "workspace:*",

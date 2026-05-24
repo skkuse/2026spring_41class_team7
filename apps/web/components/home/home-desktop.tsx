@@ -30,7 +30,7 @@ export function HomeDesktop() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/builder"
-                className="rounded-lg bg-primary px-10 py-4 font-home-mono text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(0,229,255,0.2)] transition-opacity hover:opacity-90"
+                className="rounded-lg bg-primary px-10 py-4 font-home-mono text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(217,119,87,0.2)] transition-opacity hover:opacity-90"
               >
                 Create New Asset
               </Link>

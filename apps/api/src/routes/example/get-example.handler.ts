@@ -1,5 +1,5 @@
 import type { RouteHandler } from '@hono/zod-openapi';
-import type { ExampleResponse } from '@team7/shared-types';
+import type { ExampleResponse } from '@jobclaw/shared-types';
 
 import type { Env } from '../../types.js';
 import { getExampleRoute } from './get-example.route.js';

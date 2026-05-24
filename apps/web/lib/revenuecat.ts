@@ -3,8 +3,8 @@
 import type { CustomerInfo, Purchases } from '@revenuecat/purchases-js';
 
 const API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_API_KEY ?? '';
-export const JOBSCRIPT_PRO_ENTITLEMENT = 'Jobscript Pro';
-export const DEFAULT_RC_APP_USER_ID = 'jobscript-web-demo-user';
+export const JOBCLAW_PRO_ENTITLEMENT = 'Jobclaw Pro';
+export const DEFAULT_RC_APP_USER_ID = 'jobclaw-web-demo-user';
 
 let purchasesModulePromise: Promise<typeof import('@revenuecat/purchases-js')> | null = null;
 let purchasesInstance: Purchases | null = null;
@@ -53,10 +53,10 @@ export async function getCustomerInfo(appUserId?: string): Promise<CustomerInfo>
   return purchases.getCustomerInfo();
 }
 
-export function hasJobscriptPro(customerInfo: CustomerInfo | null | undefined) {
+export function hasJobclawPro(customerInfo: CustomerInfo | null | undefined) {
   if (!customerInfo) return false;
   const { active, all } = customerInfo.entitlements;
   return Boolean(
-    active[JOBSCRIPT_PRO_ENTITLEMENT] || all[JOBSCRIPT_PRO_ENTITLEMENT]?.isActive,
+    active[JOBCLAW_PRO_ENTITLEMENT] || all[JOBCLAW_PRO_ENTITLEMENT]?.isActive,
   );
 }

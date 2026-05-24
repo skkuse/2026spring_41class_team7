@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
   display: 'swap',
 });
 
-/** Dashboard home (`font-home-*` in globals.css) — JobScript app shell. */
+/** Dashboard home (`font-home-*` in globals.css) — Jobclaw app shell. */
 const geist = Geist({
   subsets: ['latin'],
   variable: '--font-geist',
@@ -43,7 +43,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: 'JobScript — AI portfolio for developers',
+  title: 'Jobclaw — AI portfolio for developers',
   description: 'Connect GitHub and build a job-winning technical profile.',
 };
 

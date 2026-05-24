@@ -17,7 +17,7 @@ export const profile = {
   email: 'hkang@dev.system',
   role: 'Lead Platform Engineer',
   location: 'Seoul, KR',
-  website: 'https://jobscript.app/hkang',
+  website: 'https://jobclaw.app/hkang',
 };
 
 export const invoices = [

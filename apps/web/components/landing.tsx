@@ -16,7 +16,7 @@ export function Landing() {
                 <Icon icon="solar:bolt-bold" className="text-primary-foreground text-2xl" />
               </div>
               <span className="font-heading font-extrabold tracking-tight text-2xl">
-                Job<span className="text-primary">Script</span>
+                Job<span className="text-primary">claw</span>
               </span>
             </Link>
             <div className="hidden md:flex items-center gap-6 text-[11px] font-mono font-bold uppercase tracking-widest text-muted-foreground">
@@ -43,7 +43,7 @@ export function Landing() {
             </Link>
             <Link
               href="/onboarding"
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_20px_rgba(0,229,255,0.3)] inline-flex items-center justify-center"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_20px_rgba(217,119,87,0.3)] inline-flex items-center justify-center"
             >
               Get Started
             </Link>
@@ -98,7 +98,7 @@ export function Landing() {
           <div className="flex-1 relative w-full max-w-xl lg:max-w-none">
             <div className="relative z-10 p-4 bg-linear-to-b from-border/50 to-transparent rounded-[2rem] border border-border/50 shadow-2xl backdrop-blur-sm">
               <Image
-                alt="JobScript dashboard"
+                alt="Jobclaw dashboard"
                 src={DASHBOARD_IMG}
                 width={1200}
                 height={900}
@@ -192,7 +192,7 @@ export function Landing() {
             <Icon icon="solar:star-bold" className="text-primary text-2xl" />
           </div>
           <blockquote className="font-heading text-3xl md:text-5xl font-extrabold italic tracking-tight leading-snug mb-12">
-            &ldquo;I was dreading updating my portfolio for months. JobScript did it in 45 seconds
+            &ldquo;I was dreading updating my portfolio for months. Jobclaw did it in 45 seconds
             using my GitHub history, and I landed 3 interviews the following week.&rdquo;
           </blockquote>
           <div className="flex flex-col items-center gap-4">
@@ -263,7 +263,7 @@ export function Landing() {
             Invest in your trajectory.
           </h2>
           <p className="text-muted-foreground text-xl">
-            One successful career move pays for a lifetime of JobScript Pro.
+            One successful career move pays for a lifetime of Jobclaw Pro.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -301,12 +301,12 @@ export function Landing() {
               Get Started Free
             </Link>
           </div>
-          <div className="bg-card border-2 border-primary p-12 rounded-[2.5rem] flex flex-col relative shadow-[0_0_40px_rgba(0,229,255,0.1)] md:scale-105">
+          <div className="bg-card border-2 border-primary p-12 rounded-[2.5rem] flex flex-col relative shadow-[0_0_40px_rgba(217,119,87,0.1)] md:scale-105">
             <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg whitespace-nowrap">
               Most Popular
             </div>
             <div className="mb-8">
-              <h3 className="font-heading text-2xl font-bold mb-2">JobScript Pro</h3>
+              <h3 className="font-heading text-2xl font-bold mb-2">Jobclaw Pro</h3>
               <p className="text-muted-foreground text-sm">Total career reputation management.</p>
             </div>
             <div className="flex items-baseline gap-2 mb-8">
@@ -348,7 +348,7 @@ export function Landing() {
             is automated.
           </h2>
           <p className="mb-12 text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-            Join 15,000+ top-tier developers who use JobScript to stay ahead of the curve. Your next
+            Join 15,000+ top-tier developers who use Jobclaw to stay ahead of the curve. Your next
             role is 60 seconds away.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -375,7 +375,7 @@ export function Landing() {
                 <Icon icon="solar:bolt-bold" className="text-primary-foreground text-xl" />
               </div>
               <span className="font-heading font-extrabold tracking-tight text-2xl">
-                Job<span className="text-primary">Script</span>
+                Job<span className="text-primary">claw</span>
               </span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-8">
@@ -513,7 +513,7 @@ export function Landing() {
         </div>
         <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-border/30 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] text-muted-foreground/50 font-mono tracking-widest uppercase">
-            © {new Date().getFullYear()} JobScript. All rights reserved.
+            © {new Date().getFullYear()} Jobclaw. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest">
             <span>Status:</span>

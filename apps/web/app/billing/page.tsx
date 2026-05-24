@@ -25,7 +25,7 @@ export default function BillingPage() {
     offerings,
     customerInfo,
     entitlementName,
-    jobscriptProActive,
+    jobclawProActive,
     refresh,
     appUserId,
     setAppUserId,
@@ -118,7 +118,7 @@ export default function BillingPage() {
   return (
     <main className="min-h-screen bg-background text-foreground p-6 md:p-10">
       <div className="max-w-3xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold">Jobscript Billing</h1>
+        <h1 className="text-3xl font-bold">Jobclaw Billing</h1>
 
         <section className="rounded-xl border border-border bg-card p-5 space-y-3">
           <h2 className="text-xl font-semibold">API Provider (GET/POST)</h2>
@@ -167,7 +167,7 @@ export default function BillingPage() {
         <section className="rounded-xl border border-border bg-card p-5 space-y-3">
           <h2 className="text-xl font-semibold">Subscription Status</h2>
           {billingError ? <p className="text-red-400">{billingError}</p> : null}
-          {loading ? <p>Loading customer info...</p> : <p>{entitlementName}: <span className={jobscriptProActive ? 'text-emerald-400' : 'text-zinc-400'}>{jobscriptProActive ? 'ACTIVE' : 'INACTIVE'}</span></p>}
+          {loading ? <p>Loading customer info...</p> : <p>{entitlementName}: <span className={jobclawProActive ? 'text-emerald-400' : 'text-zinc-400'}>{jobclawProActive ? 'ACTIVE' : 'INACTIVE'}</span></p>}
           <button onClick={() => void refresh()} className="px-3 py-2 rounded border border-border">Refresh Customer Info</button>
         </section>
 

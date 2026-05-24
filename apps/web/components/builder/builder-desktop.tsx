@@ -130,7 +130,7 @@ export function BuilderDesktop({
               <button
                 type="button"
                 onClick={onRun}
-                className="rounded-sm bg-primary px-12 py-5 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_40px_rgba(0,229,255,0.2)] transition-opacity hover:opacity-95"
+                className="rounded-sm bg-primary px-12 py-5 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_40px_rgba(217,119,87,0.2)] transition-opacity hover:opacity-95"
               >
                 Run Engine
               </button>

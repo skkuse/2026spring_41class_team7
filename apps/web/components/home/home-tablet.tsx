@@ -38,7 +38,7 @@ export function HomeTablet() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/builder"
-                className="flex-1 rounded bg-primary py-4 text-center font-mono text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(0,229,255,0.2)] transition-opacity hover:opacity-90"
+                className="flex-1 rounded bg-primary py-4 text-center font-mono text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(217,119,87,0.2)] transition-opacity hover:opacity-90"
               >
                 Create New Asset
               </Link>

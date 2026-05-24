@@ -21,7 +21,7 @@ export default function DevHubPage() {
     <main className="min-h-screen p-8">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">JobScript UI Screens</h1>
+          <h1 className="text-3xl font-bold">Jobclaw UI Screens</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Marketing entry <Link href="/">/</Link> · app dashboard{' '}
             <Link href="/home">/home</Link>.

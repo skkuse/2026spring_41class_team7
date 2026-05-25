@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Icon } from '@iconify/react';
 
 import type { AssessmentSummary } from './responsive-home';
@@ -20,39 +21,36 @@ export function AssessmentCard({ item }: { item: AssessmentSummary }) {
   });
 
   return (
-    <article className="group relative overflow-hidden rounded-lg border border-border bg-card/40 p-5 transition-colors hover:border-border/80 hover:bg-card/60">
-      <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="mb-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            {item.assessmentType}
-          </p>
-          <h3 className="truncate font-mono text-sm font-bold">
-            {item.repoOwner}/{item.repoName}
-          </h3>
+    <Link href={`/projects/${item.id}`} className="block">
+      <article className="group relative overflow-hidden rounded-lg border border-border bg-card/40 p-5 transition-colors hover:border-primary/40 hover:bg-card/60">
+        <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="mb-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              {item.assessmentType}
+            </p>
+            <h3 className="truncate font-mono text-sm font-bold">
+              {item.repoOwner}/{item.repoName}
+            </h3>
+          </div>
+          <ScoreBadge score={item.overallScore} />
         </div>
-        <ScoreBadge score={item.overallScore} />
-      </div>
-      <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <Icon icon="solar:calendar-linear" className="text-sm" />
-          {date}
+        <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <Icon icon="solar:calendar-linear" className="text-sm" />
+            {date}
+          </span>
+          <span className="flex items-center gap-1">
+            <Icon icon="solar:cpu-bolt-linear" className="text-sm" />
+            {item.model}
+          </span>
+        </div>
+        <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-primary transition-opacity group-hover:opacity-70">
+          <Icon icon="solar:arrow-right-linear" />
+          View Details
         </span>
-        <span className="flex items-center gap-1">
-          <Icon icon="solar:cpu-bolt-linear" className="text-sm" />
-          {item.model}
-        </span>
-      </div>
-      <a
-        href={item.repoUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-primary transition-opacity hover:opacity-70"
-      >
-        <Icon icon="solar:arrow-right-up-linear" />
-        View Repo
-      </a>
-    </article>
+      </article>
+    </Link>
   );
 }
 

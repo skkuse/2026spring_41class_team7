@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 
 import { AssessmentList } from './assessment-status';
+import { InstallCLIButton } from './cli-install-modal';
 import { DashboardBottomNav } from './dashboard-bottom-nav';
 import type { AssessmentSummary } from './responsive-home';
 
@@ -19,14 +20,7 @@ export function HomeTablet({ assessments, loading }: Props) {
               Job<span className="text-primary">claw</span>
             </span>
           </div>
-          <a
-            href="https://www.npmjs.com/package/jobclaw"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded border border-border/50 bg-secondary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-secondary-foreground transition-colors hover:bg-muted"
-          >
-            Install CLI
-          </a>
+          <InstallCLIButton className="rounded border border-border/50 bg-secondary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-secondary-foreground transition-colors hover:bg-muted" />
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-8 py-10">

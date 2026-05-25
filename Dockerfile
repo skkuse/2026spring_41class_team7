@@ -12,9 +12,9 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build workspace deps, then API
-RUN pnpm --filter @team7/shared-types build
-RUN pnpm --filter api exec prisma generate
-RUN pnpm --filter api build
+RUN pnpm --filter @jobclaw/shared-types build
+RUN pnpm --filter @jobclaw/api exec prisma generate
+RUN pnpm --filter @jobclaw/api build
 
 ENV NODE_ENV=production
 WORKDIR /app/apps/api

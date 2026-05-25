@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createElement, createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 const STORAGE_KEY = 'team7_api_bearer';
 
@@ -46,7 +46,7 @@ function readStoredToken(): string | null {
   }
 }
 
-export function ApiProvider({ children }: { children: React.ReactNode }) {
+export function ApiProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
   const [authToken, setAuthTokenState] = useState<string | null>(() => readStoredToken());
 
   const setAuthToken = useCallback((token: string | null) => {
@@ -70,7 +70,7 @@ export function ApiProvider({ children }: { children: React.ReactNode }) {
     [authToken, setAuthToken],
   );
 
-  return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
+  return createElement(ApiContext.Provider, { value }, children) as React.JSX.Element;
 }
 
 export function useApi() {

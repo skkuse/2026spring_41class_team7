@@ -33,6 +33,22 @@ export function SocialAuthButtons({ disabled = false, className }: Props) {
     }
   }
 
+  async function signInWithGitHub() {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const supabase = createBrowserSupabase();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: { redirectTo: redirectTo() },
+      });
+      if (error) throw error;
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'GitHub sign-in failed.');
+      setLoading(false);
+    }
+  }
+
   async function signInWithLinkedIn() {
     setLoading(true);
     setMessage(null);
@@ -58,6 +74,15 @@ export function SocialAuthButtons({ disabled = false, className }: Props) {
   return (
     <div className={className}>
       <div className="space-y-4">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void signInWithGitHub()}
+          className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#24292e] font-bold text-white shadow-xl transition-all hover:bg-[#24292e]/90 active:scale-[0.98] disabled:opacity-50"
+        >
+          <Icon icon="mdi:github" className="text-2xl" />
+          Continue with GitHub
+        </button>
         <button
           type="button"
           disabled={busy}

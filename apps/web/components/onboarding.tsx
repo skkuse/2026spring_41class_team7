@@ -1,78 +1,23 @@
 'use client';
 
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 
-import { createBrowserSupabase } from '../lib/supabase/client';
-
-const BG_URL =
-  'https://ggrhecslgdflloszjkwl.supabase.co/storage/v1/object/public/user-assets/76524ixEd5g/components/GMq8CbiyhST.png';
+import { SocialAuthButtons } from './auth/social-auth-buttons';
 
 export function Onboarding() {
   const searchParams = useSearchParams();
   const authError = searchParams.get('error');
-
-  const [loading, setLoading] = useState(false);
-  const [oauthMessage, setOauthMessage] = useState<string | null>(null);
-  const [authMessage, setAuthMessage] = useState<string | null>(
-    authError === 'auth' ? 'Authentication failed. Try again.' : null,
-  );
-
-  const redirectTo = () => `${window.location.origin}/auth/callback`;
-
-  async function signInWithGoogle() {
-    setLoading(true);
-    setOauthMessage(null);
-    setAuthMessage(null);
-    try {
-      const supabase = createBrowserSupabase();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: redirectTo() },
-      });
-      if (error) throw error;
-    } catch (err) {
-      setOauthMessage(err instanceof Error ? err.message : 'Google sign-in failed.');
-      setLoading(false);
-    }
-  }
-
-  async function signInWithLinkedIn() {
-    setLoading(true);
-    setOauthMessage(null);
-    setAuthMessage(null);
-    try {
-      const supabase = createBrowserSupabase();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'linkedin_oidc',
-        options: { redirectTo: redirectTo() },
-      });
-      if (error) throw error;
-    } catch (err) {
-      setOauthMessage(
-        err instanceof Error
-          ? err.message
-          : 'LinkedIn sign-in failed. Enable LinkedIn (OIDC) in Supabase.',
-      );
-      setLoading(false);
-    }
-  }
+  const authMessage = authError === 'auth' ? 'Authentication failed. Try again.' : null;
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-6 font-sans text-foreground">
       <div className="absolute inset-0 z-0">
-        <Image
-          alt="Background"
-          src={BG_URL}
-          fill
-          className="object-cover opacity-40 mix-blend-screen"
-          sizes="100vw"
-          priority
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-background via-background/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/40 to-background" />
+        <div className="absolute top-0 left-0 size-[500px] -translate-x-1/3 -translate-y-1/3 rounded-full bg-primary/15 blur-[120px]" />
+        <div className="absolute bottom-0 right-0 size-[400px] translate-x-1/3 translate-y-1/3 rounded-full bg-chart-2/10 blur-[100px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,var(--background)_100%)]" />
       </div>
       <div className="relative z-10 w-full max-w-md animate-onboarding-enter">
         <div className="mb-12 flex flex-col items-center">
@@ -91,31 +36,7 @@ export function Onboarding() {
             Join 15,000+ engineers leveraging AI to transform their code into career opportunities.
           </p>
         </div>
-        <div className="space-y-4">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => void signInWithGoogle()}
-            className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-white font-bold text-black shadow-xl transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-50"
-          >
-            <Icon icon="logos:google-icon" className="text-xl" />
-            Continue with Google
-          </button>
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => void signInWithLinkedIn()}
-            className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#0077B5] font-bold text-white shadow-xl transition-all hover:bg-[#0077B5]/90 active:scale-[0.98] disabled:opacity-50"
-          >
-            <Icon icon="mdi:linkedin" className="text-2xl" />
-            Continue with LinkedIn
-          </button>
-          {oauthMessage ? (
-            <p className="text-center text-sm text-primary" role="alert">
-              {oauthMessage}
-            </p>
-          ) : null}
-        </div>
+        <SocialAuthButtons />
         {authMessage ? (
           <p className="mt-4 text-center text-sm text-primary" role="alert">
             {authMessage}
@@ -145,8 +66,6 @@ export function Onboarding() {
           </Link>
         </div>
       </div>
-      <div className="absolute -bottom-24 -left-24 -z-10 size-64 rounded-full bg-primary/20 blur-[100px]" />
-      <div className="absolute -top-24 -right-24 -z-10 size-64 rounded-full bg-chart-2/20 blur-[100px]" />
     </div>
   );
 }

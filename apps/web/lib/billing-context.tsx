@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createElement, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import type { CustomerInfo, Offerings } from '@revenuecat/purchases-js';
 
@@ -32,7 +32,7 @@ type BillingContextValue = {
 
 const BillingContext = createContext<BillingContextValue | null>(null);
 
-export function BillingProvider({ children }: { children: React.ReactNode }) {
+export function BillingProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
@@ -106,7 +106,7 @@ export function BillingProvider({ children }: { children: React.ReactNode }) {
     [loading, error, customerInfo, offerings, refresh, appUserId, setAppUserId],
   );
 
-  return <BillingContext.Provider value={value}>{children}</BillingContext.Provider>;
+  return createElement(BillingContext.Provider, { value }, children) as React.JSX.Element;
 }
 
 export function useBilling() {

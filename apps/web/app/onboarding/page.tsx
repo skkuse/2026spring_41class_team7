@@ -1,8 +1,8 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 import { Onboarding } from '../../components/onboarding';
 
-export default function OnboardingPage() {
+export default function OnboardingPage(): React.JSX.Element {
   return (
     <Suspense
       fallback={

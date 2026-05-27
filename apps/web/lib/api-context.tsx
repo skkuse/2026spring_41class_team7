@@ -4,11 +4,13 @@ import { createElement, createContext, useCallback, useContext, useMemo, useStat
 
 const STORAGE_KEY = 'team7_api_bearer';
 
-type HttpMethod = 'GET' | 'POST';
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 type ApiClient = {
   get: <T>(path: string) => Promise<T>;
   post: <T>(path: string, body?: unknown) => Promise<T>;
+  patch: <T>(path: string, body?: unknown) => Promise<T>;
+  delete: <T>(path: string) => Promise<T>;
   setAuthToken: (token: string | null) => void;
   authToken: string | null;
 };
@@ -66,6 +68,8 @@ export function ApiProvider({ children }: { children: React.ReactNode }): React.
       setAuthToken,
       get: <T,>(path: string) => request<T>('GET', path, authToken),
       post: <T,>(path: string, body?: unknown) => request<T>('POST', path, authToken, body),
+      patch: <T,>(path: string, body?: unknown) => request<T>('PATCH', path, authToken, body),
+      delete: <T,>(path: string) => request<T>('DELETE', path, authToken),
     }),
     [authToken, setAuthToken],
   );

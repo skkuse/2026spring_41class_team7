@@ -7,6 +7,24 @@ export const meResponse200Schema = z.object({
   email: z.string().email().openapi({ example: 'hkang@dev.system' }),
   role: z.string().openapi({ example: 'Lead Platform Engineer' }),
   location: z.string().openapi({ example: 'Seoul, KR' }),
-  website: z.string().nullable().openapi({ example: 'https://jobscript.app/hkang' }),
+  website: z.string().nullable().openapi({ example: 'https://jobclaw.app/hkang' }),
   isPro: z.boolean().openapi({ example: true }),
+  userType: z.enum(['DEVELOPER', 'COMPANY']).nullable().openapi({ example: 'DEVELOPER' }),
+  companyName: z.string().nullable().openapi({ example: 'Acme Corp' }),
+  industry: z.string().nullable().openapi({ example: 'FinTech' }),
+  allowContact: z.boolean().openapi({ example: false }),
 });
+
+export type ExampleResponse = {
+  message: string;
+};
+
+export type HealthOkResponse = {
+  status: 'ok';
+  service: 'api';
+};
+
+export type HealthErrorResponse = {
+  status: 'error';
+  message: string;
+};

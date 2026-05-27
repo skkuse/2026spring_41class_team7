@@ -18,6 +18,10 @@ export const getMeHandler: RouteHandler<typeof getMeRoute, Env> = async (c) => {
       location: true,
       website: true,
       isPro: true,
+      userType: true,
+      companyName: true,
+      industry: true,
+      allowContact: true,
     },
   });
 

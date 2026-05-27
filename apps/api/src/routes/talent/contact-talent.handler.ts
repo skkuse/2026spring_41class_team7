@@ -5,6 +5,15 @@ import { prisma } from '../../lib/prisma.js';
 import { getResendClient } from '../../lib/resend.js';
 import { contactTalentRoute } from './contact-talent.route.js';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export const contactTalentHandler: RouteHandler<typeof contactTalentRoute, Env> = async (c) => {
   const companyUserId = c.get('userId');
   const { userId: devUserId } = c.req.valid('param');
@@ -39,18 +48,23 @@ export const contactTalentHandler: RouteHandler<typeof contactTalentRoute, Env> 
   }
 
   const companyName = companyProfile.companyName ?? 'A company';
+  const safeCompanyName = escapeHtml(companyName);
+  const safeMessage = escapeHtml(message);
 
-  await resend.emails.send({
+  const { error: sendError } = await resend.emails.send({
     from: 'Jobclaw <noreply@jobclaw.fyi>',
     to: devProfile.email,
-    subject: `[Jobclaw] ${companyName} is interested in your work`,
+    subject: `[Jobclaw] ${safeCompanyName} is interested in your work`,
     html: `
       <p>Hi,</p>
-      <p><strong>${companyName}</strong> found your Jobclaw profile and wants to connect.</p>
-      <blockquote style="border-left:3px solid #ccc;padding-left:1em;color:#555">${message}</blockquote>
+      <p><strong>${safeCompanyName}</strong> found your Jobclaw profile and wants to connect.</p>
+      <blockquote style="border-left:3px solid #ccc;padding-left:1em;color:#555">${safeMessage}</blockquote>
       <p>You can manage contact preferences in your <a href="https://jobclaw.fyi/settings">Jobclaw settings</a>.</p>
     `,
   });
+  if (sendError) {
+    return c.json({ message: 'Email service unavailable.' }, 503);
+  }
 
   return c.json({ sent: true }, 200);
 };

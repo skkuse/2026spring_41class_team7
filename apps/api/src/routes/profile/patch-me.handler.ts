@@ -83,13 +83,13 @@ export const patchMeHandler: RouteHandler<typeof patchMeRoute, Env> = async (c) 
         data: [
           {
             profileId: existing.id,
-            externalId: `INV-${userId.slice(0, 8)}-010`,
+            externalId: `INV-${existing.id}-010`,
             amountUsd: new Prisma.Decimal('12.00'),
             issuedAt: new Date('2023-10-24T00:00:00.000Z'),
           },
           {
             profileId: existing.id,
-            externalId: `INV-${userId.slice(0, 8)}-009`,
+            externalId: `INV-${existing.id}-009`,
             amountUsd: new Prisma.Decimal('12.00'),
             issuedAt: new Date('2023-09-24T00:00:00.000Z'),
           },

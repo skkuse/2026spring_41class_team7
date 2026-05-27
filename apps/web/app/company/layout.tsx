@@ -16,5 +16,9 @@ export default function CompanyLayout({ children }: { children: React.ReactNode 
     else if (profile.userType === 'DEVELOPER') router.replace('/home');
   }, [isLoading, profile, router]);
 
+  const shouldRedirect =
+    !isLoading && !!profile && (profile.userType === null || profile.userType === 'DEVELOPER');
+  if (isLoading || shouldRedirect) return null;
+
   return <>{children}</>;
 }

@@ -11,10 +11,14 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     if (isLoading) return;
-    if (!profile) return; // not logged in — let Supabase middleware handle
+    if (!profile) return;
     if (profile.userType === null) router.replace('/onboarding/role');
     else if (profile.userType === 'COMPANY') router.replace('/company/talent');
   }, [isLoading, profile, router]);
+
+  const shouldRedirect =
+    !isLoading && !!profile && (profile.userType === null || profile.userType === 'COMPANY');
+  if (isLoading || shouldRedirect) return null;
 
   return <>{children}</>;
 }

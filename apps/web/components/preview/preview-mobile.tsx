@@ -2,7 +2,7 @@ import { PreviewResumeCard } from './preview-content';
 
 export function PreviewMobile() {
   return (
-    <main className="mx-auto min-h-screen max-w-md border-x border-border bg-zinc-950/40 pb-nav-safe">
+    <main className="mx-auto min-h-screen max-w-md border-x border-border bg-background pb-nav-safe">
       <header className="sticky top-0 flex justify-between border-b border-border bg-background p-4">
         <h1 className="font-bold">Preview</h1>
         <button

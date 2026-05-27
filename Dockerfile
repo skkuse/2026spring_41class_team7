@@ -16,8 +16,11 @@ RUN pnpm --filter @jobclaw/shared-types build
 RUN pnpm --filter @jobclaw/api exec prisma generate
 RUN pnpm --filter @jobclaw/api build
 
+# Install prisma globally so it's available at runtime without pnpm path resolution
+RUN npm install -g prisma@6
+
 ENV NODE_ENV=production
 WORKDIR /app/apps/api
 EXPOSE 3001
 
-CMD ["/bin/sh", "-c", "/app/node_modules/.bin/prisma migrate deploy --schema=/app/apps/api/prisma/schema.prisma && node dist/index.js"]
+CMD ["/bin/sh", "-c", "prisma migrate deploy --schema=/app/apps/api/prisma/schema.prisma && node dist/index.js"]

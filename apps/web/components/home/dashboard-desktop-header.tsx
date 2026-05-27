@@ -21,7 +21,7 @@ export function DashboardDesktopHeader() {
             <Icon icon="hugeicons:code" className="text-xl" />
           </div>
           <span className="font-home-heading text-lg font-bold tracking-tight">
-            Job<span className="text-primary">Script</span>
+            Job<span className="text-primary">claw</span>
           </span>
         </Link>
 

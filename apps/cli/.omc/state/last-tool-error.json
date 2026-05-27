@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"cd apps/cli && pnpm test --run 2>&1\",\"description\":\"Run CLI tests\"}",
-  "error": "Exit code 1\n/bin/bash: line 1: cd: apps/cli: No such file or directory",
-  "timestamp": "2026-05-17T18:59:36.616Z",
+  "tool_input_preview": "{\"command\":\"vercel env add NEXT_PUBLIC_API_BASE_URL preview main --value \\\"https://jobclaw-api-production.up.railway.app\\\" --yes 2>&1\",\"description\":\"Add API URL to Vercel preview env for main branch\"...",
+  "error": "Exit code 1\n<claude-code-hint v=\"1\" type=\"plugin\" value=\"vercel@claude-plugins-official\" />\n{\n  \"status\": \"error\",\n  \"reason\": \"not_linked\",\n  \"message\": \"Your codebase isn't linked to a project on Vercel. Run vercel link to begin. Use --yes for non-interactive; use --scope or --project to specify team or project. Then run your env add command.\",\n  \"next\": [\n    {\n      \"command\": \"vercel link --scope <scope> --yes\"\n    },\n    {\n      \"command\": \"vercel env add NEXT_PUBLIC_API_BASE_URL preview m...",
+  "timestamp": "2026-05-25T16:24:28.430Z",
   "retry_count": 1
 }

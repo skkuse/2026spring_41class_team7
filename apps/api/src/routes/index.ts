@@ -24,6 +24,8 @@ import { listAssessmentsHandler } from './assessments/list-assessments.handler.j
 import { listAssessmentsRoute } from './assessments/list-assessments.route.js';
 import { getAssessmentHandler } from './assessments/get-assessment.handler.js';
 import { getAssessmentRoute } from './assessments/get-assessment.route.js';
+import { postPortfolioGenerateHandler } from './portfolio/post-generate.handler.js';
+import { postPortfolioGenerateRoute } from './portfolio/post-generate.route.js';
 
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
@@ -38,4 +40,5 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(postAssessmentRoute, postAssessmentHandler);
   app.openapi(listAssessmentsRoute, listAssessmentsHandler);
   app.openapi(getAssessmentRoute, getAssessmentHandler);
+  app.openapi(postPortfolioGenerateRoute, postPortfolioGenerateHandler);
 };

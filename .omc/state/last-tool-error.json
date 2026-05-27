@@ -1,7 +1,7 @@
 {
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"pnpm --filter api build 2>&1 && echo \\\"API OK\\\"\",\"description\":\"Build API to check for TypeScript errors\",\"run_in_background\":false}",
-  "error": "Exit code 2\n\n> api@ build /home/hskan/hskang9/2026spring_41class_team7/apps/api\n> tsc -p tsconfig.json\n\nsrc/routes/assessments/list-assessments.handler.ts(10,29): error TS2339: Property 'assessment' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.\nsrc/routes/assessments/list-assessments.handler.ts(28,24): error TS7006: Parameter 'r' implicitly has an 'any' type.\nsrc/routes/assessments/post-assessment.handler.ts(28,31): error TS2339: Property 'assessment' does not e...",
-  "timestamp": "2026-05-17T21:02:01.987Z",
+  "tool_name": "mcp__plugin_oh-my-claudecode_t__lsp_diagnostics",
+  "tool_input_preview": "{\"file\":\"/home/hskan/hskang9/2026spring_41class_team7/apps/api/src/routes/talent/get-talent.handler.ts\"}",
+  "error": "Language server 'typescript-language-server' not found.\nInstall with: npm install -g typescript-language-server typescript",
+  "timestamp": "2026-05-27T03:48:00.782Z",
   "retry_count": 1
 }

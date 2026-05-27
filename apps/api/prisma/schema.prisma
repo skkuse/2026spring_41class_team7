@@ -8,57 +8,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Profile {
-  id          String      @id @default(cuid())
-  userId      String      @unique
-  fullName    String
-  email       String
-  role        String
-  location    String
-  website     String?
-  isPro       Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  projects    Project[]
-  invoices    Invoice[]
+enum UserType {
+  DEVELOPER
+  COMPANY
 }
 
-/// A term-project or workstream the developer tracks analyses under.
+model Profile {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  fullName     String
+  email        String
+  role         String
+  location     String
+  website      String?
+  isPro        Boolean   @default(false)
+  userType     UserType?
+  companyName  String?
+  industry     String?
+  allowContact Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  projects     Project[]
+  invoices     Invoice[]
+}
+
 model Project {
-  id          String      @id @default(cuid())
-  profileId   String
-  profile     Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  name        String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  documents   Document[]
+  id        String     @id @default(cuid())
+  profileId String
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  documents Document[]
 
   @@index([profileId, createdAt])
 }
 
-/// Written project analysis (content/metadata); belongs to a Project.
 model Document {
-  id          String      @id @default(cuid())
-  projectId   String
-  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  name        String
-  status      DocumentStatus
-  sizeLabel   String?
-  tags        String[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        String         @id @default(cuid())
+  projectId String
+  project   Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  status    DocumentStatus
+  sizeLabel String?
+  tags      String[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   @@index([projectId, createdAt])
 }
 
 model Invoice {
-  id          String      @id @default(cuid())
-  profileId   String
-  profile     Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  externalId  String      @unique
-  amountUsd   Decimal     @db.Decimal(10, 2)
-  issuedAt    DateTime
-  createdAt   DateTime    @default(now())
+  id         String   @id @default(cuid())
+  profileId  String
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  externalId String   @unique
+  amountUsd  Decimal  @db.Decimal(10, 2)
+  issuedAt   DateTime
+  createdAt  DateTime @default(now())
 
   @@index([profileId, issuedAt])
 }
@@ -69,7 +76,6 @@ enum DocumentStatus {
   ARCHIVED
 }
 
-/// CLI assessment result published by a logged-in user.
 model Assessment {
   id               String   @id @default(cuid())
   userId           String
@@ -90,4 +96,14 @@ model Assessment {
   createdAt        DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model Shortlist {
+  id            String   @id @default(cuid())
+  companyUserId String
+  devUserId     String
+  createdAt     DateTime @default(now())
+
+  @@unique([companyUserId, devUserId])
+  @@index([companyUserId])
 }

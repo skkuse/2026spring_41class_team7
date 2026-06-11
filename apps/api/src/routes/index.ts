@@ -24,10 +24,13 @@ import { listAssessmentsHandler } from './assessments/list-assessments.handler.j
 import { listAssessmentsRoute } from './assessments/list-assessments.route.js';
 import { getAssessmentHandler } from './assessments/get-assessment.handler.js';
 import { getAssessmentRoute } from './assessments/get-assessment.route.js';
+import { getPublicAssessmentHandler } from './assessments/get-public-assessment.handler.js';
+import { getPublicAssessmentRoute } from './assessments/get-public-assessment.route.js';
 
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
   app.openapi(getHealthRoute, getHealthHandler);
+  app.openapi(getPublicAssessmentRoute, getPublicAssessmentHandler);
   app.use('/v1/*', requireAuth);
   app.openapi(postBootstrapRoute, postBootstrapHandler);
   app.openapi(getMeRoute, getMeHandler);

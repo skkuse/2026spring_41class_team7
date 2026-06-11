@@ -5,6 +5,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import {
   formatAssessmentMarkdown,
   runBackendAssessment,
+  type BackendAssessmentResult,
 } from "../lib/backend-assessment.js";
 import { jobclawProjectDir, scanResultPath } from "../lib/config.js";
 import { runRepositoryScan } from "../lib/run-repository-scan.js";
@@ -15,6 +16,8 @@ import {
   type AssessmentKind,
 } from "../lib/assessment-kinds.js";
 import { parseAssessCommandArgv } from "../lib/workspace-agent/index.js";
+import AssessmentResultView, { type AssessmentResultMeta } from "./assess-result.js";
+import { CommandHeader, ErrorBox, StatusStep } from "../ui/index.js";
 
 type Props = {
   cwd: string;
@@ -67,8 +70,12 @@ export default function AssessCommand({ cwd, args, onDone }: Props) {
   const [pickedType, setPickedType] = useState<AssessmentKind | null>(() =>
     parsed.assessmentType ?? null,
   );
-  const [line, setLine] = useState("");
+  const [progressPhase, setProgressPhase] = useState<"scanning" | "assessing" | "done" | null>(null);
   const [runError, setRunError] = useState<string | null>(null);
+  const [doneResult, setDoneResult] = useState<{
+    result: BackendAssessmentResult;
+    meta: AssessmentResultMeta;
+  } | null>(null);
   const ranRef = useRef(false);
   const finishedRef = useRef(false);
 
@@ -120,9 +127,8 @@ export default function AssessCommand({ cwd, args, onDone }: Props) {
       try {
         const { repoRoot, model, jsonOnly, outPath } = parsed;
 
-        setLine("Repository scan: git timeline & manifests…");
+        setProgressPhase("scanning");
         const scanOut = await runRepositoryScan(repoRoot);
-        setLine("Repository scan: writing scan-result.json…");
         await mkdir(jobclawProjectDir(repoRoot), { recursive: true });
         await writeFile(
           scanResultPath(repoRoot),
@@ -130,7 +136,7 @@ export default function AssessCommand({ cwd, args, onDone }: Props) {
           "utf8",
         );
 
-        setLine("Backend assessment: bundling & calling OpenAI…");
+        setProgressPhase("assessing");
         const { result, rawJson, contextChars, model: modelUsed } =
           await runBackendAssessment({ repoRoot, model });
 
@@ -160,25 +166,22 @@ export default function AssessCommand({ cwd, args, onDone }: Props) {
 
         if (jsonOnly) {
           console.log(rawJson);
-          setLine(
-            `Done. Wrote ${scanResultPath(repoRoot)}; assessment ${saved.fileName} → ${saved.absolutePath}. Context: ${contextChars} characters.${outPath ? ` · Wrote ${outPath}` : ""}`,
-          );
+          setProgressPhase("done");
           finish(0);
           return;
         }
 
-        const s = result.scores;
-        setLine(
-          `Assessment: ${pickedType}\n\n` +
-            `Scan: ${scanResultPath(repoRoot)}\n` +
-            `Saved ${saved.fileName} → ${saved.absolutePath}\n\n` +
-            `Context: ${contextChars} chars · Overall ${result.overallScore}/100${outPath ? ` · Wrote ${outPath}` : ""}\n\n` +
-            `Scores (0–10): OpenAPI ${s.openapi} · Zod ${s.zodValidation} · Rate limit ${s.rateLimiting} · Cache ${s.caching} · Prisma ${s.prismaModels}\n\n` +
-            `${result.executiveSummary}\n\n` +
-            `Findings:\n${result.findings.map((f) => `• ${f}`).join("\n")}\n\n` +
-            `Gaps & risks:\n${result.gapsAndRisks.map((f) => `• ${f}`).join("\n")}\n\n` +
-            `Next steps:\n${result.nextSteps.map((f, i) => `${i + 1}. ${f}`).join("\n")}`,
-        );
+        setDoneResult({
+          result,
+          meta: {
+            assessmentType: pickedType,
+            scanPath: scanResultPath(repoRoot),
+            savedPath: saved.absolutePath,
+            contextChars,
+            outPath: outPath ?? undefined,
+          },
+        });
+        setProgressPhase("done");
         finish(0);
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
@@ -216,11 +219,7 @@ export default function AssessCommand({ cwd, args, onDone }: Props) {
   }
 
   if (runError) {
-    return (
-      <Box flexDirection="column">
-        <Text color="red">{runError}</Text>
-      </Box>
-    );
+    return <ErrorBox message={runError} />;
   }
 
   if (pickedType === null && process.stdin.isTTY) {
@@ -241,9 +240,38 @@ export default function AssessCommand({ cwd, args, onDone }: Props) {
     );
   }
 
+  if (doneResult) {
+    return (
+      <AssessmentResultView result={doneResult.result} meta={doneResult.meta} />
+    );
+  }
+
   return (
     <Box flexDirection="column">
-      <Text>{line || "Starting assessment…"}</Text>
+      <CommandHeader title="JOBCLAW  ·  Node.js Backend Assessment" />
+      <Box flexDirection="column" paddingLeft={1}>
+        <StatusStep
+          label="Repository scan"
+          status={
+            progressPhase === "scanning"
+              ? "active"
+              : progressPhase === "assessing" || progressPhase === "done"
+                ? "done"
+                : "pending"
+          }
+        />
+        <StatusStep
+          label="Backend assessment"
+          status={
+            progressPhase === "assessing"
+              ? "active"
+              : progressPhase === "done"
+                ? "done"
+                : "pending"
+          }
+          detail={progressPhase === "assessing" ? "Bundling context & calling OpenAI…" : undefined}
+        />
+      </Box>
     </Box>
   );
 }

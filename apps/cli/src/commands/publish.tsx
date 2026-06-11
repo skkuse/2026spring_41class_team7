@@ -6,6 +6,7 @@ import {
   recordSubscription,
   FREE_PUBLISH_LIMIT,
 } from "../lib/publish-logic.js";
+import { ErrorBox, Spinner, SuccessBox, WarningBox } from "../ui/index.js";
 
 const SUBSCRIBE_URL = "https://jobclaw.fyi/subscribe";
 
@@ -130,51 +131,32 @@ export default function PublishCommand({ cwd, onFinish }: PublishProps) {
 
   if (view.phase === "working") {
     return (
-      <Box flexDirection="column">
-        <Text bold color="cyan">
-          jobclaw publish-scan
-        </Text>
-        <Text>Publishing…</Text>
+      <Box flexDirection="column" marginTop={1}>
+        <Spinner label="Publishing scan result…" />
       </Box>
     );
   }
 
   if (view.phase === "blocked") {
     return (
-      <Box flexDirection="column">
-        <Text bold color="yellow">
-          Subscription required
-        </Text>
-        <Text>
-          You have used {FREE_PUBLISH_LIMIT} free publishes. Subscribe at{" "}
-          {SUBSCRIBE_URL}
-        </Text>
-        <Text dimColor>
-          After subscribing, press y or Enter to record subscription and continue.
-        </Text>
-        <Text dimColor>[y / Enter] confirm · [n / Esc] cancel</Text>
-      </Box>
+      <WarningBox title={`Subscription required — ${FREE_PUBLISH_LIMIT} free publishes used`}>
+        <Text>Subscribe at <Text bold color="cyan">{SUBSCRIBE_URL}</Text></Text>
+        <Text> </Text>
+        <Text dimColor>After subscribing, confirm below to continue.</Text>
+        <Text> </Text>
+        <Text dimColor>[y / Enter] Record subscription  ·  [n / Esc] Cancel</Text>
+      </WarningBox>
     );
   }
 
   if (view.phase === "error") {
-    return (
-      <Box flexDirection="column">
-        <Text bold color="cyan">
-          jobclaw publish-scan
-        </Text>
-        <Text color="red">{view.message}</Text>
-      </Box>
-    );
+    return <ErrorBox message={view.message} />;
   }
 
   return (
-    <Box flexDirection="column">
-      <Text bold color="cyan">
-        jobclaw publish-scan
-      </Text>
-      <Text color="green">{view.detail}</Text>
-      <Text bold>{view.url}</Text>
-    </Box>
+    <SuccessBox title="Scan published!">
+      <Text dimColor>{view.detail}</Text>
+      <Text bold color="cyan">{view.url}</Text>
+    </SuccessBox>
   );
 }

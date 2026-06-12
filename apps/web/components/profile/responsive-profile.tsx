@@ -17,6 +17,7 @@ export type ProfileData = {
   avatarUrl: string | null;
   stats: DeveloperStats | null;
   statsLoading: boolean;
+  statsError?: string | null;
 };
 
 export function ResponsiveProfile() {
@@ -25,15 +26,22 @@ export function ResponsiveProfile() {
   const { profile } = useProfile();
   const [stats, setStats] = useState<DeveloperStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
+  const [statsError, setStatsError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authToken) {
       setStatsLoading(false);
       return;
     }
+    setStatsLoading(true);
+    setStatsError(null);
     get<DeveloperStats>('/v1/profile/stats')
       .then((data) => { setStats(data); setStatsLoading(false); })
-      .catch(() => { setStats(null); setStatsLoading(false); });
+      .catch((e: unknown) => {
+        setStatsError(e instanceof Error ? e.message : String(e));
+        setStats(null);
+        setStatsLoading(false);
+      });
   }, [get, authToken]);
 
   const profileData: ProfileData = {
@@ -42,6 +50,7 @@ export function ResponsiveProfile() {
     avatarUrl: profile?.avatarUrl ?? null,
     stats,
     statsLoading,
+    statsError,
   };
 
   const nav =

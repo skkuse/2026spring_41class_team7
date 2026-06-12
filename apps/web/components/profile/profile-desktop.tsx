@@ -273,6 +273,9 @@ export function ProfileDesktop({ data }: { data: ProfileData }) {
             <p className="font-mono text-sm text-muted-foreground">
               Run your first assessment to see stats
             </p>
+            {data.statsError && (
+              <p className="mt-2 font-mono text-xs text-red-400">Error: {data.statsError}</p>
+            )}
           </div>
         )}
       </main>

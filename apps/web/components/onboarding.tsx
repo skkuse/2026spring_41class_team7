@@ -22,8 +22,7 @@ export function Onboarding() {
       </div>
       <div className="relative z-10 w-full max-w-md animate-onboarding-enter">
         <div className="mb-12 flex flex-col items-center">
-          <Image src="/logo-glyph.png" alt="Jobclaw" width={48} height={48} className="mb-4 h-12 w-12" />
-          <Image src="/logo.png" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
+          <Image src="/logo-glyph.png" alt="Jobclaw" width={48} height={48} className="h-12 w-12" />
         </div>
         <div className="mb-10 text-center">
           <h1 className="mb-3 font-heading text-4xl font-bold tracking-tight">

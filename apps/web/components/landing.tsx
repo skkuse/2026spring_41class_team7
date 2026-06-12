@@ -12,13 +12,8 @@ export function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <div className="flex items-center justify-between h-20 px-6 lg:px-12 max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="size-9 bg-primary rounded flex items-center justify-center">
-                <Icon icon="solar:bolt-bold" className="text-primary-foreground text-2xl" />
-              </div>
-              <span className="font-heading font-extrabold tracking-tight text-2xl">
-                Job<span className="text-primary">claw</span>
-              </span>
+            <Link href="/">
+              <Image src="/logo.svg" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <div className="hidden md:flex items-center gap-6 text-[11px] font-mono font-bold uppercase tracking-widest text-muted-foreground">
               <a href="#features" className="hover:text-primary transition-colors">
@@ -345,13 +340,8 @@ export function Landing() {
       <footer className="py-24 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8">
           <div className="col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="size-8 bg-primary rounded flex items-center justify-center">
-                <Icon icon="solar:bolt-bold" className="text-primary-foreground text-xl" />
-              </div>
-              <span className="font-heading font-extrabold tracking-tight text-2xl">
-                Job<span className="text-primary">claw</span>
-              </span>
+            <Link href="/" className="mb-6 inline-block">
+              <Image src="/logo.svg" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-8">
               Elevating developer reputation through high-signal AI analysis and professional

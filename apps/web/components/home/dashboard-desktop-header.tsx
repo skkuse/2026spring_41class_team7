@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -17,12 +18,7 @@ export function DashboardDesktopHeader() {
           href="/home"
           className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_24px_rgba(217,119,87,0.15)]">
-            <Icon icon="hugeicons:code" className="text-xl" />
-          </div>
-          <span className="font-home-heading text-lg font-bold tracking-tight">
-            Job<span className="text-primary">claw</span>
-          </span>
+          <Image src="/logo.svg" alt="Jobclaw" width={120} height={28} className="h-7 w-auto" />
         </Link>
 
         <nav className="flex min-w-0 flex-1 items-center justify-center" aria-label="Main">

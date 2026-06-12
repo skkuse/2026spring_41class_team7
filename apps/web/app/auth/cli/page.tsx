@@ -1,38 +1,37 @@
-'use client';
+import { redirect } from 'next/navigation';
+import { createServerSupabase } from '../../../lib/supabase/server';
 
-import { Suspense, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { createBrowserSupabase } from '../../../lib/supabase/client';
+type SearchParams = Promise<{ cli_port?: string; state?: string }>;
 
-function CliAuthInner() {
-  const searchParams = useSearchParams();
-  const cliPort = searchParams.get('cli_port');
-  const state = searchParams.get('state');
+export default async function CliAuthPage({ searchParams }: { searchParams: SearchParams }) {
+  const { cli_port: cliPort, state } = await searchParams;
 
-  useEffect(() => {
-    if (!cliPort || !/^\d{1,5}$/.test(cliPort)) return;
-    if (!state || !/^[0-9a-f]{32}$/.test(state)) return;
-    const supabase = createBrowserSupabase();
-    void supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?cli_port=${cliPort}&state=${state}`,
-      },
-    });
-  }, [cliPort, state]);
+  if (!cliPort || !/^\d{1,5}$/.test(cliPort) || !state || !/^[0-9a-f]{32}$/.test(state)) {
+    redirect('/onboarding');
+  }
 
-  return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h2>Signing in to jobclaw CLI…</h2>
-      <p>Redirecting to GitHub. You can close this tab once your terminal shows success.</p>
-    </div>
-  );
-}
+  const supabase = await createServerSupabase();
+  const { data: { session } } = await supabase.auth.getSession();
 
-export default function CliAuthPage() {
-  return (
-    <Suspense>
-      <CliAuthInner />
-    </Suspense>
-  );
+  if (session) {
+    const url = new URL(`http://localhost:${cliPort}/callback`);
+    url.searchParams.set('state', state);
+    url.searchParams.set('access_token', session.access_token);
+    url.searchParams.set('refresh_token', session.refresh_token);
+    url.searchParams.set(
+      'expires_at',
+      String(session.expires_at ?? Math.floor(Date.now() / 1000) + session.expires_in),
+    );
+    url.searchParams.set('user_id', session.user.id);
+    url.searchParams.set('email', session.user.email ?? '');
+    url.searchParams.set(
+      'username',
+      (session.user.user_metadata?.user_name as string | undefined) ??
+      (session.user.user_metadata?.preferred_username as string | undefined) ??
+      '',
+    );
+    redirect(url.toString());
+  }
+
+  redirect(`/auth/cli-oauth?cli_port=${cliPort}&state=${state}`);
 }

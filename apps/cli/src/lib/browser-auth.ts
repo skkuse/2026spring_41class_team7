@@ -82,6 +82,42 @@ function waitForCallback(port: number, expectedState: string, onListening: () =>
         return;
       }
 
+      // GET: server-side redirect delivers tokens as query params (no Origin header expected)
+      if (req.method === 'GET') {
+        const incomingState = url.searchParams.get('state');
+        if (incomingState !== expectedState) {
+          res.writeHead(400).end();
+          return;
+        }
+        const accessToken = url.searchParams.get('access_token');
+        const refreshToken = url.searchParams.get('refresh_token');
+        const expiresAtRaw = url.searchParams.get('expires_at');
+        const expiresAt = expiresAtRaw ? Number(expiresAtRaw) : null;
+        const userId = url.searchParams.get('user_id');
+        const email = url.searchParams.get('email') ?? '';
+        const username = url.searchParams.get('username') ?? '';
+
+        if (accessToken && refreshToken && expiresAt && userId) {
+          res.writeHead(200, { 'Content-Type': 'text/html' }).end(
+            '<!DOCTYPE html><html><head><title>jobclaw</title></head>'
+            + '<body style="font-family:sans-serif;padding:2rem;max-width:480px;margin:auto">'
+            + '<h2>&#10003; Logged in!</h2>'
+            + '<p>You can close this tab and return to your terminal.</p>'
+            + '</body></html>',
+          );
+          clearTimeout(timer);
+          const session: SupabaseSession = {
+            accessToken, refreshToken, expiresAt,
+            user: { id: userId, email, githubUsername: username },
+          };
+          server.close(() => resolve(session));
+          return;
+        }
+        res.writeHead(400).end();
+        return;
+      }
+
+      // POST: fetch from web page (requires matching Origin)
       if (!originOk) {
         res.writeHead(403).end();
         return;

@@ -9,6 +9,8 @@ import DoctorView from "./commands/doctor.js";
 import PublishCommand from "./commands/publish.js";
 import PublishEvaluationCommand from "./commands/publish-evaluation.js";
 import EvaluateCommand from "./commands/evaluate.js";
+import AssessCommand from "./commands/assess.js";
+import PublishAssessmentCommand from "./commands/publish-assessment.js";
 import { loadConfig } from "./lib/config.js";
 import { doctorExitCodeFromCfg } from "./lib/doctor-check.js";
 import { runSavedProjects } from "./lib/saved-projects/run-saved-projects.js";
@@ -100,7 +102,7 @@ export async function dispatch(argv: string[]): Promise<void> {
     }
     case "publish": {
       const inst = render(
-        <PublishEvaluationCommand
+        <PublishAssessmentCommand
           cwd={root}
           args={rest}
           onFinish={(code) => {
@@ -125,9 +127,10 @@ export async function dispatch(argv: string[]): Promise<void> {
       await inst.waitUntilExit();
       return;
     }
+    case "assess":
     case "evaluate": {
       const inst = render(
-        <EvaluateCommand
+        <AssessCommand
           cwd={root}
           args={rest}
           onDone={(code) => {

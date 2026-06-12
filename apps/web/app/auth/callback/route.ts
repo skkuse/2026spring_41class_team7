@@ -24,25 +24,26 @@ export async function GET(request: Request) {
 
       const cliState = searchParams.get('state');
       if (cliPort && /^\d{1,5}$/.test(cliPort) && cliState && /^[0-9a-f]{32}$/.test(cliState)) {
-        const callbackUrl = new URL(`http://localhost:${cliPort}/callback`);
         const session = data.session;
         const user = session.user;
-        callbackUrl.searchParams.set('state', cliState);
-        callbackUrl.searchParams.set('access_token', session.access_token);
-        callbackUrl.searchParams.set('refresh_token', session.refresh_token);
-        callbackUrl.searchParams.set(
+        const doneUrl = new URL(`${origin}/auth/cli-done`);
+        doneUrl.searchParams.set('cli_port', cliPort);
+        doneUrl.searchParams.set('state', cliState);
+        doneUrl.searchParams.set('access_token', session.access_token);
+        doneUrl.searchParams.set('refresh_token', session.refresh_token);
+        doneUrl.searchParams.set(
           'expires_at',
           String(session.expires_at ?? Math.floor(Date.now() / 1000) + session.expires_in),
         );
-        callbackUrl.searchParams.set('user_id', user.id);
-        callbackUrl.searchParams.set('email', user.email ?? '');
-        callbackUrl.searchParams.set(
+        doneUrl.searchParams.set('user_id', user.id);
+        doneUrl.searchParams.set('email', user.email ?? '');
+        doneUrl.searchParams.set(
           'username',
           (user.user_metadata?.user_name as string | undefined) ??
           (user.user_metadata?.preferred_username as string | undefined) ??
           '',
         );
-        return NextResponse.redirect(callbackUrl.toString());
+        return NextResponse.redirect(doneUrl.toString());
       }
 
       return NextResponse.redirect(`${origin}${nextPath}`);

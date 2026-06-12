@@ -59,52 +59,69 @@ function waitForCallback(port: number, expectedState: string, onListening: () =>
     }, TIMEOUT_MS);
 
     const server = http.createServer((req, res) => {
+      const corsHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Private-Network': 'true',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      };
+
       const url = new URL(req.url ?? '/', `http://localhost:${port}`);
       if (url.pathname !== '/callback') {
         res.writeHead(404).end();
         return;
       }
 
-      const error = url.searchParams.get('error');
-      if (error) {
-        const desc = url.searchParams.get('error_description') ?? error;
-        res.writeHead(200, { 'Content-Type': 'text/html' }).end(
-          `<html><body><h2>Login failed: ${desc}</h2><p>You can close this tab.</p></body></html>`,
-        );
-        clearTimeout(timer);
-        server.close(() => reject(new Error(`OAuth error: ${desc}`)));
+      // Preflight for Chrome's Private Network Access
+      if (req.method === 'OPTIONS') {
+        res.writeHead(204, corsHeaders).end();
         return;
       }
 
-      const incomingState = url.searchParams.get('state');
-      if (incomingState !== expectedState) {
-        res.writeHead(400).end();
+      if (req.method !== 'POST') {
+        res.writeHead(405).end();
         return;
       }
 
-      const accessToken = url.searchParams.get('access_token');
-      const refreshToken = url.searchParams.get('refresh_token');
-      const expiresAt = url.searchParams.get('expires_at');
-      const userId = url.searchParams.get('user_id');
-      const email = url.searchParams.get('email') ?? '';
-      const username = url.searchParams.get('username') ?? '';
+      let body = '';
+      req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+      req.on('end', () => {
+        let data: Record<string, unknown>;
+        try {
+          data = JSON.parse(body) as Record<string, unknown>;
+        } catch {
+          res.writeHead(400, corsHeaders).end();
+          return;
+        }
 
-      if (accessToken && refreshToken && expiresAt && userId) {
-        res.writeHead(200, { 'Content-Type': 'text/html' }).end(
-          `<html><body><h2>Logged in! You can close this tab.</h2></body></html>`,
-        );
-        clearTimeout(timer);
-        const session: SupabaseSession = {
-          accessToken,
-          refreshToken,
-          expiresAt: Number(expiresAt),
-          user: { id: userId, email, githubUsername: username },
-        };
-        server.close(() => resolve(session));
-        return;
-      }
+        const incomingState = typeof data.state === 'string' ? data.state : null;
+        if (incomingState !== expectedState) {
+          res.writeHead(400, corsHeaders).end();
+          return;
+        }
 
-      res.writeHead(400).end();
+        const accessToken = typeof data.access_token === 'string' ? data.access_token : null;
+        const refreshToken = typeof data.refresh_token === 'string' ? data.refresh_token : null;
+        const expiresAt = typeof data.expires_at === 'number' ? data.expires_at : null;
+        const userId = typeof data.user_id === 'string' ? data.user_id : null;
+        const email = typeof data.email === 'string' ? data.email : '';
+        const username = typeof data.username === 'string' ? data.username : '';
+
+        if (accessToken && refreshToken && expiresAt && userId) {
+          res.writeHead(200, corsHeaders).end();
+          clearTimeout(timer);
+          const session: SupabaseSession = {
+            accessToken,
+            refreshToken,
+            expiresAt,
+            user: { id: userId, email, githubUsername: username },
+          };
+          server.close(() => resolve(session));
+          return;
+        }
+
+        res.writeHead(400, corsHeaders).end();
+      });
     });
 
     server.listen(port, () => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@iconify/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { BuilderProps, ScorecardRow } from './builder-types';
 import { PortfolioSectionCard } from './portfolio-section-card';
@@ -320,43 +320,99 @@ function SelectView({
 // ─── GENERATING ───────────────────────────────────────────────────────────────
 
 function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const start = Date.now();
+    const id = setInterval(() => setElapsed(Date.now() - start), 80);
+    return () => clearInterval(id);
+  }, []);
+
+  const doneCount = sections.filter((s) => !s.generating && s.data).length;
+
   return (
     <div className="flex h-[calc(100vh-4.25rem)] items-center justify-center bg-background font-sans">
-      <div className="w-full max-w-xl px-8">
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-[120px]" />
+      </div>
+
+      <div className="relative w-full max-w-xl px-8">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-            <Icon icon="solar:magic-stick-3-bold" className="text-2xl text-primary" />
+          <div className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center">
+            <span className="absolute inset-0 animate-ping rounded-full bg-primary/20" />
+            <span className="absolute inset-1 rounded-full bg-primary/10" />
+            <Icon icon="solar:magic-stick-3-bold" className="relative text-2xl text-primary" />
           </div>
           <h2 className="font-heading text-2xl font-bold">Generating Portfolio</h2>
           <p className="mt-1 font-mono text-xs text-muted-foreground">
-            Composing summaries from your assessments…
+            AI is composing your project summaries…
           </p>
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1">
+            <span className="font-mono text-[10px] text-muted-foreground">
+              {doneCount}/{orderedIds.length} complete
+            </span>
+            <div className="h-1 w-20 overflow-hidden rounded-full bg-border">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{ width: `${orderedIds.length ? (doneCount / orderedIds.length) * 100 : 0}%` }}
+              />
+            </div>
+          </div>
         </div>
-        <div className="space-y-3">
+
+        <div className="space-y-2.5">
           {orderedIds.map((id, i) => {
             const summary = assessments.find((a) => a.id === id);
             const section = sections.find((s) => s.id === id);
-            const isDone = section && !section.generating;
-            const isActive = section?.generating;
+            const isDone = !!(section && !section.generating && section.data);
+            const sectionElapsed = Math.max(0, elapsed - i * 1200);
+            const isStarted = sectionElapsed > 0;
+            // Exponential ease: fast start, slow approach to 88%
+            const fakePercent = isDone
+              ? 100
+              : isStarted
+              ? Math.min(88, (1 - Math.exp(-sectionElapsed / 10000)) * 92)
+              : 0;
+
             return (
-              <div key={id} className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
+              <div
+                key={id}
+                className={`flex items-center gap-4 rounded-xl border p-4 transition-all duration-500 ${
+                  isDone
+                    ? 'border-emerald-200/40 bg-emerald-50/5'
+                    : isStarted
+                    ? 'border-primary/30 bg-primary/5 shadow-[0_0_20px_rgba(201,100,66,0.06)]'
+                    : 'border-border bg-card opacity-50'
+                }`}
+              >
                 <div className="w-5 shrink-0 text-center">
-                  {isDone && <Icon icon="solar:check-circle-bold" className="text-lg text-emerald-500" />}
-                  {isActive && <Icon icon="solar:spinner-bold" className="animate-spin text-lg text-primary" />}
-                  {!section && <span className="inline-block h-4 w-4 rounded-full border-2 border-border" />}
+                  {isDone ? (
+                    <Icon icon="solar:check-circle-bold" className="text-lg text-emerald-500" />
+                  ) : isStarted ? (
+                    <Icon icon="solar:spinner-bold" className="animate-spin text-lg text-primary" />
+                  ) : (
+                    <span className="inline-block h-4 w-4 rounded-full border-2 border-border" />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-xs font-bold">
                     <span className="mr-1.5 text-muted-foreground">{i + 1}.</span>
                     {summary?.repoOwner}/{summary?.repoName}
                   </p>
-                  <p className="font-mono text-[9px] text-muted-foreground">
-                    {isDone ? 'Complete' : isActive ? 'Generating…' : 'Queued'}
+                  <p className={`mt-0.5 font-mono text-[9px] transition-colors ${isDone ? 'text-emerald-500' : isStarted ? 'text-primary' : 'text-muted-foreground'}`}>
+                    {isDone ? 'Complete' : isStarted ? 'Generating…' : 'Queued'}
                   </p>
                 </div>
                 <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
-                  <div className={`h-full rounded-full bg-primary transition-all duration-700 ${isDone ? 'w-full' : isActive ? 'w-2/3' : 'w-0'}`} />
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${isDone ? 'bg-emerald-500' : 'bg-primary'}`}
+                    style={{ width: `${fakePercent}%` }}
+                  />
                 </div>
+                <span className="w-8 shrink-0 text-right font-mono text-[9px] text-muted-foreground">
+                  {Math.round(fakePercent)}%
+                </span>
               </div>
             );
           })}
@@ -370,7 +426,7 @@ function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
 
 function EditingView({
   sections, orderedIds, assessments, onSectionChange, onSave, onExport, onReset, generationError,
-  isSaving, saveSuccess,
+  isSaving, saveSuccess, saveError,
 }: BuilderProps) {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const scrollTo = (id: string) =>
@@ -408,10 +464,13 @@ function EditingView({
         <div className="space-y-2 border-t border-border p-4">
           <button type="button" onClick={onSave} disabled={!allDone || isSaving}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 font-mono text-[10px] font-black uppercase tracking-wide text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40">
-            <Icon icon={saveSuccess ? 'solar:check-circle-bold' : isSaving ? 'solar:spinner-bold' : 'solar:floppy-disk-bold'}
+            <Icon icon={saveSuccess ? 'solar:check-circle-bold' : isSaving ? 'solar:spinner-bold' : saveError ? 'solar:close-circle-bold' : 'solar:floppy-disk-bold'}
               className={isSaving ? 'animate-spin' : ''} />
-            {saveSuccess ? 'Saved!' : isSaving ? 'Saving…' : 'Save to Docs'}
+            {saveSuccess ? 'Saved!' : isSaving ? 'Saving…' : saveError ? 'Failed' : 'Save to Portfolios'}
           </button>
+          {saveError && (
+            <p className="mt-1 font-mono text-[9px] text-destructive leading-tight">{saveError}</p>
+          )}
           <button type="button" onClick={onExport} disabled={!allDone}
             className="flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors hover:bg-muted disabled:opacity-40">
             <Icon icon="solar:export-linear" /> Export PDF

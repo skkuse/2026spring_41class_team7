@@ -5,6 +5,85 @@ import { Icon } from '@iconify/react';
 
 const INSTALL_CMD = 'npm install -g jobclaw';
 
+const ONBOARDING_STEPS = [
+  {
+    step: '01',
+    title: 'Install CLI',
+    code: INSTALL_CMD,
+    icon: 'solar:download-minimalistic-linear',
+    copyable: true,
+  },
+  {
+    step: '02',
+    title: 'Assess your repo',
+    code: 'jobclaw assess',
+    icon: 'solar:code-scan-linear',
+    copyable: false,
+  },
+  {
+    step: '03',
+    title: 'Publish results',
+    code: 'jobclaw publish',
+    icon: 'solar:cloud-upload-linear',
+    copyable: false,
+  },
+];
+
+export function CLIOnboardingSection({ className }: { className?: string }) {
+  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+
+  function copy(text: string, idx: number) {
+    void navigator.clipboard.writeText(text).then(() => {
+      setCopiedIdx(idx);
+      setTimeout(() => setCopiedIdx(null), 2000);
+    });
+  }
+
+  return (
+    <div className={`rounded-xl border border-border bg-card/40 p-5 ${className ?? ''}`}>
+      <div className="mb-4 flex items-center gap-2">
+        <Icon icon="solar:bolt-bold" className="text-base text-primary" />
+        <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          Quick Start
+        </span>
+      </div>
+      <div className="space-y-2">
+        {ONBOARDING_STEPS.map(({ step, title, code, icon, copyable }, idx) => (
+          <div
+            key={step}
+            className="relative overflow-hidden rounded-lg border border-border bg-background/60 px-4 py-3"
+          >
+            <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-primary" style={{ opacity: 1 - idx * 0.25 }} />
+            <div className="mb-1.5 flex items-center gap-1.5">
+              <Icon icon={icon} className="text-sm text-primary" />
+              <span className="font-mono text-[9px] text-muted-foreground">{step} /</span>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wide">{title}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 font-mono text-xs text-foreground">{code}</code>
+              {copyable && (
+                <button
+                  onClick={() => copy(code, idx)}
+                  className="flex-shrink-0 rounded p-1 text-muted-foreground transition-colors hover:text-foreground"
+                  title="Copy"
+                >
+                  <Icon
+                    icon={copiedIdx === idx ? 'solar:check-read-linear' : 'solar:copy-linear'}
+                    className={`text-sm transition-colors ${copiedIdx === idx ? 'text-green-400' : ''}`}
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 font-mono text-[9px] leading-relaxed text-muted-foreground">
+        Requires Node.js 18+. Assessments appear here after publishing.
+      </p>
+    </div>
+  );
+}
+
 const STEPS = [
   { step: '01', label: 'Assess your repo', code: 'jobclaw assess' },
   { step: '02', label: 'Publish results', code: 'jobclaw publish' },

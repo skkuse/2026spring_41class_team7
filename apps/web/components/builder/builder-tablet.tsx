@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
 
 import type { BuilderProps, ScorecardRow } from './builder-types';
 import { PortfolioSectionCard } from './portfolio-section-card';
@@ -210,38 +211,85 @@ function SelectView({
 // ─── GENERATING ───────────────────────────────────────────────────────────────
 
 function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const start = Date.now();
+    const id = setInterval(() => setElapsed(Date.now() - start), 80);
+    return () => clearInterval(id);
+  }, []);
+
+  const doneCount = sections.filter((s) => !s.generating && s.data).length;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background pb-nav-safe font-sans">
       <div className="w-full max-w-md px-6">
         <div className="mb-6 text-center">
-          <Icon icon="solar:magic-stick-3-bold" className="mx-auto mb-3 text-3xl text-primary" />
+          <div className="relative mx-auto mb-4 flex h-14 w-14 items-center justify-center">
+            <span className="absolute inset-0 animate-ping rounded-full bg-primary/20" />
+            <span className="absolute inset-1 rounded-full bg-primary/10" />
+            <Icon icon="solar:magic-stick-3-bold" className="relative text-2xl text-primary" />
+          </div>
           <h2 className="font-heading text-xl font-bold">Generating Portfolio</h2>
           <p className="font-mono text-xs text-muted-foreground">Composing from assessments…</p>
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <div className="h-1.5 w-28 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{ width: `${orderedIds.length ? (doneCount / orderedIds.length) * 100 : 0}%` }}
+              />
+            </div>
+            <span className="font-mono text-[9px] text-muted-foreground">{doneCount}/{orderedIds.length}</span>
+          </div>
         </div>
-        <div className="space-y-3">
+
+        <div className="space-y-2.5">
           {orderedIds.map((id, i) => {
             const summary = assessments.find((a) => a.id === id);
             const section = sections.find((s) => s.id === id);
-            const isDone = section && !section.generating;
-            const isActive = section?.generating;
+            const isDone = !!(section && !section.generating && section.data);
+            const sectionElapsed = Math.max(0, elapsed - i * 1200);
+            const isStarted = sectionElapsed > 0;
+            const fakePercent = isDone
+              ? 100
+              : isStarted
+              ? Math.min(88, (1 - Math.exp(-sectionElapsed / 10000)) * 92)
+              : 0;
+
             return (
-              <div key={id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
+              <div
+                key={id}
+                className={`flex items-center gap-3 rounded-xl border p-4 transition-all duration-500 ${
+                  isDone
+                    ? 'border-emerald-200/40 bg-emerald-50/5'
+                    : isStarted
+                    ? 'border-primary/30 bg-primary/5'
+                    : 'border-border bg-card opacity-50'
+                }`}
+              >
                 <div className="w-5 shrink-0">
-                  {isDone && <Icon icon="solar:check-circle-bold" className="text-lg text-emerald-500" />}
-                  {isActive && <Icon icon="solar:spinner-bold" className="animate-spin text-lg text-primary" />}
-                  {!section && <span className="inline-block h-4 w-4 rounded-full border-2 border-border" />}
+                  {isDone ? (
+                    <Icon icon="solar:check-circle-bold" className="text-lg text-emerald-500" />
+                  ) : isStarted ? (
+                    <Icon icon="solar:spinner-bold" className="animate-spin text-lg text-primary" />
+                  ) : (
+                    <span className="inline-block h-4 w-4 rounded-full border-2 border-border" />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-xs font-bold">
                     <span className="mr-1 text-muted-foreground">{i + 1}.</span>
                     {summary?.repoOwner}/{summary?.repoName}
                   </p>
-                  <p className="font-mono text-[9px] text-muted-foreground">
-                    {isDone ? 'Complete' : isActive ? 'Generating…' : 'Queued'}
+                  <p className={`font-mono text-[9px] ${isDone ? 'text-emerald-500' : isStarted ? 'text-primary' : 'text-muted-foreground'}`}>
+                    {isDone ? 'Complete' : isStarted ? 'Generating…' : 'Queued'}
                   </p>
                 </div>
-                <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
-                  <div className={`h-full rounded-full bg-primary transition-all duration-700 ${isDone ? 'w-full' : isActive ? 'w-2/3' : 'w-0'}`} />
+                <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${isDone ? 'bg-emerald-500' : 'bg-primary'}`}
+                    style={{ width: `${fakePercent}%` }}
+                  />
                 </div>
               </div>
             );
@@ -254,7 +302,7 @@ function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
 
 // ─── EDITING ──────────────────────────────────────────────────────────────────
 
-function EditingView({ sections, orderedIds, assessments, onSectionChange, onSave, onExport, onReset }: BuilderProps) {
+function EditingView({ sections, orderedIds, assessments, onSectionChange, onSave, onExport, onReset, isSaving, saveSuccess, saveError }: BuilderProps) {
   const allDone = sections.every((s) => !s.generating);
   return (
     <div className="min-h-screen bg-background pb-nav-safe font-sans text-foreground">
@@ -276,9 +324,9 @@ function EditingView({ sections, orderedIds, assessments, onSectionChange, onSav
                 className="rounded-lg border border-border px-3 py-2 font-mono text-[10px] font-bold uppercase disabled:opacity-40">
                 Export
               </button>
-              <button type="button" onClick={onSave} disabled={!allDone}
-                className="rounded-lg bg-primary px-4 py-2 font-mono text-[10px] font-black uppercase tracking-wide text-primary-foreground disabled:opacity-40">
-                Save
+              <button type="button" onClick={onSave} disabled={!allDone || isSaving}
+                className={`flex items-center gap-1.5 rounded-lg px-4 py-2 font-mono text-[10px] font-black uppercase tracking-wide text-primary-foreground disabled:opacity-40 ${saveError ? 'bg-destructive' : 'bg-primary'}`}>
+                {saveSuccess ? 'Saved!' : isSaving ? 'Saving…' : saveError ? 'Failed' : 'Save'}
               </button>
             </div>
           </div>

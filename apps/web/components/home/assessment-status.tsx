@@ -54,56 +54,16 @@ export function AssessmentCard({ item }: { item: AssessmentSummary }) {
   );
 }
 
-const INSTALL_STEPS = [
-  {
-    step: '01',
-    title: 'Install the CLI',
-    code: 'npm install -g jobclaw',
-    icon: 'solar:download-minimalistic-linear',
-  },
-  {
-    step: '02',
-    title: 'Assess your repo',
-    code: 'cd your-project && jobclaw assess',
-    icon: 'solar:code-scan-linear',
-  },
-  {
-    step: '03',
-    title: 'Publish your assessment',
-    code: 'jobclaw publish',
-    icon: 'solar:cloud-upload-linear',
-  },
-];
 
 export function GettingStarted() {
   return (
-    <div className="space-y-4">
-      <div className="mb-6">
-        <p className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          No projects yet
-        </p>
-        <h2 className="font-heading text-2xl font-bold tracking-tight">
-          Get started with Jobclaw
-        </h2>
-      </div>
-      {INSTALL_STEPS.map(({ step, title, code, icon }) => (
-        <div
-          key={step}
-          className="relative overflow-hidden rounded-lg border border-border bg-card/40 p-5"
-        >
-          <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-primary" />
-          <div className="mb-2 flex items-center gap-2">
-            <Icon icon={icon} className="text-base text-primary" />
-            <span className="font-mono text-[10px] text-muted-foreground">{step} /</span>
-            <span className="font-mono text-xs font-bold uppercase tracking-wide">{title}</span>
-          </div>
-          <code className="block rounded bg-background/80 px-3 py-2 font-mono text-xs text-foreground">
-            {code}
-          </code>
-        </div>
-      ))}
-      <p className="pt-2 font-mono text-[10px] leading-relaxed text-muted-foreground">
-        Your published assessments will appear here once you run <span className="text-foreground">jobclaw publish</span>.
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <Icon icon="solar:folder-open-linear" className="mb-4 text-4xl text-muted-foreground/40" />
+      <p className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        No projects yet
+      </p>
+      <p className="font-mono text-xs text-muted-foreground/60">
+        Follow the Quick Start guide to run your first assessment.
       </p>
     </div>
   );

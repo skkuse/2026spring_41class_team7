@@ -8,6 +8,7 @@ import { DashboardBottomNav } from '../home/dashboard-bottom-nav';
 import { BuilderDesktop } from './builder-desktop';
 import { BuilderMobile } from './builder-mobile';
 import { BuilderTablet } from './builder-tablet';
+import { SaveSuccessOverlay } from './save-success-overlay';
 import type {
   AssessmentDetail,
   AssessmentSummary,
@@ -32,6 +33,7 @@ export function ResponsiveBuilder() {
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const detailCacheRef = useRef(detailCache);
   detailCacheRef.current = detailCache;
@@ -128,12 +130,13 @@ export function ResponsiveBuilder() {
     if (items.length === 0) return;
     setIsSaving(true);
     setSaveSuccess(false);
+    setSaveError(null);
     try {
       await post('/v1/portfolio/save', { sections: items });
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
-    } catch {
-      // silently fail — user can retry
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Failed to save. Please try again.');
+      setTimeout(() => setSaveError(null), 5000);
     } finally {
       setIsSaving(false);
     }
@@ -229,6 +232,7 @@ export function ResponsiveBuilder() {
     generationError,
     isSaving,
     saveSuccess,
+    saveError,
     onSectionChange,
     onToggle,
     onMoveUp,
@@ -244,18 +248,19 @@ export function ResponsiveBuilder() {
       <DashboardBottomNav tone={bp === 'tablet' ? 'tablet' : 'mobile'} />
     ) : null;
 
-  if (bp === 'desktop') return <BuilderDesktop {...props} />;
-  if (bp === 'tablet')
-    return (
-      <>
-        <BuilderTablet {...props} />
-        {nav}
-      </>
-    );
+  const savedCount = sections.filter((s) => s.data && !s.generating).length;
+
   return (
     <>
-      <BuilderMobile {...props} />
-      {nav}
+      {bp === 'desktop' && <BuilderDesktop {...props} />}
+      {bp === 'tablet' && <><BuilderTablet {...props} />{nav}</>}
+      {bp !== 'desktop' && bp !== 'tablet' && <><BuilderMobile {...props} />{nav}</>}
+      {saveSuccess && (
+        <SaveSuccessOverlay
+          count={savedCount}
+          onDismiss={() => setSaveSuccess(false)}
+        />
+      )}
     </>
   );
 }

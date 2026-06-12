@@ -78,6 +78,7 @@ export type BuilderProps = {
   // Save state
   isSaving: boolean;
   saveSuccess: boolean;
+  saveError: string | null;
 
   // Actions
   onToggle: (id: string) => void;

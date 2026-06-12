@@ -15,8 +15,8 @@ const ONBOARDING_STEPS = [
   },
   {
     step: '02',
-    title: 'Evaluate your repo',
-    code: 'jobclaw evaluate',
+    title: 'Assess your repo',
+    code: 'jobclaw assess',
     icon: 'solar:code-scan-linear',
     copyable: false,
   },
@@ -78,14 +78,14 @@ export function CLIOnboardingSection({ className }: { className?: string }) {
         ))}
       </div>
       <p className="mt-3 font-mono text-[9px] leading-relaxed text-muted-foreground">
-        Requires Node.js 18+. Evaluations appear here after publishing.
+        Requires Node.js 18+. Assessments appear here after publishing.
       </p>
     </div>
   );
 }
 
 const STEPS = [
-  { step: '01', label: 'Evaluate your repo', code: 'jobclaw evaluate' },
+  { step: '01', label: 'Assess your repo', code: 'jobclaw assess' },
   { step: '02', label: 'Publish results', code: 'jobclaw publish' },
 ];
 
@@ -181,7 +181,7 @@ export function CLIInstallModal({
           </div>
 
           <p className="font-mono text-[10px] leading-relaxed text-muted-foreground">
-            Requires Node.js 18+. Your evaluations will appear in this dashboard after publishing.
+            Requires Node.js 18+. Your assessments will appear in this dashboard after publishing.
           </p>
         </div>
       </div>

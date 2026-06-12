@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
+import { ShareModal } from '../../components/share-modal';
 import { useApi } from '../../lib/api-context';
 
 type DocumentItem = {
@@ -118,8 +119,8 @@ export default function DocumentsPage() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [tab, setTab] = useState<Tab>('ALL');
-  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [sharingDoc, setSharingDoc] = useState<DocumentItem | null>(null);
 
   useEffect(() => {
     if (!authToken) {
@@ -163,11 +164,7 @@ export default function DocumentsPage() {
   }
 
   function handleShare(doc: DocumentItem) {
-    const url = `${window.location.origin}/portfolio/${doc.id}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopiedId(doc.id);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
+    setSharingDoc(doc);
   }
 
   function handleEdit(doc: DocumentItem) {
@@ -175,6 +172,7 @@ export default function DocumentsPage() {
   }
 
   return (
+    <>
     <main className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto max-w-6xl px-6 py-6">
@@ -308,11 +306,8 @@ export default function DocumentsPage() {
                   onClick={() => handleShare(doc)}
                   className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border py-2 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors hover:bg-muted"
                 >
-                  <Icon
-                    icon={copiedId === doc.id ? 'solar:check-circle-linear' : 'solar:share-linear'}
-                    className="text-sm"
-                  />
-                  {copiedId === doc.id ? 'Copied!' : 'Share'}
+                  <Icon icon="solar:share-linear" className="text-sm" />
+                  Share
                 </button>
               </div>
 
@@ -329,5 +324,14 @@ export default function DocumentsPage() {
         </div>
       </section>
     </main>
+
+    {sharingDoc && (
+      <ShareModal
+        docId={sharingDoc.id}
+        docName={sharingDoc.name}
+        onClose={() => setSharingDoc(null)}
+      />
+    )}
+  </>
   );
 }

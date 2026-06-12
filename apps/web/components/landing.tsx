@@ -26,7 +26,7 @@ export function Landing() {
                 Templates
               </a>
               <Link href="/documents" className="hover:text-primary transition-colors">
-                Docs
+                Portfolios
               </Link>
             </div>
           </div>
@@ -411,7 +411,7 @@ export function Landing() {
             <ul className="space-y-4 text-sm text-muted-foreground font-medium">
               <li>
                 <Link href="/documents" className="hover:text-primary transition-colors">
-                  Docs
+                  Portfolios
                 </Link>
               </li>
               <li>

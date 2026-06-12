@@ -163,22 +163,30 @@ export function ResponsiveBuilder({ loadDocId }: { loadDocId?: string }) {
     const items = sections.filter((s) => s.data).map((s) => s.data!);
     if (items.length === 0) return;
 
+    const e = (s: unknown) =>
+      String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
     const sectionsHtml = items
       .map(
         (d) => `
       <div class="section">
-        <div class="repo">${d.repoOwner}/${d.repoName}</div>
-        <div class="headline">${d.headline}</div>
+        <div class="repo">${e(d.repoOwner)}/${e(d.repoName)}</div>
+        <div class="headline">${e(d.headline)}</div>
         <div class="meta">
-          <span>${d.role}</span>
-          <span>${d.duration}</span>
-          <span>Score: ${d.overallScore}/100</span>
+          <span>${e(d.role)}</span>
+          <span>${e(d.duration)}</span>
+          <span>Score: ${Number(d.overallScore)}/100</span>
         </div>
-        <p class="summary">${d.summary}</p>
-        <div class="tech"><strong>Tech Stack:</strong> ${d.techStack.join(', ')}</div>
+        <p class="summary">${e(d.summary)}</p>
+        <div class="tech"><strong>Tech Stack:</strong> ${d.techStack.map(e).join(', ')}</div>
         <div class="highlights-label">Highlights</div>
-        <ul>${d.highlights.map((h) => `<li><strong>${h.title}:</strong> ${h.description}</li>`).join('')}</ul>
-        <div class="impact">${d.impact}</div>
+        <ul>${d.highlights.map((h) => `<li><strong>${e(h.title)}:</strong> ${e(h.description)}</li>`).join('')}</ul>
+        <div class="impact">${e(d.impact)}</div>
       </div>`,
       )
       .join('');

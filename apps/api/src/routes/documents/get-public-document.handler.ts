@@ -24,11 +24,25 @@ export const getPublicDocumentHandler: RouteHandler<typeof getPublicDocumentRout
   });
   if (!doc) return c.json({ message: 'Document not found.' }, 404);
 
-  const rawSections = (doc.content as Record<string, unknown>[]) ?? [];
+  type StoredSection = {
+    assessmentId?: string;
+    evaluationId?: string;
+    repoOwner: string;
+    repoName: string;
+    overallScore: number;
+    headline: string;
+    summary: string;
+    role: string;
+    duration: string;
+    techStack: string[];
+    highlights: Array<{ title: string; description: string }>;
+    impact: string;
+  };
+  const rawSections = (doc.content as StoredSection[]) ?? [];
 
   // Batch-fetch assessment types for all sections
   const sectionAssessmentIds = rawSections
-    .map((s) => (s.assessmentId ?? s.evaluationId) as string)
+    .map((s) => s.assessmentId ?? s.evaluationId ?? '')
     .filter(Boolean);
 
   const assessments =
@@ -44,10 +58,11 @@ export const getPublicDocumentHandler: RouteHandler<typeof getPublicDocumentRout
   );
 
   const sections = rawSections.map((s) => {
-    const sectionId = ((s.assessmentId ?? s.evaluationId) as string) ?? '';
+    const sectionId = s.assessmentId ?? s.evaluationId ?? '';
+    const { evaluationId: _drop, ...rest } = s;
     return {
-      ...s,
-      assessmentId: sectionId || undefined,
+      ...rest,
+      assessmentId: sectionId,
       assessmentType: typeMap[sectionId] ?? undefined,
     };
   });

@@ -11,16 +11,13 @@ export function HomeDesktop({ assessments, loading }: Props) {
     <div className="min-h-screen bg-background font-home-sans text-foreground">
       <main className="mx-auto max-w-5xl px-8 py-12 lg:py-16">
         <div className="mb-10 flex items-center justify-between">
-          <div>
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-primary">
-              <Icon icon="hugeicons:ai-brain-01" className="text-sm" />
-              <span className="font-home-mono text-[10px] font-bold uppercase tracking-widest">
-                AI-Engine Active
-              </span>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <Icon icon="solar:bolt-bold" className="text-xl" />
             </div>
-            <h2 className="font-home-heading text-3xl font-extrabold tracking-tight">
-              Dashboard
-            </h2>
+            <span className="font-home-heading text-2xl font-black tracking-tighter">
+              Job<span className="text-primary">claw</span>
+            </span>
           </div>
           <InstallCLIButton className="rounded-lg border border-border/50 bg-secondary px-5 py-3 font-home-mono text-xs font-bold uppercase tracking-widest text-secondary-foreground transition-colors hover:bg-muted" />
         </div>

@@ -13,6 +13,7 @@ export const meResponse200Schema = z.object({
   companyName: z.string().nullable().openapi({ example: 'Acme Corp' }),
   industry: z.string().nullable().openapi({ example: 'FinTech' }),
   allowContact: z.boolean().openapi({ example: false }),
+  avatarUrl: z.string().nullable().optional().openapi({ example: 'https://avatars.githubusercontent.com/u/1234' }),
 });
 
 export type ExampleResponse = {

@@ -21,6 +21,7 @@ model Profile {
   role         String
   location     String
   website      String?
+  avatarUrl    String?
   isPro        Boolean   @default(false)
   userType     UserType?
   companyName  String?

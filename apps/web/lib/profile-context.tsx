@@ -13,6 +13,7 @@ type Profile = {
   role: string;
   location: string;
   website: string | null;
+  avatarUrl?: string | null;
   isPro: boolean;
   userType: UserType | null;
   companyName: string | null;

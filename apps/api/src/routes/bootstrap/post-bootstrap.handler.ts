@@ -6,6 +6,7 @@ import { postBootstrapRoute } from './post-bootstrap.route.js';
 
 export const postBootstrapHandler: RouteHandler<typeof postBootstrapRoute, Env> = async (c) => {
   const userId = c.get('userId');
+  const userMeta = c.get('userMeta');
 
   const existingProfile = await prisma.profile.findUnique({
     where: { userId },
@@ -18,8 +19,9 @@ export const postBootstrapHandler: RouteHandler<typeof postBootstrapRoute, Env> 
     await prisma.profile.create({
       data: {
         userId,
-        fullName: '',
-        email: '',
+        fullName: userMeta?.fullName ?? '',
+        email: userMeta?.email ?? '',
+        avatarUrl: userMeta?.avatarUrl ?? null,
         role: '',
         location: '',
         isPro: false,

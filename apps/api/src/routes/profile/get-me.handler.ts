@@ -22,6 +22,7 @@ export const getMeHandler: RouteHandler<typeof getMeRoute, Env> = async (c) => {
       companyName: true,
       industry: true,
       allowContact: true,
+      avatarUrl: true,
     },
   });
 

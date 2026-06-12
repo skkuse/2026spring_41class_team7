@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 
-import type { AssessmentSummary } from './responsive-home';
+import type { EvaluationSummary } from './responsive-home';
 
 function ScoreBadge({ score }: { score: number }) {
   const color =
@@ -15,7 +15,7 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
-export function AssessmentCard({ item }: { item: AssessmentSummary }) {
+export function AssessmentCard({ item }: { item: EvaluationSummary }) {
   const date = new Date(item.createdAt).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric',
   });
@@ -27,7 +27,7 @@ export function AssessmentCard({ item }: { item: AssessmentSummary }) {
         <div className="mb-3 flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="mb-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              {item.assessmentType}
+              {item.evaluationType}
             </p>
             <h3 className="truncate font-mono text-sm font-bold">
               {item.repoOwner}/{item.repoName}
@@ -70,11 +70,11 @@ export function GettingStarted() {
 }
 
 export function AssessmentList({
-  assessments,
+  evaluations,
   loading,
   className = '',
 }: {
-  assessments: AssessmentSummary[];
+  evaluations: EvaluationSummary[];
   loading: boolean;
   className?: string;
 }) {
@@ -86,7 +86,7 @@ export function AssessmentList({
     );
   }
 
-  if (assessments.length === 0) {
+  if (evaluations.length === 0) {
     return <GettingStarted />;
   }
 
@@ -95,10 +95,10 @@ export function AssessmentList({
       <div className="mb-4 flex items-center gap-2">
         <Icon icon="hugeicons:cpu" className="text-xl text-primary" />
         <h3 className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-          Your Projects · {assessments.length}
+          Your Projects · {evaluations.length}
         </h3>
       </div>
-      {assessments.map((a) => (
+      {evaluations.map((a) => (
         <AssessmentCard key={a.id} item={a} />
       ))}
       <Link

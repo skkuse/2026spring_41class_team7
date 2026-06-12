@@ -35,6 +35,12 @@ export const requireAuth: MiddlewareHandler<Env> = async (c, next) => {
     return c.json({ message: 'Unauthorized token.' }, 401);
   }
 
+  const meta = data.user.user_metadata ?? {};
   c.set('userId', data.user.id);
+  c.set('userMeta', {
+    fullName: ((meta.full_name ?? meta.name ?? '') as string),
+    email: (data.user.email ?? (meta.email as string) ?? ''),
+    avatarUrl: ((meta.avatar_url ?? meta.picture ?? null) as string | null),
+  });
   await next();
 };

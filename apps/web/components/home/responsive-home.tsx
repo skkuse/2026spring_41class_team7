@@ -8,6 +8,7 @@ import { DashboardBottomNav } from './dashboard-bottom-nav';
 import { HomeDesktop } from './home-desktop';
 import { HomeMobile } from './home-mobile';
 import { HomeTablet } from './home-tablet';
+import type { DeveloperStats } from './score-card';
 
 export type AssessmentSummary = {
   id: string;
@@ -24,8 +25,10 @@ export type AssessmentSummary = {
 export function ResponsiveHome() {
   const bp = useHomeBreakpoint();
   const { get, authToken } = useApi();
-  const [assessments, setAssessments] = useState<AssessmentSummary[]>([]);
+  const [assessments, setEvaluations] = useState<AssessmentSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<DeveloperStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
     if (!authToken) {
@@ -34,9 +37,21 @@ export function ResponsiveHome() {
     }
     setLoading(true);
     get<{ items: AssessmentSummary[]; total: number }>('/v1/assessments')
-      .then((data) => setAssessments(data.items))
-      .catch(() => setAssessments([]))
+      .then((data) => setEvaluations(data.items))
+      .catch(() => setEvaluations([]))
       .finally(() => setLoading(false));
+  }, [get, authToken]);
+
+  useEffect(() => {
+    if (!authToken) {
+      setStatsLoading(false);
+      return;
+    }
+    setStatsLoading(true);
+    get<DeveloperStats>('/v1/profile/stats')
+      .then((data) => setStats(data))
+      .catch(() => setStats(null))
+      .finally(() => setStatsLoading(false));
   }, [get, authToken]);
 
   const nav =
@@ -45,19 +60,19 @@ export function ResponsiveHome() {
     ) : null;
 
   if (bp === 'desktop') {
-    return <HomeDesktop assessments={assessments} loading={loading} />;
+    return <HomeDesktop assessments={assessments} loading={loading} stats={stats} statsLoading={statsLoading} />;
   }
   if (bp === 'tablet') {
     return (
       <>
-        <HomeTablet assessments={assessments} loading={loading} />
+        <HomeTablet assessments={assessments} loading={loading} stats={stats} statsLoading={statsLoading} />
         {nav}
       </>
     );
   }
   return (
     <>
-      <HomeMobile assessments={assessments} loading={loading} />
+      <HomeMobile assessments={assessments} loading={loading} stats={stats} statsLoading={statsLoading} />
       {nav}
     </>
   );

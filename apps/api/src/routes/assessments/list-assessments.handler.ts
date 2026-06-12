@@ -15,7 +15,7 @@ export const listAssessmentsHandler: RouteHandler<typeof listAssessmentsRoute, E
       repoUrl: true,
       repoOwner: true,
       repoName: true,
-      assessmentType: true,
+      assessmentType: true,  // prisma field — not renamed
       overallScore: true,
       model: true,
       generatedAt: true,
@@ -25,7 +25,7 @@ export const listAssessmentsHandler: RouteHandler<typeof listAssessmentsRoute, E
 
   return c.json(
     {
-      items: rows.map((r) => ({
+      items: rows.map((r: { id: string; repoUrl: string; repoOwner: string; repoName: string; assessmentType: string; overallScore: number; model: string; generatedAt: Date; createdAt: Date }) => ({
         id: r.id,
         repoUrl: r.repoUrl,
         repoOwner: r.repoOwner,

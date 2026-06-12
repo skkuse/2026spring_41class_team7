@@ -1,12 +1,19 @@
 import Image from 'next/image';
 
-import { AssessmentList } from './assessment-status';
+import { AssessmentList } from './evaluation-status';
 import { CLIOnboardingSection } from './cli-install-modal';
+import { ScoreCard } from './score-card';
 import type { AssessmentSummary } from './responsive-home';
+import type { DeveloperStats } from './score-card';
 
-type Props = { assessments: AssessmentSummary[]; loading: boolean };
+type Props = {
+  assessments: AssessmentSummary[];
+  loading: boolean;
+  stats: DeveloperStats | null;
+  statsLoading: boolean;
+};
 
-export function HomeDesktop({ assessments, loading }: Props) {
+export function HomeDesktop({ assessments, loading, stats, statsLoading }: Props) {
   return (
     <div className="min-h-screen bg-background font-home-sans text-foreground">
       <main className="mx-auto max-w-5xl px-8 py-12 lg:py-16">
@@ -17,7 +24,12 @@ export function HomeDesktop({ assessments, loading }: Props) {
           <div className="min-w-0 flex-1">
             <AssessmentList assessments={assessments} loading={loading} />
           </div>
-          <aside className="w-72 flex-shrink-0">
+          <aside className="w-72 flex-shrink-0 space-y-4">
+            {statsLoading ? (
+              <div className="h-36 animate-pulse rounded-2xl border border-border bg-card/40" />
+            ) : stats ? (
+              <ScoreCard stats={stats} compact />
+            ) : null}
             <CLIOnboardingSection />
           </aside>
         </div>

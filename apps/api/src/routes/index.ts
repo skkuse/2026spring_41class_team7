@@ -21,6 +21,8 @@ import { getMeHandler } from './profile/get-me.handler.js';
 import { getMeRoute } from './profile/get-me.route.js';
 import { patchMeHandler } from './profile/patch-me.handler.js';
 import { patchMeRoute } from './profile/patch-me.route.js';
+import { getStatsHandler } from './profile/get-stats.handler.js';
+import { getStatsRoute } from './profile/get-stats.route.js';
 import { postProjectGithubHandler } from './ai-extract/post-project-github.handler.js';
 import { postProjectGithubRoute } from './ai-extract/post-project-github.route.js';
 import { postResumeParseHandler } from './ai-extract/post-resume-parse.handler.js';
@@ -61,6 +63,7 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(postBootstrapRoute, postBootstrapHandler);
   app.openapi(getMeRoute, getMeHandler);
   app.openapi(patchMeRoute, patchMeHandler);
+  app.openapi(getStatsRoute, getStatsHandler);
 
   // Developer routes
   app.openapi(listDocumentsRoute, listDocumentsHandler);

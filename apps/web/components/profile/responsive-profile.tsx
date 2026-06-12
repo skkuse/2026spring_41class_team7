@@ -9,12 +9,14 @@ import { DashboardBottomNav } from '../home/dashboard-bottom-nav';
 import { ProfileDesktop } from './profile-desktop';
 import { ProfileMobile } from './profile-mobile';
 import { ProfileTablet } from './profile-tablet';
+import type { DeveloperStats } from '../home/score-card';
 
 export type ProfileData = {
   name: string;
   email: string;
   avatarUrl: string | null;
-  assessmentCount: number;
+  stats: DeveloperStats | null;
+  statsLoading: boolean;
 };
 
 export function ResponsiveProfile() {
@@ -24,7 +26,8 @@ export function ResponsiveProfile() {
     name: '',
     email: '',
     avatarUrl: null,
-    assessmentCount: 0,
+    stats: null,
+    statsLoading: true,
   });
 
   useEffect(() => {
@@ -56,10 +59,13 @@ export function ResponsiveProfile() {
   }, []);
 
   useEffect(() => {
-    if (!authToken) return;
-    get<{ items: unknown[]; total: number }>('/v1/assessments')
-      .then((data) => setProfileData((prev) => ({ ...prev, assessmentCount: data.total })))
-      .catch(() => {});
+    if (!authToken) {
+      setProfileData((prev) => ({ ...prev, statsLoading: false }));
+      return;
+    }
+    get<DeveloperStats>('/v1/profile/stats')
+      .then((data) => setProfileData((prev) => ({ ...prev, stats: data, statsLoading: false })))
+      .catch(() => setProfileData((prev) => ({ ...prev, stats: null, statsLoading: false })));
   }, [get, authToken]);
 
   const nav =

@@ -2,6 +2,7 @@ import { serve } from '@hono/node-server';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { apiReference } from '@scalar/hono-api-reference';
 import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
 
 import type { Env } from './types.js';
 import { registerRoutes } from './routes/index.js';
@@ -23,6 +24,8 @@ const app = new OpenAPIHono<Env>({
     }
   },
 });
+
+app.use('*', logger());
 
 app.use(
   '*',

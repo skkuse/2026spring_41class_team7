@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1780233436759,
+  "lastScanned": 1781225091400,
   "projectRoot": "/home/hskan/hskang9/2026spring_41class_team7",
   "techStack": {
     "languages": [
@@ -18,7 +18,7 @@
     "runtime": null
   },
   "build": {
-    "buildCommand": "pnpm build",
+    "buildCommand": "pnpm --filter @jobclaw/web tsc --noEmit 2>&1 | tail -20",
     "testCommand": null,
     "lintCommand": "pnpm lint",
     "devCommand": "pnpm dev",
@@ -54,14 +54,14 @@
       "path": "apps",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1780233436733,
+      "lastAccessed": 1781225091386,
       "keyFiles": []
     },
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 4,
-      "lastAccessed": 1780233436736,
+      "lastAccessed": 1781225091387,
       "keyFiles": [
         "SRS.md",
         "ai-openai-hono-extraction.md",
@@ -73,14 +73,14 @@
       "path": "packages",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1780233436746,
+      "lastAccessed": 1781225091394,
       "keyFiles": []
     },
     "apps/api": {
       "path": "apps/api",
       "purpose": "API routes",
       "fileCount": 4,
-      "lastAccessed": 1780233436755,
+      "lastAccessed": 1781225091395,
       "keyFiles": [
         "package.json",
         "tsconfig.json",
@@ -91,14 +91,20 @@
   "hotPaths": [
     {
       "path": "apps/web/components/landing.tsx",
-      "accessCount": 10,
-      "lastAccessed": 1779852697585,
+      "accessCount": 15,
+      "lastAccessed": 1781227196313,
       "type": "file"
     },
     {
       "path": "apps/api/prisma/schema.prisma",
       "accessCount": 8,
       "lastAccessed": 1780233485444,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/index.ts",
+      "accessCount": 8,
+      "lastAccessed": 1781225117778,
       "type": "file"
     },
     {
@@ -126,27 +132,39 @@
       "type": "file"
     },
     {
+      "path": "apps/web/app/home/layout.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1781226015008,
+      "type": "file"
+    },
+    {
       "path": "README.md",
       "accessCount": 5,
       "lastAccessed": 1779851431975,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/index.ts",
-      "accessCount": 5,
-      "lastAccessed": 1779854623349,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/app/home/layout.tsx",
-      "accessCount": 5,
-      "lastAccessed": 1779855308141,
-      "type": "file"
-    },
-    {
       "path": "apps/web/app/company/talent/page.tsx",
       "accessCount": 5,
       "lastAccessed": 1779924129915,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/api-context.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1781226004635,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/profile-context.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1781226014830,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/providers.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1781226022968,
       "type": "file"
     },
     {
@@ -162,27 +180,9 @@
       "type": "file"
     },
     {
-      "path": "apps/web/app/providers.tsx",
-      "accessCount": 4,
-      "lastAccessed": 1779855236528,
-      "type": "file"
-    },
-    {
       "path": "docs/superpowers/plans/2026-05-27-company-user-type.md",
       "accessCount": 4,
       "lastAccessed": 1779855342219,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/lib/api-context.tsx",
-      "accessCount": 4,
-      "lastAccessed": 1779855425906,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/lib/profile-context.tsx",
-      "accessCount": 4,
-      "lastAccessed": 1779855426487,
       "type": "file"
     },
     {

@@ -16,8 +16,22 @@ type Section = {
   techStack: string[];
   highlights: Highlight[];
   impact: string;
+  assessmentType?: string;
 };
-type Doc = { id: string; name: string; sections: Section[]; createdAt: string };
+type Doc = {
+  id: string;
+  name: string;
+  sections: Section[];
+  createdAt: string;
+  authorName?: string;
+  authorRole?: string;
+};
+
+function scoreColor(score: number) {
+  if (score >= 70) return 'text-emerald-400 border-emerald-400/30 bg-emerald-400/5';
+  if (score >= 40) return 'text-yellow-400 border-yellow-400/30 bg-yellow-400/5';
+  return 'text-primary border-primary/30 bg-primary/5';
+}
 
 export async function generateMetadata({
   params,
@@ -60,42 +74,120 @@ export default async function PublicPortfolioPage({
   if (!doc) notFound();
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-3xl px-6 py-12">
-        <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-          Software Portfolio · Jobclaw
-        </p>
-        <h1 className="mb-10 font-heading text-3xl font-bold">{doc.name}</h1>
+    <main className="min-h-screen bg-background font-sans text-foreground">
+      <div className="mx-auto max-w-3xl px-6 py-14">
+        {/* Header */}
+        <div className="mb-12">
+          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+            Software Portfolio · Jobclaw
+          </p>
+          <h1 className="font-heading text-4xl font-black tracking-tight">{doc.name}</h1>
+          {(doc.authorName || doc.authorRole) && (
+            <p className="mt-2 font-mono text-sm text-muted-foreground">
+              {doc.authorName}{doc.authorName && doc.authorRole ? ' · ' : ''}{doc.authorRole}
+            </p>
+          )}
+        </div>
 
-        {doc.sections.map((s) => (
-          <div key={s.assessmentId} className="mb-10 border-t border-border pt-8">
-            <p className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              {s.repoOwner}/{s.repoName}
-            </p>
-            <h2 className="mb-2 text-xl font-bold">{s.headline}</h2>
-            <div className="mb-4 flex flex-wrap gap-4 font-mono text-xs text-muted-foreground">
-              <span>{s.role}</span>
-              <span>{s.duration}</span>
-              <span>Score: {s.overallScore}/100</span>
-            </div>
-            <p className="mb-4 text-sm leading-relaxed">{s.summary}</p>
-            <p className="mb-4 font-mono text-xs text-muted-foreground">
-              <strong className="text-foreground">Stack:</strong> {s.techStack.join(', ')}
-            </p>
-            <ul className="mb-4 space-y-2 pl-4 text-sm">
-              {s.highlights.map((h) => (
-                <li key={h.title} className="list-disc">
-                  <strong>{h.title}:</strong> {h.description}
-                </li>
-              ))}
-            </ul>
-            <p className="border-l-2 border-primary pl-3 text-sm italic text-muted-foreground">
-              {s.impact}
-            </p>
-          </div>
-        ))}
+        {/* Sections */}
+        {doc.sections.map((s) => {
+          const githubUrl = `https://github.com/${s.repoOwner}/${s.repoName}`;
+          return (
+            <article key={s.assessmentId} className="mb-12 overflow-hidden rounded-2xl border border-border bg-card/40">
+              {/* Section header */}
+              <div className="border-b border-border px-6 py-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    {s.assessmentType && (
+                      <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {s.assessmentType} Assessment
+                      </p>
+                    )}
+                    <p className="font-mono text-xs font-bold text-muted-foreground">
+                      {s.repoOwner}/<span className="text-foreground">{s.repoName}</span>
+                    </p>
+                    <h2 className="mt-2 font-heading text-xl font-bold leading-snug">{s.headline}</h2>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-muted-foreground">
+                      <span>{s.role}</span>
+                      <span>·</span>
+                      <span>{s.duration}</span>
+                    </div>
+                  </div>
 
-        <p className="mt-16 text-center font-mono text-[10px] text-muted-foreground/50">
+                  {/* Score badge */}
+                  <div className={`flex-shrink-0 rounded-xl border px-4 py-2 text-center ${scoreColor(s.overallScore)}`}>
+                    <p className="font-mono text-2xl font-black leading-none">{s.overallScore}</p>
+                    <p className="mt-0.5 font-mono text-[8px] uppercase tracking-widest opacity-70">/ 100</p>
+                    <p className="font-mono text-[8px] uppercase tracking-widest opacity-60">Jobclaw</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="space-y-5 px-6 py-5">
+                <p className="text-sm leading-relaxed text-foreground/80">{s.summary}</p>
+
+                {/* Tech stack */}
+                <div>
+                  <p className="mb-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Tech Stack</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {s.techStack.map((t) => (
+                      <span key={t} className="rounded-md border border-border bg-background px-2 py-0.5 font-mono text-[10px] text-foreground">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Highlights */}
+                {s.highlights.length > 0 && (
+                  <div>
+                    <p className="mb-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Highlights</p>
+                    <ul className="space-y-2">
+                      {s.highlights.map((h) => (
+                        <li key={h.title} className="flex items-start gap-2 text-sm">
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                          <span><strong className="font-semibold">{h.title}:</strong> {h.description}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Impact */}
+                <blockquote className="border-l-2 border-primary pl-4 font-mono text-xs italic leading-relaxed text-muted-foreground">
+                  {s.impact}
+                </blockquote>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-3 border-t border-border px-6 py-4">
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-foreground transition-colors hover:border-foreground/30 hover:bg-muted"
+                >
+                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                  </svg>
+                  View Code on GitHub
+                </a>
+                <a
+                  href={`https://jobclaw.fyi/projects/${s.assessmentId}`}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  View Full Assessment
+                </a>
+              </div>
+            </article>
+          );
+        })}
+
+        <p className="mt-8 text-center font-mono text-[10px] text-muted-foreground/40">
           Generated by{' '}
           <a href="https://jobclaw.fyi" className="hover:underline">
             Jobclaw

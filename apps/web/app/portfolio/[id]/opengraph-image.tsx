@@ -22,6 +22,22 @@ function initials(name: string) {
     .join('');
 }
 
+const APP_BASE = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.jobclaw.fyi';
+
+async function fetchLogoBase64(): Promise<string | null> {
+  try {
+    const r = await fetch(`${APP_BASE}/logo.png`);
+    if (!r.ok) return null;
+    const buf = await r.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let bin = '';
+    for (let i = 0; i < bytes.byteLength; i++) bin += String.fromCharCode(bytes[i]);
+    return `data:image/png;base64,${btoa(bin)}`;
+  } catch {
+    return null;
+  }
+}
+
 export default async function OGImage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
@@ -30,18 +46,23 @@ export default async function OGImage({ params }: { params: Promise<{ id: string
   let authorName = '';
   let authorRole = '';
 
-  try {
-    const res = await fetch(`${API_BASE}/v1/documents/${id}/view`, { cache: 'no-store' });
-    if (res.ok) {
-      const doc = await res.json();
-      name = doc.name ?? name;
-      sections = doc.sections ?? [];
-      authorName = doc.authorName ?? '';
-      authorRole = doc.authorRole ?? '';
-    }
-  } catch {
-    // use defaults
-  }
+  const [logoSrc] = await Promise.all([
+    fetchLogoBase64(),
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/v1/documents/${id}/view`, { cache: 'no-store' });
+        if (res.ok) {
+          const doc = await res.json();
+          name = doc.name ?? name;
+          sections = doc.sections ?? [];
+          authorName = doc.authorName ?? '';
+          authorRole = doc.authorRole ?? '';
+        }
+      } catch {
+        // use defaults
+      }
+    })(),
+  ]);
 
   const projectCount = sections.length;
   const avgScore =
@@ -92,35 +113,27 @@ export default async function OGImage({ params }: { params: Promise<{ id: string
             position: 'relative',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {/* Logo mark */}
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                background: '#c96442',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px',
-                fontWeight: 900,
-                color: 'white',
-              }}
-            >
-              J
-            </div>
-            <span
-              style={{
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: 800,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-              }}
-            >
-              JOBCLAW
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {logoSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoSrc}
+                alt="Jobclaw"
+                style={{ height: '30px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+              />
+            ) : (
+              <span
+                style={{
+                  color: 'white',
+                  fontSize: '18px',
+                  fontWeight: 800,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                JOBCLAW
+              </span>
+            )}
           </div>
 
           {/* Assessment type badge */}

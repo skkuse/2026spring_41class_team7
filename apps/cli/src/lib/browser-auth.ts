@@ -58,9 +58,13 @@ function waitForCallback(port: number, expectedState: string, onListening: () =>
       reject(new Error('Login timed out after 5 minutes.'));
     }, TIMEOUT_MS);
 
+    const allowedOrigin = new URL(WEB_APP_URL).origin;
+
     const server = http.createServer((req, res) => {
-      const corsHeaders = {
-        'Access-Control-Allow-Origin': '*',
+      const requestOrigin = req.headers.origin ?? '';
+      const originOk = requestOrigin === allowedOrigin;
+      const corsHeaders: Record<string, string> = {
+        'Access-Control-Allow-Origin': originOk ? requestOrigin : '',
         'Access-Control-Allow-Private-Network': 'true',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
@@ -75,6 +79,11 @@ function waitForCallback(port: number, expectedState: string, onListening: () =>
       // Preflight for Chrome's Private Network Access
       if (req.method === 'OPTIONS') {
         res.writeHead(204, corsHeaders).end();
+        return;
+      }
+
+      if (!originOk) {
+        res.writeHead(403).end();
         return;
       }
 

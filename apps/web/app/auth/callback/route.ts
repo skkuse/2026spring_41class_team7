@@ -26,24 +26,23 @@ export async function GET(request: Request) {
       if (cliPort && /^\d{1,5}$/.test(cliPort) && cliState && /^[0-9a-f]{32}$/.test(cliState)) {
         const session = data.session;
         const user = session.user;
-        const doneUrl = new URL(`${origin}/auth/cli-done`);
-        doneUrl.searchParams.set('cli_port', cliPort);
-        doneUrl.searchParams.set('state', cliState);
-        doneUrl.searchParams.set('access_token', session.access_token);
-        doneUrl.searchParams.set('refresh_token', session.refresh_token);
-        doneUrl.searchParams.set(
-          'expires_at',
-          String(session.expires_at ?? Math.floor(Date.now() / 1000) + session.expires_in),
-        );
-        doneUrl.searchParams.set('user_id', user.id);
-        doneUrl.searchParams.set('email', user.email ?? '');
-        doneUrl.searchParams.set(
-          'username',
+        const expiresAt = session.expires_at ?? Math.floor(Date.now() / 1000) + session.expires_in;
+        const username =
           (user.user_metadata?.user_name as string | undefined) ??
           (user.user_metadata?.preferred_username as string | undefined) ??
-          '',
-        );
-        return NextResponse.redirect(doneUrl.toString());
+          '';
+        // Tokens go in the URL fragment — never sent to the server or in referrer headers
+        const fragment = new URLSearchParams({
+          cli_port: cliPort,
+          state: cliState,
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+          expires_at: String(expiresAt),
+          user_id: user.id,
+          email: user.email ?? '',
+          username,
+        }).toString();
+        return NextResponse.redirect(`${origin}/auth/cli-done#${fragment}`);
       }
 
       return NextResponse.redirect(`${origin}${nextPath}`);

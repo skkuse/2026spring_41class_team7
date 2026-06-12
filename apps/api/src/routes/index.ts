@@ -31,6 +31,8 @@ import { getPublicAssessmentHandler } from './assessments/get-public-assessment.
 import { getPublicAssessmentRoute } from './assessments/get-public-assessment.route.js';
 import { postPortfolioGenerateHandler } from './portfolio/post-generate.handler.js';
 import { postPortfolioGenerateRoute } from './portfolio/post-generate.route.js';
+import { postPortfolioSaveHandler } from './portfolio/post-save.handler.js';
+import { postPortfolioSaveRoute } from './portfolio/post-save.route.js';
 import { listTalentHandler } from './talent/list-talent.handler.js';
 import { listTalentRoute } from './talent/list-talent.route.js';
 import { getTalentHandler } from './talent/get-talent.handler.js';
@@ -64,6 +66,7 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(listAssessmentsRoute, listAssessmentsHandler);
   app.openapi(getAssessmentRoute, getAssessmentHandler);
   app.openapi(postPortfolioGenerateRoute, postPortfolioGenerateHandler);
+  app.openapi(postPortfolioSaveRoute, postPortfolioSaveHandler);
 
   // Talent directory (any authenticated user)
   app.openapi(listTalentRoute, listTalentHandler);

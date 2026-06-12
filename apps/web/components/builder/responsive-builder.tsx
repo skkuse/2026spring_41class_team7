@@ -30,6 +30,8 @@ export function ResponsiveBuilder() {
   const [detailLoading, setDetailLoading] = useState(false);
   const [sections, setSections] = useState<PortfolioSection[]>([]);
   const [generationError, setGenerationError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const detailCacheRef = useRef(detailCache);
   detailCacheRef.current = detailCache;
@@ -121,9 +123,21 @@ export function ResponsiveBuilder() {
     );
   }, []);
 
-  const onSave = useCallback(() => {
-    alert('Portfolio saved to Documents.');
-  }, []);
+  const onSave = useCallback(async () => {
+    const items = sections.filter((s) => s.data && !s.generating).map((s) => s.data!);
+    if (items.length === 0) return;
+    setIsSaving(true);
+    setSaveSuccess(false);
+    try {
+      await post('/v1/portfolio/save', { sections: items });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch {
+      // silently fail — user can retry
+    } finally {
+      setIsSaving(false);
+    }
+  }, [sections, post]);
 
   const onExport = useCallback(() => {
     const items = sections.filter((s) => s.data).map((s) => s.data!);
@@ -213,6 +227,8 @@ export function ResponsiveBuilder() {
     detailLoading,
     sections,
     generationError,
+    isSaving,
+    saveSuccess,
     onSectionChange,
     onToggle,
     onMoveUp,

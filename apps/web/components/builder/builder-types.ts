@@ -75,6 +75,10 @@ export type BuilderProps = {
   // Generation error (null = no error)
   generationError: string | null;
 
+  // Save state
+  isSaving: boolean;
+  saveSuccess: boolean;
+
   // Actions
   onToggle: (id: string) => void;
   onMoveUp: (id: string) => void;

@@ -52,6 +52,7 @@ model Document {
   status    DocumentStatus
   sizeLabel String?
   tags      String[]
+  content   Json?
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 

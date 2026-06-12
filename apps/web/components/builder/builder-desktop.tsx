@@ -370,6 +370,7 @@ function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
 
 function EditingView({
   sections, orderedIds, assessments, onSectionChange, onSave, onExport, onReset, generationError,
+  isSaving, saveSuccess,
 }: BuilderProps) {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const scrollTo = (id: string) =>
@@ -405,9 +406,11 @@ function EditingView({
           })}
         </div>
         <div className="space-y-2 border-t border-border p-4">
-          <button type="button" onClick={onSave} disabled={!allDone}
+          <button type="button" onClick={onSave} disabled={!allDone || isSaving}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 font-mono text-[10px] font-black uppercase tracking-wide text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40">
-            <Icon icon="solar:floppy-disk-bold" /> Save to Docs
+            <Icon icon={saveSuccess ? 'solar:check-circle-bold' : isSaving ? 'solar:spinner-bold' : 'solar:floppy-disk-bold'}
+              className={isSaving ? 'animate-spin' : ''} />
+            {saveSuccess ? 'Saved!' : isSaving ? 'Saving…' : 'Save to Docs'}
           </button>
           <button type="button" onClick={onExport} disabled={!allDone}
             className="flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors hover:bg-muted disabled:opacity-40">
@@ -466,9 +469,11 @@ function EditingView({
 
           {allDone && (
             <div className="flex gap-3 border-t border-border pt-6">
-              <button type="button" onClick={onSave}
-                className="flex-1 rounded-xl bg-primary py-4 font-mono text-sm font-black uppercase tracking-[0.12em] text-primary-foreground shadow-[0_0_24px_rgba(201,100,66,0.18)] transition-opacity hover:opacity-90">
-                Save Portfolio
+              <button type="button" onClick={onSave} disabled={isSaving}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-4 font-mono text-sm font-black uppercase tracking-[0.12em] text-primary-foreground shadow-[0_0_24px_rgba(201,100,66,0.18)] transition-opacity hover:opacity-90 disabled:opacity-60">
+                <Icon icon={saveSuccess ? 'solar:check-circle-bold' : isSaving ? 'solar:spinner-bold' : 'solar:floppy-disk-bold'}
+                  className={isSaving ? 'animate-spin' : ''} />
+                {saveSuccess ? 'Saved!' : isSaving ? 'Saving…' : 'Save Portfolio'}
               </button>
               <button type="button" onClick={onExport}
                 className="flex items-center gap-2 rounded-xl border border-border px-8 py-4 font-mono text-sm font-bold uppercase tracking-wide transition-colors hover:bg-muted">

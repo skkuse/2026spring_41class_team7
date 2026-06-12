@@ -14,7 +14,7 @@ export const dashboardNavItems: readonly DashboardNavItem[] = [
   },
   {
     href: '/builder',
-    label: 'Gen',
+    label: 'Build',
     icon: 'hugeicons:magic-wand-01',
     match: (p) => p.startsWith('/builder'),
   },

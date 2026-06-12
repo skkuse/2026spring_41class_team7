@@ -69,10 +69,10 @@ export default function DocumentsPage() {
           <div className="mb-1 flex items-center gap-2">
             <Icon icon="solar:folder-bold" className="text-lg text-primary" />
             <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-              Saved Files
+              Your Portfolios
             </span>
           </div>
-          <h1 className="font-heading text-3xl font-bold">Documents</h1>
+          <h1 className="font-heading text-3xl font-bold">Portfolios</h1>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative flex-1 max-w-md">
               <Icon
@@ -118,9 +118,18 @@ export default function DocumentsPage() {
             <Icon icon="solar:folder-open-linear" className="mx-auto mb-3 text-4xl text-muted-foreground/40" />
             <p className="font-mono text-sm text-muted-foreground">
               {query || tab !== 'ALL'
-                ? 'No documents match your filter.'
-                : <>No documents yet. Run <code className="text-primary">jobclaw publish</code> to generate one.</>}
+                ? 'No portfolios match your filter.'
+                : 'No portfolios yet.'}
             </p>
+            {!query && tab === 'ALL' && (
+              <a
+                href="/builder"
+                className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs font-bold text-primary hover:underline"
+              >
+                Go to Build to create your first portfolio
+                <Icon icon="solar:arrow-right-linear" className="text-sm" />
+              </a>
+            )}
           </div>
         )}
 

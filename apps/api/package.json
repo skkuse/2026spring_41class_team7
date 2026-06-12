@@ -7,7 +7,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "build": "tsc -p tsconfig.json",
-    "start": "node --env-file=../../.env dist/index.js",
+    "start": "prisma migrate deploy && node dist/index.js",
+    "start:dev": "node --env-file=../../.env dist/index.js",
     "test": "vitest run",
     "test:fixtures": "node scripts/build-test-fixtures.mjs",
     "test:resume:local": "node scripts/test-resume-parse-local.mjs",
@@ -17,14 +18,15 @@
   "dependencies": {
     "@hono/node-server": "latest",
     "@hono/zod-openapi": "latest",
+    "@jobclaw/shared-types": "workspace:*",
     "@prisma/client": "^6.19.2",
     "@scalar/hono-api-reference": "latest",
     "@supabase/supabase-js": "^2.100.0",
-    "@jobclaw/shared-types": "workspace:*",
     "hono": "latest",
     "mammoth": "^1.12.0",
     "openai": "^6.32.0",
     "pdf-parse": "^2.4.5",
+    "resend": "^6.12.4",
     "zod": "latest"
   },
   "devDependencies": {

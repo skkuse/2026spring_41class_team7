@@ -141,6 +141,19 @@ export function AssessmentList({
       {assessments.map((a) => (
         <AssessmentCard key={a.id} item={a} />
       ))}
+      <Link
+        href="/builder"
+        className="mt-6 flex w-full items-center justify-between rounded-lg border border-primary/30 bg-primary/5 px-5 py-4 transition-colors hover:bg-primary/10"
+      >
+        <div className="flex items-center gap-3">
+          <Icon icon="hugeicons:magic-wand-01" className="text-lg text-primary" />
+          <div>
+            <p className="font-mono text-xs font-bold text-foreground">Build Portfolio</p>
+            <p className="font-mono text-[9px] text-muted-foreground">Turn your project reports into a portfolio</p>
+          </div>
+        </div>
+        <Icon icon="solar:arrow-right-linear" className="text-primary" />
+      </Link>
     </div>
   );
 }

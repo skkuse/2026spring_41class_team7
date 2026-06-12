@@ -2,7 +2,7 @@ import type { ProfileData } from './responsive-profile';
 
 export function ProfileDesktop({ data }: { data: ProfileData }) {
   return (
-    <main className="min-h-screen p-6 md:p-10">
+    <main className="mx-auto min-h-screen max-w-4xl p-6 md:p-10">
       <h1 className="mb-8 text-4xl font-bold">Account Control</h1>
       <section className="mb-8 rounded border border-border bg-card/40 p-6">
         <h2 className="text-2xl font-semibold">{data.name || '—'}</h2>

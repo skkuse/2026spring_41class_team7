@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_rNWtJFYayqNLiKeXzymW7sMdnJDr",
+  "orgId": "team_dIvEyXYW5ISWlZzCEi94yqL5",
+  "projectName": "web",
+  "settings": {
+    "createdAt": 1775860473437,
+    "framework": "nextjs",
+    "devCommand": null,
+    "installCommand": "npm install --ignore-scripts",
+    "buildCommand": "npm run build",
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

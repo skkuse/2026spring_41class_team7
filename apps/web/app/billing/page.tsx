@@ -135,7 +135,7 @@ export default function BillingPage() {
             value={tokenInput}
             onChange={(e) => setTokenInput(e.target.value)}
             placeholder="Optional: paste access token (override)"
-            className="w-full rounded border border-border bg-black/30 px-3 py-2"
+            className="w-full rounded border border-border bg-muted/60 px-3 py-2"
           />
           <div className="flex gap-2 flex-wrap">
             <button onClick={() => api.setAuthToken(tokenInput || null)} className="px-3 py-2 rounded border border-border">Set Token</button>
@@ -152,7 +152,7 @@ export default function BillingPage() {
             <input
               value={rcUserInput}
               onChange={(e) => setRcUserInput(e.target.value)}
-              className="flex-1 min-w-[200px] rounded border border-border bg-black/30 px-3 py-2 font-mono text-sm"
+              className="flex-1 min-w-[200px] rounded border border-border bg-muted/60 px-3 py-2 font-mono text-sm"
             />
             <button
               type="button"
@@ -167,7 +167,7 @@ export default function BillingPage() {
         <section className="rounded-xl border border-border bg-card p-5 space-y-3">
           <h2 className="text-xl font-semibold">Subscription Status</h2>
           {billingError ? <p className="text-red-400">{billingError}</p> : null}
-          {loading ? <p>Loading customer info...</p> : <p>{entitlementName}: <span className={jobclawProActive ? 'text-emerald-400' : 'text-zinc-400'}>{jobclawProActive ? 'ACTIVE' : 'INACTIVE'}</span></p>}
+          {loading ? <p>Loading customer info...</p> : <p>{entitlementName}: <span className={jobclawProActive ? 'text-emerald-600' : 'text-muted-foreground'}>{jobclawProActive ? 'ACTIVE' : 'INACTIVE'}</span></p>}
           <button onClick={() => void refresh()} className="px-3 py-2 rounded border border-border">Refresh Customer Info</button>
         </section>
 

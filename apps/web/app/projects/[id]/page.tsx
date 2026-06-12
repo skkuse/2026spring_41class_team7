@@ -1,9 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(() => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }, [text]);
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      title={copied ? 'Copied!' : 'Copy prompt'}
+      className="ml-auto flex-shrink-0 rounded p-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+    >
+      <Icon
+        icon={copied ? 'solar:check-linear' : 'solar:copy-linear'}
+        className="text-sm"
+      />
+    </button>
+  );
+}
 
 import { useApi } from '../../../lib/api-context';
 
@@ -222,16 +245,29 @@ export default function ProjectPage() {
         {/* Next Steps */}
         {data.nextSteps.length > 0 && (
           <section className="rounded-lg border border-primary/20 bg-primary/5 p-6">
-            <h2 className="mb-4 font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
-              Next Steps
-            </h2>
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <h2 className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
+                Next Steps
+              </h2>
+              <div className="group relative flex-shrink-0">
+                <div className="flex cursor-help items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wide text-primary">
+                  <Icon icon="solar:cpu-bolt-linear" className="text-xs" />
+                  AI Coding Agent Prompts
+                  <Icon icon="solar:info-circle-linear" className="text-xs" />
+                </div>
+                <div className="pointer-events-none absolute right-0 top-full z-20 mt-2 w-64 rounded-lg border border-border bg-card p-3 text-xs leading-relaxed text-muted-foreground opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                  These prompts are ready to paste into AI coding agents like Cursor, GitHub Copilot, or Claude Code to implement the recommended improvements directly in your codebase.
+                </div>
+              </div>
+            </div>
             <ol className="space-y-3">
               {data.nextSteps.map((s, i) => (
-                <li key={i} className="flex gap-3 text-sm leading-relaxed">
+                <li key={i} className="flex items-start gap-3 rounded-lg border border-primary/10 bg-background/40 px-4 py-3 text-sm leading-relaxed">
                   <span className="flex-shrink-0 font-mono text-[10px] font-bold text-primary">
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  {s}
+                  <span className="flex-1">{s}</span>
+                  <CopyButton text={s} />
                 </li>
               ))}
             </ol>

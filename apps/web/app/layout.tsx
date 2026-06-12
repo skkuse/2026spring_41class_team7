@@ -45,7 +45,10 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata = {
   title: 'Jobclaw — AI portfolio for developers',
   description: 'Connect GitHub and build a job-winning technical profile.',
-  icons: { icon: '/favicon.ico' },
+  icons: {
+    icon: '/logo-glyph.png',
+    apple: '/logo-glyph.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -14,13 +14,13 @@ export const dashboardNavItems: readonly DashboardNavItem[] = [
   },
   {
     href: '/builder',
-    label: 'Gen',
+    label: 'Build',
     icon: 'hugeicons:magic-wand-01',
     match: (p) => p.startsWith('/builder'),
   },
   {
     href: '/documents',
-    label: 'Docs',
+    label: 'Portfolios',
     icon: 'hugeicons:folder-01',
     match: (p) => p.startsWith('/documents'),
   },

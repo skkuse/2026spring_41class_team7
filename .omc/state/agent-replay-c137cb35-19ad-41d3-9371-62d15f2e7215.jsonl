@@ -1,5 +1,0 @@
-{"t":0,"agent":"system","event":"skill_invoked","skill_name":"superpowers:brainstorming"}
-{"t":0,"agent":"a005476","agent_type":"unknown","event":"agent_stop","success":true}
-{"t":0,"agent":"a059eb5","agent_type":"unknown","event":"agent_stop","success":true}
-{"t":0,"agent":"system","event":"skill_invoked","skill_name":"supabase:supabase"}
-{"t":0,"agent":"aea755a","agent_type":"unknown","event":"agent_stop","success":true}

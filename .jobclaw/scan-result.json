@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-04-04T18:53:42.255Z",
+  "generatedAt": "2026-05-25T16:25:07.795Z",
   "repoRoot": "/home/hskan/hskang9/2026spring_41class_team7",
   "timeline": {
-    "start": "2026-03-25T10:20:50+09:00",
-    "end": "2026-03-25T10:20:50+09:00"
+    "start": "2026-05-25T05:10:08+09:00",
+    "end": "2026-05-25T05:10:08+09:00"
   },
   "agent1": {
     "skills": [
@@ -17,20 +17,28 @@
       "TypeScript"
     ],
     "libraries": [
+      "@hono/node-server",
       "@hono/zod-openapi",
       "@iconify/react",
+      "@jobclaw/shared-types",
       "@prisma/client",
       "@revenuecat/purchases-js",
       "@scalar/hono-api-reference",
       "@supabase/ssr",
       "@supabase/supabase-js",
       "@tailwindcss/postcss",
-      "@team7/shared-types",
       "@types/node",
+      "@types/prompts",
       "@types/react",
       "@types/react-dom",
+      "commander",
+      "didyoumean",
+      "gitignore-parser",
       "hono",
       "ink",
+      "ink-big-text",
+      "ink-gradient",
+      "jobclaw",
       "jszip",
       "lucide-react",
       "mammoth",
@@ -39,6 +47,7 @@
       "pdf-lib",
       "pdf-parse",
       "prisma",
+      "prompts",
       "react",
       "react-dom",
       "tailwindcss",
@@ -54,6 +63,7 @@
         "/home/hskan/hskang9/2026spring_41class_team7/apps/cli/package.json",
         "/home/hskan/hskang9/2026spring_41class_team7/apps/web/package.json",
         "/home/hskan/hskang9/2026spring_41class_team7/package.json",
+        "/home/hskan/hskang9/2026spring_41class_team7/packages/project-management/package.json",
         "/home/hskan/hskang9/2026spring_41class_team7/packages/shared-types/package.json"
       ],
       "cargoToml": []
@@ -62,32 +72,33 @@
   "agent2": {
     "promptSource": "fallback",
     "scores": {
-      "structure": 0,
-      "tests": 0,
-      "documentation": 0,
-      "dependencies_hygiene": 0
+      "structure": 9,
+      "tests": 8,
+      "documentation": 9,
+      "dependencies_hygiene": 7
     },
     "checklist": [
       {
-        "id": "c1",
-        "label": "structure",
-        "status": "not_done"
+        "id": "structure",
+        "label": "Clear structure of the repository",
+        "status": "done"
       },
       {
-        "id": "c2",
-        "label": "tests",
-        "status": "not_done"
+        "id": "tests",
+        "label": "Presence of unit tests",
+        "status": "done"
       },
       {
-        "id": "c3",
-        "label": "documentation",
-        "status": "not_done"
+        "id": "documentation",
+        "label": "Comprehensive documentation",
+        "status": "done"
       },
       {
-        "id": "c4",
-        "label": "dependencies_hygiene",
-        "status": "not_done"
+        "id": "dependencies_hygiene",
+        "label": "Proper management of dependencies",
+        "status": "done"
       }
-    ]
+    ],
+    "rawModelResponse": "{\n  \"scores\": {\n    \"structure\": 9,\n    \"tests\": 8,\n    \"documentation\": 9,\n    \"dependencies_hygiene\": 7\n  },\n  \"checklist\": [\n    {\n      \"id\": \"structure\",\n      \"label\": \"Clear structure of the repository\",\n      \"status\": \"done\"\n    },\n    {\n      \"id\": \"tests\",\n      \"label\": \"Presence of unit tests\",\n      \"status\": \"done\"\n    },\n    {\n      \"id\": \"documentation\",\n      \"label\": \"Comprehensive documentation\",\n      \"status\": \"done\"\n    },\n    {\n      \"id\": \"dependencies_hygiene\",\n      \"label\": \"Proper management of dependencies\",\n      \"status\": \"done\"\n    }\n  ]\n}"
   }
 }

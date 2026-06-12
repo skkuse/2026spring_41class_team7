@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { LandingPricing } from './landing-pricing';
 
 const DASHBOARD_IMG =
   'https://ggrhecslgdflloszjkwl.supabase.co/storage/v1/object/public/user-assets/76524ixEd5g/components/d5XWfZC6Ix7.png';
@@ -11,11 +12,8 @@ export function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <div className="flex items-center justify-between h-20 px-6 lg:px-12 max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
-              <Image src="/logo-glyph.png" alt="Jobclaw" width={36} height={36} className="size-9" />
-              <span className="font-heading font-extrabold tracking-tight text-2xl">
-                Job<span className="text-primary">claw</span>
-              </span>
+            <Link href="/">
+              <Image src="/logo.png" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <div className="hidden md:flex items-center gap-6 text-[11px] font-mono font-bold uppercase tracking-widest text-muted-foreground">
               <a href="#features" className="hover:text-primary transition-colors">
@@ -28,7 +26,7 @@ export function Landing() {
                 Templates
               </a>
               <Link href="/documents" className="hover:text-primary transition-colors">
-                Docs
+                Portfolios
               </Link>
             </div>
           </div>
@@ -61,18 +59,19 @@ export function Landing() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
               <span className="text-[10px] md:text-xs font-mono font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                Next-Gen Resume Engine Now Live
+                Verified Code Portfolios · Now Live
               </span>
             </div>
             <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] md:leading-[1.08] mb-8">
-              Code is your <br />
+              Resumes lie. <br />
               <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-chart-2 to-chart-1">
-                Competitive Advantage.
+                Code doesn&apos;t.
               </span>
             </h1>
             <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              The AI portfolio builder that speaks developer. Connect your GitHub, and watch as we
-              transform raw commits into a stunning, job-winning technical profile.
+              Hiring is broken. Candidates fake skills. Companies make bad bets. Jobclaw gives
+              developers a verified code portfolio — so companies can evaluate if your real code fits
+              their codebase, and you can see exactly how to improve.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
@@ -180,6 +179,61 @@ export function Landing() {
           </div>
         </div>
       </section>
+      <section className="py-32 px-6 lg:px-12 bg-card border-y border-border">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+          <div className="flex-1 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 bg-muted/50 border border-border px-4 py-2 rounded-full mb-8">
+              <Icon icon="mdi:github" className="text-lg" />
+              <span className="text-[10px] md:text-xs font-mono font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Open Source
+              </span>
+            </div>
+            <h2 className="font-heading text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">
+              The evaluation engine<br />
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-chart-2 to-chart-1">
+                is built by developers.
+              </span>
+            </h2>
+            <p className="text-muted-foreground text-lg leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
+              What makes code &ldquo;good&rdquo; depends on the codebase. No single company can define the right metrics for every team. So we open-sourced the evaluation engine — and we need developers who&apos;ve done real code reviews to contribute the evaluators that actually matter.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <a
+                href="https://github.com/hskang9/2026spring_41class_team7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-foreground text-background px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-foreground/90 active:scale-95 transition-all text-lg group"
+              >
+                <Icon icon="mdi:github" className="text-2xl" />
+                View on GitHub
+              </a>
+              <a
+                href="https://github.com/hskang9/2026spring_41class_team7#contributing-an-evaluator"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-primary/10 border border-primary/30 text-primary px-8 py-5 rounded-2xl font-bold hover:bg-primary/20 active:scale-95 transition-all text-lg inline-flex items-center justify-center gap-3"
+              >
+                <Icon icon="solar:code-bold" className="text-xl" />
+                Contribute an Evaluator
+              </a>
+            </div>
+          </div>
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-xl lg:max-w-none">
+            {[
+              { icon: 'solar:ruler-bold', label: 'Naming conventions', desc: 'Does the code follow consistent, readable naming across files?' },
+              { icon: 'solar:shield-check-bold', label: 'Error handling depth', desc: 'Are edge cases covered or only the happy path?' },
+              { icon: 'solar:layers-bold', label: 'Abstraction quality', desc: 'Are abstractions useful or is the code over-engineered?' },
+              { icon: 'solar:test-tube-bold', label: 'Test signal', desc: 'Does test coverage reflect real confidence or just line count?' },
+            ].map(({ icon, label, desc }) => (
+              <div key={label} className="bg-muted/40 border border-border rounded-2xl p-6 hover:border-primary/40 transition-colors">
+                <Icon icon={icon} className="text-primary text-2xl mb-3" />
+                <h4 className="font-bold mb-1">{label}</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       <section className="py-32 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <div className="flex justify-center gap-1 mb-10">
@@ -255,89 +309,7 @@ export function Landing() {
           </div>
         </div>
       </section>
-      <section id="pricing" className="py-32 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
-        <div className="text-center mb-24">
-          <h2 className="font-heading text-4xl lg:text-6xl font-bold mb-6 tracking-tight">
-            Invest in your trajectory.
-          </h2>
-          <p className="text-muted-foreground text-xl">
-            One successful career move pays for a lifetime of Jobclaw Pro.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          <div className="bg-card border border-border p-12 rounded-[2.5rem] flex flex-col">
-            <div className="mb-8">
-              <h3 className="font-heading text-2xl font-bold mb-2">Individual</h3>
-              <p className="text-muted-foreground text-sm">Perfect for your next job search.</p>
-            </div>
-            <div className="flex items-baseline gap-2 mb-8">
-              <span className="text-5xl font-black">$0</span>
-              <span className="text-muted-foreground">/ forever</span>
-            </div>
-            <ul className="space-y-4 mb-12 flex-1">
-              <li className="flex items-center gap-3 opacity-80">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />1
-                AI Portfolio Generation
-              </li>
-              <li className="flex items-center gap-3 opacity-80">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />
-                Standard PDF Export
-              </li>
-              <li className="flex items-center gap-3 opacity-80">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />
-                Public Profile URL
-              </li>
-              <li className="flex items-center gap-3 opacity-40 italic">
-                <Icon icon="solar:close-circle-bold" className="text-xl shrink-0" />
-                Custom Domain
-              </li>
-            </ul>
-            <Link
-              href="/onboarding"
-              className="w-full bg-secondary text-secondary-foreground py-5 rounded-2xl font-bold hover:bg-muted transition-all text-center"
-            >
-              Get Started Free
-            </Link>
-          </div>
-          <div className="bg-card border-2 border-primary p-12 rounded-[2.5rem] flex flex-col relative shadow-[0_0_40px_rgba(217,119,87,0.1)] md:scale-105">
-            <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg whitespace-nowrap">
-              Most Popular
-            </div>
-            <div className="mb-8">
-              <h3 className="font-heading text-2xl font-bold mb-2">Jobclaw Pro</h3>
-              <p className="text-muted-foreground text-sm">Total career reputation management.</p>
-            </div>
-            <div className="flex items-baseline gap-2 mb-8">
-              <span className="text-5xl font-black">$12</span>
-              <span className="text-muted-foreground">/ month</span>
-            </div>
-            <ul className="space-y-4 mb-12 flex-1">
-              <li className="flex items-center gap-3">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />
-                <strong>Unlimited</strong> AI Generations
-              </li>
-              <li className="flex items-center gap-3">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />
-                Advanced GitHub Analytics Sync
-              </li>
-              <li className="flex items-center gap-3">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />
-                Custom Domain + SSL
-              </li>
-              <li className="flex items-center gap-3">
-                <Icon icon="solar:check-circle-bold" className="text-primary text-xl shrink-0" />
-                Premium Developer Templates
-              </li>
-            </ul>
-            <Link
-              href="/billing"
-              className="w-full bg-primary text-primary-foreground py-5 rounded-2xl font-bold hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 text-center"
-            >
-              Go Pro Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      <LandingPricing />
       <section className="py-32 px-6 lg:px-12 text-center bg-primary text-primary-foreground relative overflow-hidden mt-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 to-transparent" />
         <div className="max-w-4xl mx-auto relative z-10">
@@ -368,11 +340,8 @@ export function Landing() {
       <footer className="py-24 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8">
           <div className="col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <Image src="/logo-glyph.png" alt="Jobclaw" width={32} height={32} className="size-8" />
-              <span className="font-heading font-extrabold tracking-tight text-2xl">
-                Job<span className="text-primary">claw</span>
-              </span>
+            <Link href="/" className="mb-6 inline-block">
+              <Image src="/logo.png" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-8">
               Elevating developer reputation through high-signal AI analysis and professional
@@ -442,7 +411,7 @@ export function Landing() {
             <ul className="space-y-4 text-sm text-muted-foreground font-medium">
               <li>
                 <Link href="/documents" className="hover:text-primary transition-colors">
-                  Docs
+                  Portfolios
                 </Link>
               </li>
               <li>
@@ -468,17 +437,17 @@ export function Landing() {
             </h5>
             <ul className="space-y-4 text-sm text-muted-foreground font-medium">
               <li>
-                <a href="/privacy" className="hover:text-primary transition-colors">
+                <a href="#features" className="hover:text-primary transition-colors">
                   Privacy
                 </a>
               </li>
               <li>
-                <a href="/terms" className="hover:text-primary transition-colors">
+                <a href="#features" className="hover:text-primary transition-colors">
                   Terms
                 </a>
               </li>
               <li>
-                <a href="/security" className="hover:text-primary transition-colors">
+                <a href="#features" className="hover:text-primary transition-colors">
                   Security
                 </a>
               </li>

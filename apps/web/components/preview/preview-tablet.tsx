@@ -2,7 +2,7 @@ import { PreviewResumeCard } from './preview-content';
 
 export function PreviewTablet() {
   return (
-    <main className="mx-auto min-h-screen max-w-2xl border-x border-border bg-zinc-950/40 pb-nav-safe">
+    <main className="mx-auto min-h-screen max-w-2xl border-x border-border bg-background pb-nav-safe">
       <header className="flex items-center justify-between border-b border-border bg-background px-8 py-5">
         <div>
           <h1 className="font-home-heading text-xl font-bold uppercase tracking-tight">Preview</h1>

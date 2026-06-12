@@ -10,10 +10,12 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "jobclaw": "jobclaw",
-    "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts"
+    "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts",
+    "export-pdf": "node export-pdf.mjs"
   },
   "devDependencies": {
     "jobclaw": "workspace:*",
+    "puppeteer-core": "^23.0.0",
     "turbo": "latest",
     "typescript": "latest"
   }

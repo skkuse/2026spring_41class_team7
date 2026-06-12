@@ -5,6 +5,10 @@ import { postBootstrapHandler } from './bootstrap/post-bootstrap.handler.js';
 import { postBootstrapRoute } from './bootstrap/post-bootstrap.route.js';
 import { requireAuth } from '../middlewares/auth.js';
 import { requireCompany } from '../middlewares/require-company.js';
+import { getDocumentHandler } from './documents/get-document.handler.js';
+import { getDocumentRoute } from './documents/get-document.route.js';
+import { getPublicDocumentHandler } from './documents/get-public-document.handler.js';
+import { getPublicDocumentRoute } from './documents/get-public-document.route.js';
 import { listDocumentsHandler } from './documents/list-documents.handler.js';
 import { listDocumentsRoute } from './documents/list-documents.route.js';
 import { getExampleHandler } from './example/get-example.handler.js';
@@ -50,6 +54,7 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
   app.openapi(getHealthRoute, getHealthHandler);
   app.openapi(getPublicAssessmentRoute, getPublicAssessmentHandler);
+  app.openapi(getPublicDocumentRoute, getPublicDocumentHandler);
   app.use('/v1/*', requireAuth);
 
   // Profile
@@ -59,6 +64,7 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
 
   // Developer routes
   app.openapi(listDocumentsRoute, listDocumentsHandler);
+  app.openapi(getDocumentRoute, getDocumentHandler);
   app.openapi(listInvoicesRoute, listInvoicesHandler);
   app.openapi(postResumeParseRoute, postResumeParseHandler);
   app.openapi(postProjectGithubRoute, postProjectGithubHandler);

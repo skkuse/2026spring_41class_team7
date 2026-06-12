@@ -17,7 +17,7 @@ import type {
   PortfolioSectionData,
 } from './builder-types';
 
-export function ResponsiveBuilder() {
+export function ResponsiveBuilder({ loadDocId }: { loadDocId?: string }) {
   const bp = useHomeBreakpoint();
   const { get, post, authToken } = useApi();
 
@@ -47,6 +47,23 @@ export function ResponsiveBuilder() {
       .catch(() => setAssessments([]))
       .finally(() => setListLoading(false));
   }, [get, authToken]);
+
+  // If loadDocId is provided, fetch the saved document and jump to editing phase
+  useEffect(() => {
+    if (!loadDocId || !authToken) return;
+    get<{ name: string; sections: PortfolioSectionData[] }>(`/v1/documents/${loadDocId}`)
+      .then((doc) => {
+        const loaded: PortfolioSection[] = doc.sections.map((s) => ({
+          id: s.assessmentId,
+          data: s,
+          generating: false,
+        }));
+        setOrderedIds(doc.sections.map((s) => s.assessmentId));
+        setSections(loaded);
+        setPhase('editing');
+      })
+      .catch(() => { /* fall through to normal select phase */ });
+  }, [loadDocId, authToken, get]);
 
   // Lazy-load detail for whatever the carousel is showing
   useEffect(() => {

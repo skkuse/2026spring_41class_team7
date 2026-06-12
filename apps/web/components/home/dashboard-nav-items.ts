@@ -20,7 +20,7 @@ export const dashboardNavItems: readonly DashboardNavItem[] = [
   },
   {
     href: '/documents',
-    label: 'Docs',
+    label: 'Portfolios',
     icon: 'hugeicons:folder-01',
     match: (p) => p.startsWith('/documents'),
   },

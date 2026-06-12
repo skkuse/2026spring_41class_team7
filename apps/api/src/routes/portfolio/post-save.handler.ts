@@ -8,13 +8,16 @@ export const postPortfolioSaveHandler: RouteHandler<typeof postPortfolioSaveRout
   const userId = c.get('userId');
   const { sections, title } = c.req.valid('json');
 
-  const profile = await prisma.profile.findUnique({
+  let profile = await prisma.profile.findUnique({
     where: { userId },
     select: { id: true },
   });
 
   if (!profile) {
-    return c.json({ message: 'Profile not found.' }, 404);
+    profile = await prisma.profile.create({
+      data: { userId, fullName: '', email: '', role: '', location: '', isPro: false },
+      select: { id: true },
+    });
   }
 
   // Find or create the "Portfolio" project for this profile

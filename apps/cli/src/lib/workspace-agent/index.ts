@@ -11,6 +11,8 @@ export {
   resolveRepoRoot,
   parseEvaluateCommandArgv,
   type ParsedEvaluateArgv,
+  parseAssessCommandArgv,
+  type ParsedAssessArgv,
 } from "./repo-root.js";
 
 export { loadLocalRepositoryAgentPrompt } from "./load-agent-prompt.js";

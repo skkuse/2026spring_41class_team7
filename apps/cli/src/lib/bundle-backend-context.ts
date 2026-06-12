@@ -113,3 +113,5 @@ export async function bundleBackendEvaluationContext(repoRoot: string): Promise<
   }
   return parts.join("\n\n");
 }
+
+export const bundleBackendAssessmentContext = bundleBackendEvaluationContext;

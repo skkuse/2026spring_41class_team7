@@ -1,6 +1,8 @@
 import path from "node:path";
 import type { EvaluationKind } from "../evaluation-kinds.js";
 import { parseEvaluationKind } from "../evaluation-kinds.js";
+import type { AssessmentKind } from "../assessment-kinds.js";
+import { parseAssessmentKind } from "../assessment-kinds.js";
 
 /**
  * Repository root for CLI-style tools: optional directory argument, otherwise `cwd`.
@@ -77,5 +79,65 @@ export function parseEvaluateCommandArgv(cwd: string, argv: string[]): ParsedEva
     outPath,
     evaluationType,
     invalidEvaluationType,
+  };
+}
+
+export type ParsedAssessArgv = {
+  repoRoot: string;
+  model?: string;
+  jsonOnly: boolean;
+  help: boolean;
+  outPath?: string;
+  assessmentType?: AssessmentKind;
+  invalidAssessmentType?: string;
+};
+
+export function parseAssessCommandArgv(cwd: string, argv: string[]): ParsedAssessArgv {
+  let repoRoot = path.resolve(cwd);
+  let model: string | undefined;
+  let jsonOnly = false;
+  let help = false;
+  let outPath: string | undefined;
+  let assessmentType: AssessmentKind | undefined;
+  let invalidAssessmentType: string | undefined;
+  const rest = [...argv];
+  while (rest.length > 0) {
+    const a = rest.shift()!;
+    if (a === "--model" && rest[0]) {
+      model = rest.shift();
+      continue;
+    }
+    if ((a === "--type" || a === "-t") && rest[0]) {
+      const raw = rest.shift()!;
+      const k = parseAssessmentKind(raw);
+      if (k) assessmentType = k;
+      else invalidAssessmentType = raw;
+      continue;
+    }
+    if (a === "--out" && rest[0]) {
+      outPath = path.resolve(cwd, rest.shift()!);
+      continue;
+    }
+    if (a === "--json") {
+      jsonOnly = true;
+      continue;
+    }
+    if (a === "-h" || a === "--help") {
+      help = true;
+      continue;
+    }
+    if (a.startsWith("-")) {
+      continue;
+    }
+    repoRoot = path.resolve(cwd, a);
+  }
+  return {
+    repoRoot,
+    model,
+    jsonOnly,
+    help,
+    outPath,
+    assessmentType,
+    invalidAssessmentType,
   };
 }

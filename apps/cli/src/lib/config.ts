@@ -45,8 +45,17 @@ export function evaluationsDir(projectRoot: string): string {
   return path.join(jobclawProjectDir(projectRoot), "evaluations");
 }
 
+/** `.jobclaw/assessments` under the assessed project root. */
+export function assessmentsDir(projectRoot: string): string {
+  return path.join(jobclawProjectDir(projectRoot), "assessments");
+}
+
 /** ISO-like, filesystem-safe: `2026-05-02T14-30-00-123Z.json` */
 export function newEvaluationJsonFileName(d = new Date()): string {
+  return `${d.toISOString().replace(/:/g, "-").replace(/\./g, "-")}.json`;
+}
+
+export function newAssessmentJsonFileName(d = new Date()): string {
   return `${d.toISOString().replace(/:/g, "-").replace(/\./g, "-")}.json`;
 }
 

@@ -1,0 +1,8 @@
+.DS_Store
+.omc/
+src/
+tsconfig.json
+tsconfig*.json
+*.tsbuildinfo
+.env
+.env.*

@@ -85,10 +85,10 @@ function sortByPriority(repoRoot: string, files: string[]): string[] {
 }
 
 /**
- * Bundles text sources under repoRoot for LLM assessment (OpenAPI, Zod, middleware, Prisma).
+ * Bundles text sources under repoRoot for LLM evaluation (OpenAPI, Zod, middleware, Prisma).
  * Higher-priority paths are included first; total size is capped.
  */
-export async function bundleBackendAssessmentContext(repoRoot: string): Promise<string> {
+export async function bundleBackendEvaluationContext(repoRoot: string): Promise<string> {
   const resolved = path.resolve(repoRoot);
   const raw: string[] = [];
   await walkFiles(resolved, 0, raw);

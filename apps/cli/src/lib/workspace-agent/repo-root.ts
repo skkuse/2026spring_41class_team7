@@ -1,10 +1,10 @@
 import path from "node:path";
-import type { AssessmentKind } from "../assessment-kinds.js";
-import { parseAssessmentKind } from "../assessment-kinds.js";
+import type { EvaluationKind } from "../evaluation-kinds.js";
+import { parseEvaluationKind } from "../evaluation-kinds.js";
 
 /**
  * Repository root for CLI-style tools: optional directory argument, otherwise `cwd`.
- * Passing an empty or whitespace-only string behaves like “no argument” (returns resolved cwd).
+ * Passing an empty or whitespace-only string behaves like "no argument" (returns resolved cwd).
  */
 export function resolveRepoRoot(cwd: string, explicitDirectory?: string): string {
   const c = path.resolve(cwd);
@@ -14,30 +14,30 @@ export function resolveRepoRoot(cwd: string, explicitDirectory?: string): string
   return path.resolve(c, String(explicitDirectory).trim());
 }
 
-export type ParsedAssessArgv = {
+export type ParsedEvaluateArgv = {
   repoRoot: string;
   model?: string;
   jsonOnly: boolean;
   help: boolean;
   outPath?: string;
   /** Set from `--type` / `-t` when valid. */
-  assessmentType?: AssessmentKind;
-  /** User passed `--type <x>` but `<x>` is not a known assessment. */
-  invalidAssessmentType?: string;
+  evaluationType?: EvaluationKind;
+  /** User passed `--type <x>` but `<x>` is not a known evaluation. */
+  invalidEvaluationType?: string;
 };
 
 /**
- * Parses argv after `jobclaw assess` (same rules as before refactor).
+ * Parses argv after `jobclaw evaluate` (same rules as before refactor).
  * Positional directory wins last if multiple (unlikely).
  */
-export function parseAssessCommandArgv(cwd: string, argv: string[]): ParsedAssessArgv {
+export function parseEvaluateCommandArgv(cwd: string, argv: string[]): ParsedEvaluateArgv {
   let repoRoot = path.resolve(cwd);
   let model: string | undefined;
   let jsonOnly = false;
   let help = false;
   let outPath: string | undefined;
-  let assessmentType: AssessmentKind | undefined;
-  let invalidAssessmentType: string | undefined;
+  let evaluationType: EvaluationKind | undefined;
+  let invalidEvaluationType: string | undefined;
   const rest = [...argv];
   while (rest.length > 0) {
     const a = rest.shift()!;
@@ -47,9 +47,9 @@ export function parseAssessCommandArgv(cwd: string, argv: string[]): ParsedAsses
     }
     if ((a === "--type" || a === "-t") && rest[0]) {
       const raw = rest.shift()!;
-      const k = parseAssessmentKind(raw);
-      if (k) assessmentType = k;
-      else invalidAssessmentType = raw;
+      const k = parseEvaluationKind(raw);
+      if (k) evaluationType = k;
+      else invalidEvaluationType = raw;
       continue;
     }
     if (a === "--out" && rest[0]) {
@@ -75,7 +75,7 @@ export function parseAssessCommandArgv(cwd: string, argv: string[]): ParsedAsses
     jsonOnly,
     help,
     outPath,
-    assessmentType,
-    invalidAssessmentType,
+    evaluationType,
+    invalidEvaluationType,
   };
 }

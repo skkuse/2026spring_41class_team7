@@ -7,8 +7,8 @@ import { runInitCredentialsPrompts } from "./lib/init-credentials.js";
 import { restoreStdinAfterInk } from "./lib/readline-tty.js";
 import DoctorView from "./commands/doctor.js";
 import PublishCommand from "./commands/publish.js";
-import PublishAssessmentCommand from "./commands/publish-assessment.js";
-import AssessCommand from "./commands/assess.js";
+import PublishEvaluationCommand from "./commands/publish-evaluation.js";
+import EvaluateCommand from "./commands/evaluate.js";
 import { loadConfig } from "./lib/config.js";
 import { doctorExitCodeFromCfg } from "./lib/doctor-check.js";
 import { runSavedProjects } from "./lib/saved-projects/run-saved-projects.js";
@@ -100,7 +100,7 @@ export async function dispatch(argv: string[]): Promise<void> {
     }
     case "publish": {
       const inst = render(
-        <PublishAssessmentCommand
+        <PublishEvaluationCommand
           cwd={root}
           args={rest}
           onFinish={(code) => {
@@ -125,9 +125,9 @@ export async function dispatch(argv: string[]): Promise<void> {
       await inst.waitUntilExit();
       return;
     }
-    case "assess": {
+    case "evaluate": {
       const inst = render(
-        <AssessCommand
+        <EvaluateCommand
           cwd={root}
           args={rest}
           onDone={(code) => {

@@ -40,13 +40,13 @@ export function scanResultPath(cwd: string): string {
   return path.join(jobclawProjectDir(cwd), "scan-result.json");
 }
 
-/** `.jobclaw/assessments` under the assessed project root (not necessarily shell cwd). */
-export function assessmentsDir(projectRoot: string): string {
-  return path.join(jobclawProjectDir(projectRoot), "assessments");
+/** `.jobclaw/evaluations` under the evaluated project root (not necessarily shell cwd). */
+export function evaluationsDir(projectRoot: string): string {
+  return path.join(jobclawProjectDir(projectRoot), "evaluations");
 }
 
 /** ISO-like, filesystem-safe: `2026-05-02T14-30-00-123Z.json` */
-export function newAssessmentJsonFileName(d = new Date()): string {
+export function newEvaluationJsonFileName(d = new Date()): string {
   return `${d.toISOString().replace(/:/g, "-").replace(/\./g, "-")}.json`;
 }
 

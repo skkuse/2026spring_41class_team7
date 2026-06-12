@@ -9,8 +9,8 @@
 
 export {
   resolveRepoRoot,
-  parseAssessCommandArgv,
-  type ParsedAssessArgv,
+  parseEvaluateCommandArgv,
+  type ParsedEvaluateArgv,
 } from "./repo-root.js";
 
 export { loadLocalRepositoryAgentPrompt } from "./load-agent-prompt.js";

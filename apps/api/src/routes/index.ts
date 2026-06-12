@@ -27,6 +27,8 @@ import { listAssessmentsHandler } from './assessments/list-assessments.handler.j
 import { listAssessmentsRoute } from './assessments/list-assessments.route.js';
 import { getAssessmentHandler } from './assessments/get-assessment.handler.js';
 import { getAssessmentRoute } from './assessments/get-assessment.route.js';
+import { getPublicAssessmentHandler } from './assessments/get-public-assessment.handler.js';
+import { getPublicAssessmentRoute } from './assessments/get-public-assessment.route.js';
 import { postPortfolioGenerateHandler } from './portfolio/post-generate.handler.js';
 import { postPortfolioGenerateRoute } from './portfolio/post-generate.route.js';
 import { listTalentHandler } from './talent/list-talent.handler.js';
@@ -45,7 +47,7 @@ import { deleteShortlistRoute } from './shortlist/delete-shortlist.route.js';
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
   app.openapi(getHealthRoute, getHealthHandler);
-
+  app.openapi(getPublicAssessmentRoute, getPublicAssessmentHandler);
   app.use('/v1/*', requireAuth);
 
   // Profile

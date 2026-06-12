@@ -90,7 +90,7 @@ export function UserMenu() {
     } catch { /* ignore */ }
     setOpen(false);
     setEmail(null);
-    router.refresh();
+    router.push('/');
   }
 
   if (!email) {

@@ -97,10 +97,8 @@ function normalizeResult(raw: unknown): BackendAssessmentResult {
       scores.caching +
       scores.prismaModels) /
     5;
-  const overall =
-    typeof o.overallScore === "number" && Number.isFinite(o.overallScore)
-      ? Math.max(0, Math.min(100, Math.round(o.overallScore)))
-      : Math.round(avg * 10);
+  // Always compute from subscores — LLM often drifts from the formula
+  const overall = Math.round(avg * 10);
 
   const scorecard: ScorecardRow[] = Array.isArray(o.scorecard)
     ? (o.scorecard as unknown[])

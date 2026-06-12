@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { useApi } from '../../lib/api-context';
-import { createBrowserSupabase } from '../../lib/supabase/client';
+import { useProfile } from '../../lib/profile-context';
 import { useHomeBreakpoint } from '../../hooks/use-breakpoint';
 import { DashboardBottomNav } from '../home/dashboard-bottom-nav';
 import { ProfileDesktop } from './profile-desktop';
@@ -22,51 +22,27 @@ export type ProfileData = {
 export function ResponsiveProfile() {
   const bp = useHomeBreakpoint();
   const { get, authToken } = useApi();
-  const [profileData, setProfileData] = useState<ProfileData>({
-    name: '',
-    email: '',
-    avatarUrl: null,
-    stats: null,
-    statsLoading: true,
-  });
-
-  useEffect(() => {
-    let cancelled = false;
-    let supabase: ReturnType<typeof createBrowserSupabase>;
-    try {
-      supabase = createBrowserSupabase();
-    } catch {
-      return;
-    }
-
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (cancelled || !user) return;
-      setProfileData((prev) => ({
-        ...prev,
-        name:
-          user.user_metadata?.full_name ??
-          user.user_metadata?.name ??
-          user.email?.split('@')[0] ??
-          '',
-        email: user.email ?? '',
-        avatarUrl: user.user_metadata?.avatar_url ?? null,
-      }));
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { profile } = useProfile();
+  const [stats, setStats] = useState<DeveloperStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
     if (!authToken) {
-      setProfileData((prev) => ({ ...prev, statsLoading: false }));
+      setStatsLoading(false);
       return;
     }
     get<DeveloperStats>('/v1/profile/stats')
-      .then((data) => setProfileData((prev) => ({ ...prev, stats: data, statsLoading: false })))
-      .catch(() => setProfileData((prev) => ({ ...prev, stats: null, statsLoading: false })));
+      .then((data) => { setStats(data); setStatsLoading(false); })
+      .catch(() => { setStats(null); setStatsLoading(false); });
   }, [get, authToken]);
+
+  const profileData: ProfileData = {
+    name: profile?.fullName ?? profile?.email?.split('@')[0] ?? '',
+    email: profile?.email ?? '',
+    avatarUrl: profile?.avatarUrl ?? null,
+    stats,
+    statsLoading,
+  };
 
   const nav =
     bp === 'mobile' || bp === 'tablet' ? (

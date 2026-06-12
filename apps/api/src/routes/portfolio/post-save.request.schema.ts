@@ -23,5 +23,6 @@ export const postPortfolioSaveRequestSchema = z
   .object({
     sections: z.array(PortfolioSectionSchema).min(1),
     title: z.string().optional(),
+    documentId: z.string().optional(),
   })
   .openapi('PortfolioSaveRequest');

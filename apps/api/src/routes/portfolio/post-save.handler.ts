@@ -6,7 +6,7 @@ import { postPortfolioSaveRoute } from './post-save.route.js';
 
 export const postPortfolioSaveHandler: RouteHandler<typeof postPortfolioSaveRoute, Env> = async (c) => {
   const userId = c.get('userId');
-  const { sections, title } = c.req.valid('json');
+  const { sections, title, documentId } = c.req.valid('json');
 
   let profile = await prisma.profile.findUnique({
     where: { userId },
@@ -33,17 +33,27 @@ export const postPortfolioSaveHandler: RouteHandler<typeof postPortfolioSaveRout
     });
   }
 
-  const doc = await prisma.document.create({
-    data: {
-      projectId: project.id,
-      name: title ?? 'Portfolio',
-      status: 'ACTIVE',
-      tags: ['portfolio'],
-      sizeLabel: null,
-      content: sections,
-    },
-    select: { id: true },
-  });
+  // Update existing document if documentId is provided, otherwise create new
+  let doc: { id: string };
+  if (documentId) {
+    doc = await prisma.document.update({
+      where: { id: documentId, projectId: project.id },
+      data: { content: sections, name: title ?? 'Portfolio' },
+      select: { id: true },
+    });
+  } else {
+    doc = await prisma.document.create({
+      data: {
+        projectId: project.id,
+        name: title ?? 'Portfolio',
+        status: 'ACTIVE',
+        tags: ['portfolio'],
+        sizeLabel: null,
+        content: sections,
+      },
+      select: { id: true },
+    });
+  }
 
   return c.json({ documentId: doc.id }, 200);
 };

@@ -34,6 +34,7 @@ export function ResponsiveBuilder({ loadDocId }: { loadDocId?: string }) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [savedDocId, setSavedDocId] = useState<string | undefined>(loadDocId);
 
   const detailCacheRef = useRef(detailCache);
   detailCacheRef.current = detailCache;
@@ -149,7 +150,11 @@ export function ResponsiveBuilder({ loadDocId }: { loadDocId?: string }) {
     setSaveSuccess(false);
     setSaveError(null);
     try {
-      await post('/v1/portfolio/save', { sections: items });
+      const result = await post<{ documentId: string }>('/v1/portfolio/save', {
+        sections: items,
+        documentId: savedDocId,
+      });
+      setSavedDocId(result.documentId);
       setSaveSuccess(true);
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : 'Failed to save. Please try again.');

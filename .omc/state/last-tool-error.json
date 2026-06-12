@@ -1,7 +1,7 @@
 {
-  "tool_name": "mcp__plugin_oh-my-claudecode_t__lsp_diagnostics",
-  "tool_input_preview": "{\"file\":\"/home/hskan/hskang9/2026spring_41class_team7/apps/api/src/routes/talent/get-talent.handler.ts\"}",
-  "error": "Language server 'typescript-language-server' not found.\nInstall with: npm install -g typescript-language-server typescript",
-  "timestamp": "2026-05-27T03:48:00.782Z",
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cp /home/hskan/hskang9/2026spring_41class_team7/export-pdf.mjs /tmp/pdf-export/ && cd /tmp/pdf-export && node export-pdf.mjs 2>&1\",\"description\":\"Run PDF export from temp directory where p...",
+  "error": "Exit code 1\nfile:///tmp/pdf-export/node_modules/puppeteer-core/lib/puppeteer/cdp/Frame.js:185\n                        ? new Error(`${response.errorText} at ${url}`)\n                          ^\n\nError: net::ERR_FILE_NOT_FOUND at file:///tmp/pdf-export/DESIGN_SPEC.html\n    at navigate (file:///tmp/pdf-export/node_modules/puppeteer-core/lib/puppeteer/cdp/Frame.js:185:27)\n    at async Deferred.race (file:///tmp/pdf-export/node_modules/puppeteer-core/lib/puppeteer/util/Deferred.js:33:20)\n    at async...",
+  "timestamp": "2026-05-28T00:52:07.226Z",
   "retry_count": 1
 }

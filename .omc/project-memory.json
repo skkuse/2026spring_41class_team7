@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1779850468219,
+  "lastScanned": 1780233436759,
   "projectRoot": "/home/hskan/hskang9/2026spring_41class_team7",
   "techStack": {
     "languages": [
@@ -18,7 +18,7 @@
     "runtime": null
   },
   "build": {
-    "buildCommand": "cd /home/hskan/hskang9/2026spring_41class_team7/apps/api && pnpm build 2>&1 | tail -5",
+    "buildCommand": "pnpm build",
     "testCommand": null,
     "lintCommand": "pnpm lint",
     "devCommand": "pnpm dev",
@@ -30,7 +30,8 @@
       "lint": "turbo run lint",
       "typecheck": "turbo run typecheck",
       "jobclaw": "jobclaw",
-      "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts"
+      "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts",
+      "export-pdf": "node export-pdf.mjs"
     }
   },
   "conventions": {
@@ -53,14 +54,14 @@
       "path": "apps",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1779850468211,
+      "lastAccessed": 1780233436733,
       "keyFiles": []
     },
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 4,
-      "lastAccessed": 1779850468212,
+      "lastAccessed": 1780233436736,
       "keyFiles": [
         "SRS.md",
         "ai-openai-hono-extraction.md",
@@ -72,14 +73,14 @@
       "path": "packages",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1779850468215,
+      "lastAccessed": 1780233436746,
       "keyFiles": []
     },
     "apps/api": {
       "path": "apps/api",
       "purpose": "API routes",
       "fileCount": 4,
-      "lastAccessed": 1779850468216,
+      "lastAccessed": 1780233436755,
       "keyFiles": [
         "package.json",
         "tsconfig.json",
@@ -96,8 +97,32 @@
     },
     {
       "path": "apps/api/prisma/schema.prisma",
+      "accessCount": 8,
+      "lastAccessed": 1780233485444,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/profile/patch-me.handler.ts",
+      "accessCount": 7,
+      "lastAccessed": 1779854797846,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/contact-talent.handler.ts",
+      "accessCount": 7,
+      "lastAccessed": 1779854799273,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/company/layout.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1779924130211,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/list-talent.handler.ts",
       "accessCount": 6,
-      "lastAccessed": 1779853672599,
+      "lastAccessed": 1779854798806,
       "type": "file"
     },
     {
@@ -107,15 +132,63 @@
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/profile/patch-me.handler.ts",
+      "path": "apps/api/src/routes/index.ts",
       "accessCount": 5,
-      "lastAccessed": 1779853493733,
+      "lastAccessed": 1779854623349,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/talent/list-talent.handler.ts",
+      "path": "apps/web/app/home/layout.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1779855308141,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/company/talent/page.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1779924129915,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/test/company-feature.test.ts",
       "accessCount": 4,
-      "lastAccessed": 1779853863879,
+      "lastAccessed": 1779854788972,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/post-shortlist.handler.ts",
+      "accessCount": 4,
+      "lastAccessed": 1779854799686,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/providers.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1779855236528,
+      "type": "file"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-05-27-company-user-type.md",
+      "accessCount": 4,
+      "lastAccessed": 1779855342219,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/api-context.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1779855425906,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/profile-context.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1779855426487,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/get-talent.handler.ts",
+      "accessCount": 4,
+      "lastAccessed": 1779924143997,
       "type": "file"
     },
     {
@@ -143,6 +216,78 @@
       "type": "file"
     },
     {
+      "path": "apps/api/src/middlewares/require-company.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779854350499,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/profile/patch-me.route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779854696186,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/list-talent.route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779854697208,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/contact-talent.route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779854697750,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/post-shortlist.route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779854698055,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/lib/resend.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779854705093,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/list-talent.response.schema.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779855437096,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/post-shortlist.request.schema.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779855437633,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/delete-shortlist.route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779855442625,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/get-talent.response.schema.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779924143045,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/contact-talent.request.schema.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779924144466,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/list-shortlist.response.schema.ts",
+      "accessCount": 3,
+      "lastAccessed": 1779924152173,
+      "type": "file"
+    },
+    {
       "path": "apps/api/src/routes/profile/patch-me.request.schema.ts",
       "accessCount": 2,
       "lastAccessed": 1779853318928,
@@ -155,51 +300,45 @@
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/profile/patch-me.route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1779853319857,
-      "type": "file"
-    },
-    {
-      "path": "apps/api/src/middlewares/require-company.ts",
-      "accessCount": 2,
-      "lastAccessed": 1779853548602,
-      "type": "file"
-    },
-    {
-      "path": "apps/api/src/routes/talent/list-talent.response.schema.ts",
-      "accessCount": 2,
-      "lastAccessed": 1779853647540,
-      "type": "file"
-    },
-    {
-      "path": "apps/api/src/routes/talent/list-talent.route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1779853649346,
-      "type": "file"
-    },
-    {
-      "path": "apps/api/src/routes/talent/get-talent.response.schema.ts",
-      "accessCount": 2,
-      "lastAccessed": 1779853653883,
-      "type": "file"
-    },
-    {
       "path": "apps/api/src/routes/talent/get-talent.route.ts",
       "accessCount": 2,
       "lastAccessed": 1779853656168,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/talent/get-talent.handler.ts",
+      "path": "apps/api/src/routes/talent/contact-talent.response.schema.ts",
       "accessCount": 2,
-      "lastAccessed": 1779853658542,
+      "lastAccessed": 1779854017946,
       "type": "file"
     },
     {
-      "path": "docs/superpowers/plans/2026-05-27-company-user-type.md",
-      "accessCount": 1,
-      "lastAccessed": 1779852042468,
+      "path": "apps/api/src/routes/shortlist/list-shortlist.route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1779854330929,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/list-shortlist.handler.ts",
+      "accessCount": 2,
+      "lastAccessed": 1779854331414,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/delete-shortlist.handler.ts",
+      "accessCount": 2,
+      "lastAccessed": 1779854334968,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/onboarding/role/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1779855236107,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/company/talent/[userId]/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1779929052440,
       "type": "file"
     },
     {
@@ -221,12 +360,6 @@
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/index.ts",
-      "accessCount": 1,
-      "lastAccessed": 1779853326666,
-      "type": "file"
-    },
-    {
       "path": "apps/api/src/routes/bootstrap/post-bootstrap.route.ts",
       "accessCount": 1,
       "lastAccessed": 1779853327300,
@@ -239,27 +372,21 @@
       "type": "file"
     },
     {
-      "path": "apps/api/src/lib/resend.ts",
+      "path": "apps/api/src/middlewares/auth.ts",
       "accessCount": 1,
-      "lastAccessed": 1779853943657,
+      "lastAccessed": 1779854041063,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/talent/contact-talent.request.schema.ts",
+      "path": "apps/api/vitest.config.ts",
       "accessCount": 1,
-      "lastAccessed": 1779853944334,
+      "lastAccessed": 1779854704450,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/talent/contact-talent.response.schema.ts",
+      "path": "apps/web/app/home/page.tsx",
       "accessCount": 1,
-      "lastAccessed": 1779853945783,
-      "type": "file"
-    },
-    {
-      "path": "apps/api/src/routes/talent/contact-talent.route.ts",
-      "accessCount": 1,
-      "lastAccessed": 1779853950749,
+      "lastAccessed": 1779855236941,
       "type": "file"
     }
   ],

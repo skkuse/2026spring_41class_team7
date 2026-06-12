@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"echo \\\"jobclaw-api\\\" | railway service 2>&1\",\"description\":\"Link Railway service non-interactively\"}",
+  "error": "Exit code 1\nService name required in non-interactive mode. Usage: railway service <name>",
+  "timestamp": "2026-06-12T00:35:22.175Z",
+  "retry_count": 3
+}

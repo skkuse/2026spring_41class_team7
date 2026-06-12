@@ -62,7 +62,7 @@ export async function dispatch(argv: string[]): Promise<void> {
       }
       await restoreStdinAfterInk();
       process.exitCode = await runInitCredentialsPrompts();
-      return;
+      process.exit(process.exitCode ?? 0);
     }
     case 'login': {
       const inst = render(

@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1779652408292,
-  "projectRoot": "/home/hskan/hskang9/2026spring_41class_team7",
+  "lastScanned": 1781210151503,
+  "projectRoot": "/Users/hyungsukkang/hskang9/2026spring_41class_team7",
   "techStack": {
     "languages": [
       {
@@ -30,7 +30,7 @@
       "lint": "turbo run lint",
       "typecheck": "turbo run typecheck",
       "jobclaw": "jobclaw",
-      "projects": "pnpm --filter project-management exec tsx src/cli.ts"
+      "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts"
     }
   },
   "conventions": {
@@ -45,7 +45,10 @@
     "mainDirectories": [
       "docs"
     ],
-    "gitBranches": null
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
   },
   "customNotes": [],
   "directoryMap": {
@@ -53,14 +56,14 @@
       "path": "apps",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1779652408284,
+      "lastAccessed": 1781210151484,
       "keyFiles": []
     },
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 4,
-      "lastAccessed": 1779652408285,
+      "lastAccessed": 1781210151484,
       "keyFiles": [
         "SRS.md",
         "ai-openai-hono-extraction.md",
@@ -72,14 +75,14 @@
       "path": "packages",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1779652408288,
+      "lastAccessed": 1781210151487,
       "keyFiles": []
     },
     "apps/api": {
       "path": "apps/api",
       "purpose": "API routes",
       "fileCount": 4,
-      "lastAccessed": 1779652408290,
+      "lastAccessed": 1781210151488,
       "keyFiles": [
         "package.json",
         "tsconfig.json",
@@ -89,189 +92,177 @@
   },
   "hotPaths": [
     {
-      "path": "apps/web/lib/billing-context.tsx",
-      "accessCount": 6,
-      "lastAccessed": 1779652726514,
+      "path": "apps/cli/src/commands/assess.tsx",
+      "accessCount": 10,
+      "lastAccessed": 1781215278677,
+      "type": "file"
+    },
+    {
+      "path": "Dockerfile",
+      "accessCount": 5,
+      "lastAccessed": 1781220416475,
+      "type": "file"
+    },
+    {
+      "path": "railway.toml",
+      "accessCount": 4,
+      "lastAccessed": 1781220426783,
       "type": "file"
     },
     {
       "path": "apps/web/components/landing.tsx",
-      "accessCount": 6,
-      "lastAccessed": 1779652834995,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/app/layout.tsx",
-      "accessCount": 4,
-      "lastAccessed": 1779652711226,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/lib/revenuecat.ts",
-      "accessCount": 4,
-      "lastAccessed": 1779652713240,
-      "type": "file"
-    },
-    {
-      "path": "package.json",
       "accessCount": 3,
-      "lastAccessed": 1779652538181,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/package.json",
-      "accessCount": 3,
-      "lastAccessed": 1779652538625,
-      "type": "file"
-    },
-    {
-      "path": "apps/api/package.json",
-      "accessCount": 3,
-      "lastAccessed": 1779652538866,
+      "lastAccessed": 1781212107305,
       "type": "file"
     },
     {
       "path": "apps/web/components/onboarding.tsx",
       "accessCount": 3,
-      "lastAccessed": 1779652714490,
+      "lastAccessed": 1781212109176,
       "type": "file"
     },
     {
-      "path": "apps/web/app/billing/page.tsx",
+      "path": "apps/cli/src/commands/publish.tsx",
       "accessCount": 3,
-      "lastAccessed": 1779652717141,
+      "lastAccessed": 1781215299485,
       "type": "file"
     },
     {
-      "path": "README.md",
+      "path": "apps/cli/src/commands/publish-assessment.tsx",
       "accessCount": 3,
-      "lastAccessed": 1779653364879,
+      "lastAccessed": 1781215315409,
       "type": "file"
     },
     {
-      "path": "packages/shared-types/package.json",
+      "path": "apps/cli/src/lib/publish-assessment-logic.ts",
+      "accessCount": 3,
+      "lastAccessed": 1781216674483,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/layout.tsx",
       "accessCount": 2,
-      "lastAccessed": 1779652538314,
+      "lastAccessed": 1781212101320,
       "type": "file"
     },
     {
-      "path": "packages/project-management/package.json",
+      "path": "apps/cli/package.json",
       "accessCount": 2,
-      "lastAccessed": 1779652539823,
+      "lastAccessed": 1781216434955,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/example/get-example.handler.ts",
+      "path": "apps/api/src/routes/index.ts",
       "accessCount": 2,
-      "lastAccessed": 1779652540433,
+      "lastAccessed": 1781217414023,
       "type": "file"
     },
     {
-      "path": "apps/web/lib/mock-data.ts",
-      "accessCount": 2,
-      "lastAccessed": 1779652692193,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/app/dev/page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1779652693024,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/app/globals.css",
-      "accessCount": 2,
-      "lastAccessed": 1779652830939,
-      "type": "file"
-    },
-    {
-      "path": ".env",
-      "accessCount": 2,
-      "lastAccessed": 1779653052928,
-      "type": "file"
-    },
-    {
-      "path": "apps/cli/src/index.tsx",
+      "path": "apps/cli/src/lib/backend-assessment.ts",
       "accessCount": 1,
-      "lastAccessed": 1779652568903,
-      "type": "file"
-    },
-    {
-      "path": "apps/cli/src/cli.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1779652574957,
-      "type": "file"
-    },
-    {
-      "path": "apps/cli/src/commands/filled-logo.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1779652589762,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/app/auth/callback/route.ts",
-      "accessCount": 1,
-      "lastAccessed": 1779652909954,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/lib/supabase/client.ts",
-      "accessCount": 1,
-      "lastAccessed": 1779652910815,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/lib/supabase/server.ts",
-      "accessCount": 1,
-      "lastAccessed": 1779652911237,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/middleware.ts",
-      "accessCount": 1,
-      "lastAccessed": 1779652911672,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/lib/supabase-auth-bridge.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1779652912494,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/components/auth/social-auth-buttons.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1779652912718,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/.env.example",
-      "accessCount": 1,
-      "lastAccessed": 1779652924514,
-      "type": "file"
-    },
-    {
-      "path": "apps/web/.env.local",
-      "accessCount": 1,
-      "lastAccessed": 1779653039036,
-      "type": "file"
-    },
-    {
-      "path": "LICENSE",
-      "accessCount": 1,
-      "lastAccessed": 1779653092695,
-      "type": "file"
-    },
-    {
-      "path": "apps/cli/prompts/assessments/node-backend-assessment.prompt.md",
-      "accessCount": 1,
-      "lastAccessed": 1779653227225,
+      "lastAccessed": 1781214921875,
       "type": "file"
     },
     {
       "path": "apps/cli/src/lib/assessment-kinds.ts",
       "accessCount": 1,
-      "lastAccessed": 1779653227568,
+      "lastAccessed": 1781215009794,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/commands/assess-result.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781215042316,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/commands/init.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781215153356,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/ui/index.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781215233993,
+      "type": "file"
+    },
+    {
+      "path": "apps/cli/src/lib/publish-logic.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781216325862,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/assessments/post-assessment.handler.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781216338041,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/assessments/get-assessment.handler.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781217356299,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/projects/[id]/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781217356413,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/assessments/get-assessment.route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781217370687,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/api-context.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781217371158,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/assessments/get-assessment.response.schema.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781217378948,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/assessments/get-public-assessment.route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781217400500,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/assessments/get-public-assessment.handler.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781217405928,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/[username]/[repo]/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1781217449752,
+      "type": "file"
+    },
+    {
+      "path": ".dockerignore",
+      "accessCount": 1,
+      "lastAccessed": 1781218728991,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/index.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781220235585,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/middlewares/auth.ts",
+      "accessCount": 1,
+      "lastAccessed": 1781220343438,
       "type": "file"
     }
   ],

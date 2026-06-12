@@ -12,3 +12,4 @@ dist
 
 # Local resume used only for manual API smoke tests (see apps/api/scripts/test-resume-parse-local.mjs)
 apps/api/test/fixtures/user-resume.pdf
+.vercel

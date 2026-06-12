@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-06-11T22:07:17.295Z",
+  "repoRoot": "/Users/hyungsukkang/hskang9/2026spring_41class_team7/example-backend",
+  "timeline": {
+    "start": "2026-05-26T02:48:57+09:00",
+    "end": "2026-05-26T02:48:57+09:00"
+  },
+  "agent1": {
+    "skills": [
+      "HTTP APIs",
+      "TypeScript"
+    ],
+    "libraries": [
+      "@hono/node-server",
+      "@hono/zod-openapi",
+      "@scalar/hono-api-reference",
+      "@types/node",
+      "hono",
+      "tsx",
+      "typescript",
+      "zod"
+    ],
+    "manifests": {
+      "packageJson": [
+        "/Users/hyungsukkang/hskang9/2026spring_41class_team7/example-backend/package.json"
+      ],
+      "cargoToml": []
+    }
+  },
+  "agent2": {
+    "promptSource": "fallback",
+    "scores": {
+      "structure": 8,
+      "tests": 0,
+      "documentation": 7,
+      "dependencies_hygiene": 9
+    },
+    "checklist": [
+      {
+        "id": "structure",
+        "label": "Clarity of structure",
+        "status": "done"
+      },
+      {
+        "id": "tests",
+        "label": "Presence of tests",
+        "status": "not_done"
+      },
+      {
+        "id": "documentation",
+        "label": "Quality of documentation",
+        "status": "done"
+      },
+      {
+        "id": "dependencies_hygiene",
+        "label": "Dependencies hygiene",
+        "status": "done"
+      }
+    ],
+    "rawModelResponse": "{\"scores\":{\"structure\":8,\"tests\":0,\"documentation\":7,\"dependencies_hygiene\":9},\"checklist\":[{\"id\":\"structure\",\"label\":\"Clarity of structure\",\"status\":\"done\"},{\"id\":\"tests\",\"label\":\"Presence of tests\",\"status\":\"not_done\"},{\"id\":\"documentation\",\"label\":\"Quality of documentation\",\"status\":\"done\"},{\"id\":\"dependencies_hygiene\",\"label\":\"Dependencies hygiene\",\"status\":\"done\"}]}"
+  }
+}

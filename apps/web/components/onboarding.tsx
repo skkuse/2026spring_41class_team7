@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -22,7 +23,7 @@ export function Onboarding() {
       <div className="relative z-10 w-full max-w-md animate-onboarding-enter">
         <div className="mb-12 flex flex-col items-center">
           <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary shadow-[0_0_30px_rgba(217,119,87,0.4)]">
-            <Icon icon="solar:bolt-bold" className="text-3xl text-primary-foreground" />
+            <Image src="/logo-glyph.png" alt="Jobclaw" width={32} height={32} className="size-8" />
           </div>
           <span className="font-heading text-3xl font-black tracking-tighter">
             Job<span className="text-primary">claw</span>
@@ -44,11 +45,11 @@ export function Onboarding() {
         ) : null}
         <p className="mt-12 text-center text-xs leading-relaxed text-muted-foreground">
           By continuing, you agree to our{' '}
-          <a href="#" className="text-primary underline-offset-4 hover:underline">
+          <a href="/terms" className="text-primary underline-offset-4 hover:underline">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href="#" className="text-primary underline-offset-4 hover:underline">
+          <a href="/privacy" className="text-primary underline-offset-4 hover:underline">
             Privacy Policy
           </a>
           .

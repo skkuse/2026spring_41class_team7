@@ -15,9 +15,9 @@ COPY . .
 RUN pnpm --filter @jobclaw/shared-types build
 RUN pnpm --filter @jobclaw/api exec prisma generate
 RUN pnpm --filter @jobclaw/api build
+RUN chmod +x /app/start.sh
 
 ENV NODE_ENV=production
-WORKDIR /app/apps/api
 EXPOSE 3001
 
-CMD ["/bin/sh", "-c", "/app/node_modules/.bin/prisma migrate deploy --schema=/app/apps/api/prisma/schema.prisma && node dist/index.js"]
+CMD ["/app/start.sh"]

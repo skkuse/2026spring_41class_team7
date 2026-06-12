@@ -12,9 +12,7 @@ export function Landing() {
         <div className="flex items-center justify-between h-20 px-6 lg:px-12 max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
-              <div className="size-9 bg-primary rounded flex items-center justify-center">
-                <Icon icon="solar:bolt-bold" className="text-primary-foreground text-2xl" />
-              </div>
+              <Image src="/logo-glyph.png" alt="Jobclaw" width={36} height={36} className="size-9" />
               <span className="font-heading font-extrabold tracking-tight text-2xl">
                 Job<span className="text-primary">claw</span>
               </span>
@@ -371,9 +369,7 @@ export function Landing() {
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8">
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="size-8 bg-primary rounded flex items-center justify-center">
-                <Icon icon="solar:bolt-bold" className="text-primary-foreground text-xl" />
-              </div>
+              <Image src="/logo-glyph.png" alt="Jobclaw" width={32} height={32} className="size-8" />
               <span className="font-heading font-extrabold tracking-tight text-2xl">
                 Job<span className="text-primary">claw</span>
               </span>
@@ -472,17 +468,17 @@ export function Landing() {
             </h5>
             <ul className="space-y-4 text-sm text-muted-foreground font-medium">
               <li>
-                <a href="#features" className="hover:text-primary transition-colors">
+                <a href="/privacy" className="hover:text-primary transition-colors">
                   Privacy
                 </a>
               </li>
               <li>
-                <a href="#features" className="hover:text-primary transition-colors">
+                <a href="/terms" className="hover:text-primary transition-colors">
                   Terms
                 </a>
               </li>
               <li>
-                <a href="#features" className="hover:text-primary transition-colors">
+                <a href="/security" className="hover:text-primary transition-colors">
                   Security
                 </a>
               </li>

@@ -29,6 +29,7 @@ export function ResponsiveBuilder() {
   const [detailCache, setDetailCache] = useState<Record<string, AssessmentDetail>>({});
   const [detailLoading, setDetailLoading] = useState(false);
   const [sections, setSections] = useState<PortfolioSection[]>([]);
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   const detailCacheRef = useRef(detailCache);
   detailCacheRef.current = detailCache;
@@ -88,6 +89,7 @@ export function ResponsiveBuilder() {
   const onBuild = useCallback(async () => {
     if (orderedIds.length === 0) return;
     setPhase('generating');
+    setGenerationError(null);
 
     // Initialize all sections as generating
     setSections(orderedIds.map((id) => ({ id, data: null, generating: true })));
@@ -103,7 +105,8 @@ export function ResponsiveBuilder() {
           generating: false,
         })),
       );
-    } catch {
+    } catch (err) {
+      setGenerationError(err instanceof Error ? err.message : 'Portfolio generation failed.');
       setSections((prev) => prev.map((s) => ({ ...s, generating: false })));
     }
 
@@ -194,6 +197,7 @@ export function ResponsiveBuilder() {
     setOrderedIds([]);
     setCarouselIdx(0);
     setSections([]);
+    setGenerationError(null);
   }, []);
 
   const currentId = orderedIds[carouselIdx];
@@ -208,6 +212,7 @@ export function ResponsiveBuilder() {
     currentCarouselDetail: currentId ? detailCache[currentId] : undefined,
     detailLoading,
     sections,
+    generationError,
     onSectionChange,
     onToggle,
     onMoveUp,

@@ -369,7 +369,7 @@ function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
 // ─── EDITING ──────────────────────────────────────────────────────────────────
 
 function EditingView({
-  sections, orderedIds, assessments, onSectionChange, onSave, onExport, onReset,
+  sections, orderedIds, assessments, onSectionChange, onSave, onExport, onReset, generationError,
 }: BuilderProps) {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const scrollTo = (id: string) =>
@@ -423,6 +423,15 @@ function EditingView({
       {/* Sections — full remaining width, no artificial cap */}
       <main className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-5xl 2xl:max-w-6xl space-y-10 px-10 py-8">
+          {generationError && (
+            <div className="rounded-lg border border-destructive/40 bg-destructive/5 px-5 py-4">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-destructive">Generation Failed</p>
+              <p className="mt-1 font-mono text-xs text-destructive/80">{generationError}</p>
+              <button type="button" onClick={onReset} className="mt-3 font-mono text-[10px] font-bold text-destructive underline hover:no-underline">
+                ← Try again
+              </button>
+            </div>
+          )}
           {orderedIds.map((id, i) => {
             const section = sections.find((s) => s.id === id);
             const summary = assessments.find((a) => a.id === id);

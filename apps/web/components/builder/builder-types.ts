@@ -72,6 +72,9 @@ export type BuilderProps = {
   sections: PortfolioSection[];
   onSectionChange: (id: string, patch: Partial<PortfolioSectionData>) => void;
 
+  // Generation error (null = no error)
+  generationError: string | null;
+
   // Actions
   onToggle: (id: string) => void;
   onMoveUp: (id: string) => void;

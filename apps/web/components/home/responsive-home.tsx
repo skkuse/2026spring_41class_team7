@@ -25,7 +25,7 @@ export type AssessmentSummary = {
 export function ResponsiveHome() {
   const bp = useHomeBreakpoint();
   const { get, authToken } = useApi();
-  const [assessments, setEvaluations] = useState<AssessmentSummary[]>([]);
+  const [assessments, setAssessments] = useState<AssessmentSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DeveloperStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -37,8 +37,8 @@ export function ResponsiveHome() {
     }
     setLoading(true);
     get<{ items: AssessmentSummary[]; total: number }>('/v1/assessments')
-      .then((data) => setEvaluations(data.items))
-      .catch(() => setEvaluations([]))
+      .then((data) => setAssessments(data.items))
+      .catch(() => setAssessments([]))
       .finally(() => setLoading(false));
   }, [get, authToken]);
 

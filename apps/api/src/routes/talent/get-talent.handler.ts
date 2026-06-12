@@ -24,7 +24,7 @@ export const getTalentHandler: RouteHandler<typeof getTalentRoute, Env> = async 
     return c.json({ message: 'Developer not found.' }, 404);
   }
 
-  const [assessments, shortlistEntry] = await Promise.all([
+  const [evaluationRows, shortlistEntry] = await Promise.all([
     prisma.assessment.findMany({
       where: { userId: devUserId },
       orderBy: { overallScore: 'desc' },
@@ -50,8 +50,14 @@ export const getTalentHandler: RouteHandler<typeof getTalentRoute, Env> = async 
     {
       ...profile,
       isShortlisted: shortlistEntry !== null,
-      assessments: assessments.map((a) => ({
-        ...a,
+      assessments: evaluationRows.map((a) => ({
+        id: a.id,
+        repoUrl: a.repoUrl,
+        repoOwner: a.repoOwner,
+        repoName: a.repoName,
+        assessmentType: a.assessmentType,
+        overallScore: a.overallScore,
+        model: a.model,
         generatedAt: a.generatedAt.toISOString(),
         createdAt: a.createdAt.toISOString(),
       })),

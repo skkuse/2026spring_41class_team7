@@ -39,7 +39,7 @@ export function ResponsiveBuilder({ loadDocId }: { loadDocId?: string }) {
   const detailCacheRef = useRef(detailCache);
   detailCacheRef.current = detailCache;
 
-  // Load assessment list
+  // Load evaluation list
   useEffect(() => {
     if (!authToken) { setListLoading(false); return; }
     setListLoading(true);

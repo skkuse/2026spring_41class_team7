@@ -26,15 +26,15 @@ export const getPublicDocumentHandler: RouteHandler<typeof getPublicDocumentRout
 
   const rawSections = (doc.content as Record<string, unknown>[]) ?? [];
 
-  // Batch-fetch assessment types for all sections that have an assessmentId
-  const assessmentIds = rawSections
-    .map((s) => s.assessmentId as string)
+  // Batch-fetch assessment types for all sections
+  const sectionAssessmentIds = rawSections
+    .map((s) => (s.assessmentId ?? s.evaluationId) as string)
     .filter(Boolean);
 
   const assessments =
-    assessmentIds.length > 0
+    sectionAssessmentIds.length > 0
       ? await prisma.assessment.findMany({
-          where: { id: { in: assessmentIds } },
+          where: { id: { in: sectionAssessmentIds } },
           select: { id: true, assessmentType: true },
         })
       : [];
@@ -43,10 +43,14 @@ export const getPublicDocumentHandler: RouteHandler<typeof getPublicDocumentRout
     assessments.map((a: { id: string; assessmentType: string }) => [a.id, a.assessmentType]),
   );
 
-  const sections = rawSections.map((s) => ({
-    ...s,
-    assessmentType: typeMap[s.assessmentId as string] ?? undefined,
-  }));
+  const sections = rawSections.map((s) => {
+    const sectionId = ((s.assessmentId ?? s.evaluationId) as string) ?? '';
+    return {
+      ...s,
+      assessmentId: sectionId || undefined,
+      assessmentType: typeMap[sectionId] ?? undefined,
+    };
+  });
 
   return c.json(
     {

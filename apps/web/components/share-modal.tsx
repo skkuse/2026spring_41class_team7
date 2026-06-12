@@ -13,21 +13,25 @@ const PLATFORMS = [
   {
     key: 'linkedin' as const,
     label: 'LinkedIn',
-    icon: 'skill-icons:linkedin',
-    getUrl: (url: string, text: string) =>
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`,
+    icon: 'mdi:linkedin',
+    color: '#0A66C2',
+    // LinkedIn only reads `url`; text must be pasted by the user
+    getUrl: (url: string) =>
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
   },
   {
     key: 'twitter' as const,
     label: 'X / Twitter',
-    icon: 'skill-icons:twitter',
+    icon: 'mdi:twitter',
+    color: '#000000',
     getUrl: (url: string, text: string) =>
       `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
   },
   {
     key: 'facebook' as const,
     label: 'Facebook',
-    icon: 'skill-icons:facebook',
+    icon: 'mdi:facebook',
+    color: '#1877F2',
     getUrl: (url: string) =>
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
   },
@@ -37,6 +41,7 @@ type Platform = (typeof PLATFORMS)[number]['key'];
 
 export function ShareModal({ docId, docName, onClose }: Props) {
   const [copied, setCopied] = useState(false);
+  const [copiedText, setCopiedText] = useState(false);
   const [activePreview, setActivePreview] = useState<Platform>('linkedin');
 
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://jobclaw.fyi';
@@ -51,10 +56,21 @@ export function ShareModal({ docId, docName, onClose }: Props) {
     });
   }
 
+  function handleCopyText() {
+    const full = `${shareText}\n\n${shareUrl}`;
+    navigator.clipboard.writeText(full).then(() => {
+      setCopiedText(true);
+      setTimeout(() => setCopiedText(false), 2000);
+    });
+  }
+
   function handleShare(platform: (typeof PLATFORMS)[number]) {
-    const url = platform.key === 'facebook'
-      ? platform.getUrl(shareUrl)
-      : platform.getUrl(shareUrl, shareText);
+    let url: string;
+    if (platform.key === 'twitter') {
+      url = platform.getUrl(shareUrl, shareText);
+    } else {
+      url = platform.getUrl(shareUrl);
+    }
     window.open(url, '_blank', 'noopener,noreferrer,width=620,height=520');
   }
 
@@ -65,6 +81,8 @@ export function ShareModal({ docId, docName, onClose }: Props) {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
+
+  const activePlatform = PLATFORMS.find((p) => p.key === activePreview)!;
 
   return (
     <div
@@ -89,7 +107,7 @@ export function ShareModal({ docId, docName, onClose }: Props) {
           </button>
         </div>
 
-        {/* Preview tabs */}
+        {/* Platform tabs */}
         <div className="px-5 pt-4 pb-3">
           <div className="mb-3 flex gap-1.5">
             {PLATFORMS.map((p) => (
@@ -97,18 +115,19 @@ export function ShareModal({ docId, docName, onClose }: Props) {
                 key={p.key}
                 type="button"
                 onClick={() => setActivePreview(p.key)}
-                className={`rounded-full px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors ${
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors ${
                   activePreview === p.key
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
+                <Icon icon={p.icon} className="text-sm" />
                 {p.label}
               </button>
             ))}
           </div>
 
-          {/* Real OG image preview wrapped in platform chrome */}
+          {/* OG image framed per platform */}
           {activePreview === 'linkedin' && (
             <LinkedInFrame ogImageUrl={ogImageUrl} name={docName} url={shareUrl} text={shareText} />
           )}
@@ -117,6 +136,26 @@ export function ShareModal({ docId, docName, onClose }: Props) {
           )}
           {activePreview === 'facebook' && (
             <FacebookFrame ogImageUrl={ogImageUrl} name={docName} url={shareUrl} />
+          )}
+
+          {/* LinkedIn tip: text must be pasted manually */}
+          {activePreview === 'linkedin' && (
+            <div className="mt-2 flex items-start gap-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 px-3 py-2">
+              <Icon icon="solar:info-circle-linear" className="mt-0.5 shrink-0 text-sm text-blue-500" />
+              <div className="flex-1">
+                <p className="font-mono text-[10px] text-blue-700 dark:text-blue-300 leading-relaxed">
+                  LinkedIn doesn't support pre-filled text. Copy the post text below and paste it after opening LinkedIn.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCopyText}
+                  className="mt-1.5 flex items-center gap-1 font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  <Icon icon={copiedText ? 'solar:check-circle-bold' : 'solar:copy-linear'} className="text-xs" />
+                  {copiedText ? 'Copied!' : 'Copy post text'}
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -128,7 +167,11 @@ export function ShareModal({ docId, docName, onClose }: Props) {
                 key={p.key}
                 type="button"
                 onClick={() => handleShare(p)}
-                className="flex flex-col items-center gap-1.5 rounded-xl border border-border bg-card py-3 text-center transition-colors hover:bg-muted"
+                className={`flex flex-col items-center gap-1.5 rounded-xl border py-3 text-center transition-colors hover:opacity-80 ${
+                  activePlatform.key === p.key
+                    ? 'border-primary/30 bg-primary/10'
+                    : 'border-border bg-card hover:bg-muted'
+                }`}
               >
                 <Icon icon={p.icon} className="text-2xl" />
                 <span className="font-mono text-[9px] font-bold uppercase tracking-wide text-muted-foreground">
@@ -147,13 +190,15 @@ export function ShareModal({ docId, docName, onClose }: Props) {
               icon={copied ? 'solar:check-circle-bold' : 'solar:link-bold'}
               className={`text-base ${copied ? 'text-emerald-500' : 'text-muted-foreground'}`}
             />
-            {copied ? 'Link copied!' : (
-              <>
+            {copied ? (
+              'Link copied!'
+            ) : (
+              <span className="flex items-center gap-1">
                 Copy link
-                <span className="ml-1 max-w-[180px] truncate font-mono text-[9px] text-muted-foreground/60 font-normal">
+                <span className="max-w-[180px] truncate font-mono text-[9px] text-muted-foreground/60 font-normal">
                   {shareUrl}
                 </span>
-              </>
+              </span>
             )}
           </button>
         </div>
@@ -162,7 +207,18 @@ export function ShareModal({ docId, docName, onClose }: Props) {
   );
 }
 
-// ── Platform frame components ─────────────────────────────────────────────────
+// ── Platform frames ───────────────────────────────────────────────────────────
+
+function OgImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full object-cover"
+      style={{ aspectRatio: '1200/630' }}
+    />
+  );
+}
 
 function LinkedInFrame({
   ogImageUrl,
@@ -186,7 +242,7 @@ function LinkedInFrame({
       </div>
       <p className="text-[11px] leading-relaxed text-foreground line-clamp-2">{text}</p>
       <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <img src={ogImageUrl} alt={name} className="w-full object-cover" style={{ aspectRatio: '1200/630' }} />
+        <OgImage src={ogImageUrl} alt={name} />
         <div className="px-3 py-2">
           <p className="font-bold text-[11px] truncate">{name}</p>
           <p className="text-[10px] text-muted-foreground truncate">{url}</p>
@@ -205,7 +261,8 @@ function TwitterFrame({
   name: string;
   text: string;
 }) {
-  const full = `${text}\n\njobclaw.fyi/portfolio/…`;
+  const tweetLen = `${text}\n\njobclaw.fyi/portfolio/…`.length;
+  const remaining = 280 - tweetLen;
   return (
     <div className="rounded-xl border border-border bg-muted/30 p-3 text-xs space-y-2">
       <div className="flex gap-2">
@@ -217,14 +274,14 @@ function TwitterFrame({
           </div>
           <p className="text-[11px] leading-relaxed whitespace-pre-line">{text}</p>
           <div className="overflow-hidden rounded-xl border border-border bg-background">
-            <img src={ogImageUrl} alt={name} className="w-full object-cover" style={{ aspectRatio: '1200/630' }} />
+            <OgImage src={ogImageUrl} alt={name} />
             <div className="px-2.5 py-1.5">
               <p className="font-semibold text-[10px] truncate">{name}</p>
               <p className="text-[10px] text-muted-foreground">jobclaw.fyi</p>
             </div>
           </div>
-          <p className={`text-[10px] text-right ${280 - full.length < 20 ? 'text-red-500' : 'text-muted-foreground'}`}>
-            {280 - full.length} chars remaining
+          <p className={`text-[10px] text-right ${remaining < 20 ? 'text-red-500' : 'text-muted-foreground'}`}>
+            {remaining} chars remaining
           </p>
         </div>
       </div>
@@ -251,7 +308,7 @@ function FacebookFrame({
         </div>
       </div>
       <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <img src={ogImageUrl} alt={name} className="w-full object-cover" style={{ aspectRatio: '1200/630' }} />
+        <OgImage src={ogImageUrl} alt={name} />
         <div className="px-3 py-2 bg-muted/30">
           <p className="font-mono text-[9px] uppercase text-muted-foreground">JOBCLAW.FYI</p>
           <p className="font-bold text-[11px] truncate">{name}</p>

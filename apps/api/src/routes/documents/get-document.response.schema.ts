@@ -17,6 +17,7 @@ const SectionSchema = z.object({
   techStack: z.array(z.string()),
   highlights: z.array(HighlightSchema),
   impact: z.string(),
+  assessmentType: z.string().optional(),
 });
 
 export const getDocumentResponse200Schema = z
@@ -26,5 +27,7 @@ export const getDocumentResponse200Schema = z
     status: z.enum(['ACTIVE', 'DRAFT', 'ARCHIVED']),
     sections: z.array(SectionSchema),
     createdAt: z.string(),
+    authorName: z.string().optional(),
+    authorRole: z.string().optional(),
   })
   .openapi('GetDocumentResponse');

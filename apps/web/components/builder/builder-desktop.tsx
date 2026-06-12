@@ -46,7 +46,7 @@ function SelectView({
   }, [carouselIdx, orderedIds.length, setCarouselIdx]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background font-sans text-foreground">
+    <div className="flex h-[calc(100vh-4.25rem)] overflow-hidden bg-background font-sans text-foreground">
       {/* ── Sidebar — scales from w-72 → w-80 → w-96 ── */}
       <aside className="flex w-72 xl:w-80 2xl:w-96 shrink-0 flex-col border-r border-border">
         <div className="border-b border-border px-6 py-6">
@@ -321,7 +321,7 @@ function SelectView({
 
 function GeneratingView({ sections, assessments, orderedIds }: BuilderProps) {
   return (
-    <div className="flex h-screen items-center justify-center bg-background font-sans">
+    <div className="flex h-[calc(100vh-4.25rem)] items-center justify-center bg-background font-sans">
       <div className="w-full max-w-xl px-8">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
@@ -377,7 +377,7 @@ function EditingView({
   const allDone = sections.every((s) => !s.generating);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background font-sans text-foreground">
+    <div className="flex h-[calc(100vh-4.25rem)] overflow-hidden bg-background font-sans text-foreground">
       {/* Left nav — scales with viewport */}
       <aside className="flex w-56 xl:w-64 2xl:w-72 shrink-0 flex-col border-r border-border">
         <div className="border-b border-border px-5 py-5">
@@ -411,7 +411,7 @@ function EditingView({
           </button>
           <button type="button" onClick={onExport} disabled={!allDone}
             className="flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors hover:bg-muted disabled:opacity-40">
-            <Icon icon="solar:export-linear" /> Export .md
+            <Icon icon="solar:export-linear" /> Export PDF
           </button>
           <button type="button" onClick={onReset}
             className="w-full py-1 font-mono text-[9px] text-muted-foreground transition-colors hover:text-foreground">
@@ -463,7 +463,7 @@ function EditingView({
               </button>
               <button type="button" onClick={onExport}
                 className="flex items-center gap-2 rounded-xl border border-border px-8 py-4 font-mono text-sm font-bold uppercase tracking-wide transition-colors hover:bg-muted">
-                <Icon icon="solar:export-linear" /> Export .md
+                <Icon icon="solar:export-linear" /> Export PDF
               </button>
             </div>
           )}

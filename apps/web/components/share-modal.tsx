@@ -11,27 +11,24 @@ type Props = {
 
 const PLATFORMS = [
   {
-    key: 'linkedin',
+    key: 'linkedin' as const,
     label: 'LinkedIn',
     icon: 'skill-icons:linkedin',
-    color: '#0A66C2',
     getUrl: (url: string, text: string) =>
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`,
   },
   {
-    key: 'twitter',
+    key: 'twitter' as const,
     label: 'X / Twitter',
     icon: 'skill-icons:twitter',
-    color: '#000000',
     getUrl: (url: string, text: string) =>
       `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
   },
   {
-    key: 'facebook',
+    key: 'facebook' as const,
     label: 'Facebook',
     icon: 'skill-icons:facebook',
-    color: '#1877F2',
-    getUrl: (url: string, _text: string) =>
+    getUrl: (url: string) =>
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
   },
 ] as const;
@@ -42,10 +39,9 @@ export function ShareModal({ docId, docName, onClose }: Props) {
   const [copied, setCopied] = useState(false);
   const [activePreview, setActivePreview] = useState<Platform>('linkedin');
 
-  const shareUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/portfolio/${docId}`
-    : `https://jobclaw.fyi/portfolio/${docId}`;
-
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://jobclaw.fyi';
+  const shareUrl = `${origin}/portfolio/${docId}`;
+  const ogImageUrl = `${origin}/portfolio/${docId}/opengraph-image`;
   const shareText = `Check out my software portfolio — built from real GitHub repos with AI-powered analysis on Jobclaw.`;
 
   function handleCopy() {
@@ -56,10 +52,12 @@ export function ShareModal({ docId, docName, onClose }: Props) {
   }
 
   function handleShare(platform: (typeof PLATFORMS)[number]) {
-    window.open(platform.getUrl(shareUrl, shareText), '_blank', 'noopener,noreferrer,width=600,height=500');
+    const url = platform.key === 'facebook'
+      ? platform.getUrl(shareUrl)
+      : platform.getUrl(shareUrl, shareText);
+    window.open(url, '_blank', 'noopener,noreferrer,width=620,height=520');
   }
 
-  // Close on Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose();
@@ -67,8 +65,6 @@ export function ShareModal({ docId, docName, onClose }: Props) {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
-
-  const activePlatform = PLATFORMS.find((p) => p.key === activePreview)!;
 
   return (
     <div
@@ -93,9 +89,9 @@ export function ShareModal({ docId, docName, onClose }: Props) {
           </button>
         </div>
 
-        {/* Post preview */}
-        <div className="px-5 pt-4 pb-2">
-          <div className="mb-2 flex gap-2">
+        {/* Preview tabs */}
+        <div className="px-5 pt-4 pb-3">
+          <div className="mb-3 flex gap-1.5">
             {PLATFORMS.map((p) => (
               <button
                 key={p.key}
@@ -112,22 +108,20 @@ export function ShareModal({ docId, docName, onClose }: Props) {
             ))}
           </div>
 
-          {/* Preview card */}
-          <div className="rounded-xl border border-border bg-muted/40 p-3">
-            {activePreview === 'linkedin' && (
-              <LinkedInPreview name={docName} url={shareUrl} text={shareText} />
-            )}
-            {activePreview === 'twitter' && (
-              <TwitterPreview name={docName} url={shareUrl} text={shareText} />
-            )}
-            {activePreview === 'facebook' && (
-              <FacebookPreview name={docName} url={shareUrl} />
-            )}
-          </div>
+          {/* Real OG image preview wrapped in platform chrome */}
+          {activePreview === 'linkedin' && (
+            <LinkedInFrame ogImageUrl={ogImageUrl} name={docName} url={shareUrl} text={shareText} />
+          )}
+          {activePreview === 'twitter' && (
+            <TwitterFrame ogImageUrl={ogImageUrl} name={docName} text={shareText} />
+          )}
+          {activePreview === 'facebook' && (
+            <FacebookFrame ogImageUrl={ogImageUrl} name={docName} url={shareUrl} />
+          )}
         </div>
 
-        {/* Share buttons */}
-        <div className="px-5 py-4 space-y-2">
+        {/* Action buttons */}
+        <div className="px-5 pb-5 space-y-2">
           <div className="grid grid-cols-3 gap-2">
             {PLATFORMS.map((p) => (
               <button
@@ -153,11 +147,13 @@ export function ShareModal({ docId, docName, onClose }: Props) {
               icon={copied ? 'solar:check-circle-bold' : 'solar:link-bold'}
               className={`text-base ${copied ? 'text-emerald-500' : 'text-muted-foreground'}`}
             />
-            {copied ? 'Link copied!' : 'Copy link'}
-            {!copied && (
-              <span className="ml-1 max-w-[180px] truncate font-mono text-[9px] text-muted-foreground/60 font-normal">
-                {shareUrl}
-              </span>
+            {copied ? 'Link copied!' : (
+              <>
+                Copy link
+                <span className="ml-1 max-w-[180px] truncate font-mono text-[9px] text-muted-foreground/60 font-normal">
+                  {shareUrl}
+                </span>
+              </>
             )}
           </button>
         </div>
@@ -166,27 +162,33 @@ export function ShareModal({ docId, docName, onClose }: Props) {
   );
 }
 
-// ── Preview sub-components ────────────────────────────────────────────────────
+// ── Platform frame components ─────────────────────────────────────────────────
 
-function LinkedInPreview({ name, url, text }: { name: string; url: string; text: string }) {
+function LinkedInFrame({
+  ogImageUrl,
+  name,
+  url,
+  text,
+}: {
+  ogImageUrl: string;
+  name: string;
+  url: string;
+  text: string;
+}) {
   return (
-    <div className="font-sans text-xs space-y-2">
-      {/* Mock profile row */}
+    <div className="rounded-xl border border-border bg-muted/30 p-3 text-xs space-y-2.5">
       <div className="flex items-center gap-2">
-        <div className="h-8 w-8 rounded-full bg-muted-foreground/20" />
+        <div className="h-7 w-7 rounded-full bg-muted-foreground/20" />
         <div>
-          <p className="font-semibold text-[11px] text-foreground">You</p>
+          <p className="font-semibold text-[11px]">You</p>
           <p className="text-[10px] text-muted-foreground">1st · Just now</p>
         </div>
       </div>
-      <p className="text-[11px] leading-relaxed text-foreground">{text}</p>
-      {/* Link card */}
+      <p className="text-[11px] leading-relaxed text-foreground line-clamp-2">{text}</p>
       <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <div className="h-16 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-          <Icon icon="solar:code-bold" className="text-2xl text-primary/40" />
-        </div>
+        <img src={ogImageUrl} alt={name} className="w-full object-cover" style={{ aspectRatio: '1200/630' }} />
         <div className="px-3 py-2">
-          <p className="font-bold text-[11px] text-foreground truncate">{name}</p>
+          <p className="font-bold text-[11px] truncate">{name}</p>
           <p className="text-[10px] text-muted-foreground truncate">{url}</p>
         </div>
       </div>
@@ -194,31 +196,35 @@ function LinkedInPreview({ name, url, text }: { name: string; url: string; text:
   );
 }
 
-function TwitterPreview({ name, url, text }: { name: string; url: string; text: string }) {
-  const tweet = `${text}\n\n${url}`;
-  const remaining = 280 - tweet.length;
+function TwitterFrame({
+  ogImageUrl,
+  name,
+  text,
+}: {
+  ogImageUrl: string;
+  name: string;
+  text: string;
+}) {
+  const full = `${text}\n\njobclaw.fyi/portfolio/…`;
   return (
-    <div className="font-sans text-xs space-y-2">
+    <div className="rounded-xl border border-border bg-muted/30 p-3 text-xs space-y-2">
       <div className="flex gap-2">
-        <div className="h-8 w-8 shrink-0 rounded-full bg-muted-foreground/20" />
+        <div className="h-7 w-7 shrink-0 rounded-full bg-muted-foreground/20" />
         <div className="flex-1 space-y-1.5">
           <div className="flex items-center gap-1">
-            <p className="font-bold text-[11px] text-foreground">You</p>
+            <p className="font-bold text-[11px]">You</p>
             <p className="text-[10px] text-muted-foreground">@you</p>
           </div>
-          <p className="text-[11px] leading-relaxed text-foreground whitespace-pre-line">{text}</p>
-          {/* Link card */}
+          <p className="text-[11px] leading-relaxed whitespace-pre-line">{text}</p>
           <div className="overflow-hidden rounded-xl border border-border bg-background">
-            <div className="h-12 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-              <Icon icon="solar:code-bold" className="text-xl text-primary/40" />
-            </div>
+            <img src={ogImageUrl} alt={name} className="w-full object-cover" style={{ aspectRatio: '1200/630' }} />
             <div className="px-2.5 py-1.5">
-              <p className="font-semibold text-[10px] text-foreground truncate">{name}</p>
+              <p className="font-semibold text-[10px] truncate">{name}</p>
               <p className="text-[10px] text-muted-foreground">jobclaw.fyi</p>
             </div>
           </div>
-          <p className={`text-[10px] text-right ${remaining < 20 ? 'text-red-500' : 'text-muted-foreground'}`}>
-            {remaining} chars remaining
+          <p className={`text-[10px] text-right ${280 - full.length < 20 ? 'text-red-500' : 'text-muted-foreground'}`}>
+            {280 - full.length} chars remaining
           </p>
         </div>
       </div>
@@ -226,24 +232,29 @@ function TwitterPreview({ name, url, text }: { name: string; url: string; text: 
   );
 }
 
-function FacebookPreview({ name, url }: { name: string; url: string }) {
+function FacebookFrame({
+  ogImageUrl,
+  name,
+  url,
+}: {
+  ogImageUrl: string;
+  name: string;
+  url: string;
+}) {
   return (
-    <div className="font-sans text-xs space-y-2">
+    <div className="rounded-xl border border-border bg-muted/30 p-3 text-xs space-y-2">
       <div className="flex items-center gap-2">
-        <div className="h-8 w-8 rounded-full bg-muted-foreground/20" />
+        <div className="h-7 w-7 rounded-full bg-muted-foreground/20" />
         <div>
-          <p className="font-semibold text-[11px] text-foreground">You</p>
+          <p className="font-semibold text-[11px]">You</p>
           <p className="text-[10px] text-muted-foreground">Just now · 🌐</p>
         </div>
       </div>
-      {/* Link card */}
       <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <div className="h-20 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-          <Icon icon="solar:code-bold" className="text-3xl text-primary/40" />
-        </div>
+        <img src={ogImageUrl} alt={name} className="w-full object-cover" style={{ aspectRatio: '1200/630' }} />
         <div className="px-3 py-2 bg-muted/30">
           <p className="font-mono text-[9px] uppercase text-muted-foreground">JOBCLAW.FYI</p>
-          <p className="font-bold text-[11px] text-foreground truncate">{name}</p>
+          <p className="font-bold text-[11px] truncate">{name}</p>
           <p className="text-[10px] text-muted-foreground truncate">{url}</p>
         </div>
       </div>

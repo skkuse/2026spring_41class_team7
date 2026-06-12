@@ -13,7 +13,7 @@ export function Landing() {
         <div className="flex items-center justify-between h-20 px-6 lg:px-12 max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
             <Link href="/">
-              <Image src="/logo.svg" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
+              <Image src="/logo.png" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <div className="hidden md:flex items-center gap-6 text-[11px] font-mono font-bold uppercase tracking-widest text-muted-foreground">
               <a href="#features" className="hover:text-primary transition-colors">
@@ -341,7 +341,7 @@ export function Landing() {
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8">
           <div className="col-span-2">
             <Link href="/" className="mb-6 inline-block">
-              <Image src="/logo.svg" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
+              <Image src="/logo.png" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-8">
               Elevating developer reputation through high-signal AI analysis and professional

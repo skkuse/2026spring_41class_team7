@@ -18,7 +18,7 @@ export function DashboardDesktopHeader() {
           href="/home"
           className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
         >
-          <Image src="/logo.svg" alt="Jobclaw" width={120} height={28} className="h-7 w-auto" />
+          <Image src="/logo.png" alt="Jobclaw" width={120} height={28} className="h-7 w-auto" />
         </Link>
 
         <nav className="flex min-w-0 flex-1 items-center justify-center" aria-label="Main">

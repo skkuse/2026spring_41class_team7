@@ -43,11 +43,11 @@ export async function saveSecrets(secrets: Partial<JobclawSecrets>): Promise<voi
   const prev = await loadSecrets();
   const next: JobclawSecrets = {
     openaiApiKey:
-      secrets.openaiApiKey !== undefined
-        ? secrets.openaiApiKey.trim() || undefined
+      'openaiApiKey' in secrets
+        ? (secrets.openaiApiKey != null ? secrets.openaiApiKey.trim() || undefined : undefined)
         : prev.openaiApiKey,
     supabaseSession:
-      secrets.supabaseSession !== undefined
+      'supabaseSession' in secrets
         ? secrets.supabaseSession
         : prev.supabaseSession,
   };

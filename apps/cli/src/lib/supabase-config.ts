@@ -8,3 +8,7 @@ export const SUPABASE_ANON_KEY =
   process.env.SUPABASE_ANON_KEY ??
   process.env.SUPABASE_PUBLISHABLE_KEY ??
   'sb_publishable_L3927rknhsyTb_4_IkQInA_9TYk39FH';
+
+export const WEB_APP_URL =
+  (process.env.WEB_APP_URL ?? '').replace(/\/$/, '') ||
+  'https://www.jobclaw.fyi';

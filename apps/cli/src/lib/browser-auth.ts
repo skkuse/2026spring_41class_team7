@@ -1,8 +1,7 @@
 import http from 'node:http';
 import { exec } from 'node:child_process';
-import { generatePKCE } from './pkce.js';
-import { parseTokenResponse } from './auth-store.js';
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-config.js';
+import { randomBytes } from 'node:crypto';
+import { WEB_APP_URL } from './supabase-config.js';
 import type { SupabaseSession } from './secrets.js';
 
 const TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -14,24 +13,15 @@ export type OAuthResult =
 export async function runOAuthFlow(
   onUrl?: (url: string) => void,
 ): Promise<OAuthResult> {
-  const { verifier, challenge } = generatePKCE();
   const port = await findFreePort();
-  const redirectTo = `http://localhost:${port}/callback`;
-
-  const authUrl = new URL(`${SUPABASE_URL}/auth/v1/authorize`);
-  authUrl.searchParams.set('provider', 'github');
-  authUrl.searchParams.set('code_challenge', challenge);
-  authUrl.searchParams.set('code_challenge_method', 'S256');
-  authUrl.searchParams.set('redirect_to', redirectTo);
-
-  const urlStr = authUrl.toString();
+  const state = randomBytes(16).toString('hex');
+  const urlStr = `${WEB_APP_URL}/auth/cli?cli_port=${port}&state=${state}`;
 
   try {
-    const code = await waitForCallback(port, () => {
+    const session = await waitForCallback(port, state, () => {
       onUrl?.(urlStr);
       openBrowser(urlStr);
     });
-    const session = await exchangeCode(code, verifier, redirectTo);
     return { ok: true, session };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
@@ -61,7 +51,7 @@ function openBrowser(url: string): void {
   });
 }
 
-function waitForCallback(port: number, onListening: () => void): Promise<string> {
+function waitForCallback(port: number, expectedState: string, onListening: () => void): Promise<SupabaseSession> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       server.close();
@@ -76,8 +66,6 @@ function waitForCallback(port: number, onListening: () => void): Promise<string>
       }
 
       const error = url.searchParams.get('error');
-      const code = url.searchParams.get('code');
-
       if (error) {
         const desc = url.searchParams.get('error_description') ?? error;
         res.writeHead(200, { 'Content-Type': 'text/html' }).end(
@@ -88,12 +76,31 @@ function waitForCallback(port: number, onListening: () => void): Promise<string>
         return;
       }
 
-      if (code) {
+      const incomingState = url.searchParams.get('state');
+      if (incomingState !== expectedState) {
+        res.writeHead(400).end();
+        return;
+      }
+
+      const accessToken = url.searchParams.get('access_token');
+      const refreshToken = url.searchParams.get('refresh_token');
+      const expiresAt = url.searchParams.get('expires_at');
+      const userId = url.searchParams.get('user_id');
+      const email = url.searchParams.get('email') ?? '';
+      const username = url.searchParams.get('username') ?? '';
+
+      if (accessToken && refreshToken && expiresAt && userId) {
         res.writeHead(200, { 'Content-Type': 'text/html' }).end(
           `<html><body><h2>Logged in! You can close this tab.</h2></body></html>`,
         );
         clearTimeout(timer);
-        server.close(() => resolve(code));
+        const session: SupabaseSession = {
+          accessToken,
+          refreshToken,
+          expiresAt: Number(expiresAt),
+          user: { id: userId, email, githubUsername: username },
+        };
+        server.close(() => resolve(session));
         return;
       }
 
@@ -108,32 +115,4 @@ function waitForCallback(port: number, onListening: () => void): Promise<string>
       reject(e);
     });
   });
-}
-
-async function exchangeCode(
-  code: string,
-  verifier: string,
-  redirectUri: string,
-): Promise<SupabaseSession> {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=pkce`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: SUPABASE_ANON_KEY,
-    },
-    body: JSON.stringify({
-      auth_code: code,
-      code_verifier: verifier,
-      redirect_uri: redirectUri,
-    }),
-  });
-
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`Token exchange failed (${res.status}): ${body}`);
-  }
-
-  return parseTokenResponse(
-    await res.json() as Parameters<typeof parseTokenResponse>[0],
-  );
 }

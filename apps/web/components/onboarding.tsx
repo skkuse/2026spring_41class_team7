@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -21,12 +22,8 @@ export function Onboarding() {
       </div>
       <div className="relative z-10 w-full max-w-md animate-onboarding-enter">
         <div className="mb-12 flex flex-col items-center">
-          <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary shadow-[0_0_30px_rgba(217,119,87,0.4)]">
-            <Icon icon="solar:bolt-bold" className="text-3xl text-primary-foreground" />
-          </div>
-          <span className="font-heading text-3xl font-black tracking-tighter">
-            Job<span className="text-primary">claw</span>
-          </span>
+          <Image src="/logo-glyph.png" alt="Jobclaw" width={48} height={48} className="mb-4 h-12 w-12" />
+          <Image src="/logo.png" alt="Jobclaw" width={140} height={32} className="h-8 w-auto" />
         </div>
         <div className="mb-10 text-center">
           <h1 className="mb-3 font-heading text-4xl font-bold tracking-tight">

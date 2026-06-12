@@ -4,6 +4,8 @@ import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { ShareModal } from '../share-modal';
+
 export type DeveloperStats = {
   userId: string;
   avgScore: number;
@@ -59,15 +61,11 @@ function ScoreRing({ score, size = 72 }: { score: number; size?: number }) {
 type Props = { stats: DeveloperStats; compact?: boolean };
 
 export function ScoreCard({ stats, compact = false }: Props) {
-  const [copied, setCopied] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
-  function handleShare() {
-    const url = `${window.location.origin}/company/talent/${stats.userId}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  }
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://jobclaw.fyi';
+  const shareUrl = `${origin}/company/talent/${stats.userId}`;
+  const ogImageUrl = `${origin}/company/talent/${stats.userId}/opengraph-image`;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
@@ -127,14 +125,11 @@ export function ScoreCard({ stats, compact = false }: Props) {
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={handleShare}
+          onClick={() => setShareOpen(true)}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border py-2 font-mono text-[10px] font-bold uppercase tracking-wide transition-colors hover:bg-muted"
         >
-          <Icon
-            icon={copied ? 'solar:check-circle-bold' : 'solar:share-linear'}
-            className={`text-sm ${copied ? 'text-emerald-500' : ''}`}
-          />
-          {copied ? 'Copied!' : 'Share with Company'}
+          <Icon icon="solar:share-linear" className="text-sm" />
+          Share with Company
         </button>
 
         {compact && (
@@ -147,6 +142,16 @@ export function ScoreCard({ stats, compact = false }: Props) {
           </Link>
         )}
       </div>
+
+      {shareOpen && (
+        <ShareModal
+          title="My Developer Profile"
+          shareUrl={shareUrl}
+          ogImageUrl={ogImageUrl}
+          shareText="Check out my developer assessment scores on Jobclaw — AI-powered analysis of real GitHub repos."
+          onClose={() => setShareOpen(false)}
+        />
+      )}
     </div>
   );
 }

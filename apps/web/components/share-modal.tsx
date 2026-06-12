@@ -4,8 +4,10 @@ import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 
 type Props = {
-  docId: string;
-  docName: string;
+  title: string;
+  shareUrl: string;
+  ogImageUrl: string;
+  shareText: string;
   onClose: () => void;
 };
 
@@ -15,7 +17,6 @@ const PLATFORMS = [
     label: 'LinkedIn',
     icon: 'mdi:linkedin',
     color: '#0A66C2',
-    // LinkedIn only reads `url`; text must be pasted by the user
     getUrl: (url: string) =>
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
   },
@@ -39,15 +40,10 @@ const PLATFORMS = [
 
 type Platform = (typeof PLATFORMS)[number]['key'];
 
-export function ShareModal({ docId, docName, onClose }: Props) {
+export function ShareModal({ title, shareUrl, ogImageUrl, shareText, onClose }: Props) {
   const [copied, setCopied] = useState(false);
   const [copiedText, setCopiedText] = useState(false);
   const [activePreview, setActivePreview] = useState<Platform>('linkedin');
-
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://jobclaw.fyi';
-  const shareUrl = `${origin}/portfolio/${docId}`;
-  const ogImageUrl = `${origin}/portfolio/${docId}/opengraph-image`;
-  const shareText = `Check out my software portfolio — built from real GitHub repos with AI-powered analysis on Jobclaw.`;
 
   function handleCopy() {
     navigator.clipboard.writeText(shareUrl).then(() => {
@@ -93,9 +89,9 @@ export function ShareModal({ docId, docName, onClose }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div>
-            <h2 className="font-heading text-base font-bold">Share Portfolio</h2>
+            <h2 className="font-heading text-base font-bold">Share</h2>
             <p className="mt-0.5 font-mono text-[10px] text-muted-foreground truncate max-w-[280px]">
-              {docName}
+              {title}
             </p>
           </div>
           <button
@@ -129,16 +125,16 @@ export function ShareModal({ docId, docName, onClose }: Props) {
 
           {/* OG image framed per platform */}
           {activePreview === 'linkedin' && (
-            <LinkedInFrame ogImageUrl={ogImageUrl} name={docName} url={shareUrl} text={shareText} />
+            <LinkedInFrame ogImageUrl={ogImageUrl} title={title} url={shareUrl} text={shareText} />
           )}
           {activePreview === 'twitter' && (
-            <TwitterFrame ogImageUrl={ogImageUrl} name={docName} text={shareText} />
+            <TwitterFrame ogImageUrl={ogImageUrl} title={title} text={shareText} />
           )}
           {activePreview === 'facebook' && (
-            <FacebookFrame ogImageUrl={ogImageUrl} name={docName} url={shareUrl} />
+            <FacebookFrame ogImageUrl={ogImageUrl} title={title} url={shareUrl} />
           )}
 
-          {/* LinkedIn tip: text must be pasted manually */}
+          {/* LinkedIn tip */}
           {activePreview === 'linkedin' && (
             <div className="mt-2 flex items-start gap-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 px-3 py-2">
               <Icon icon="solar:info-circle-linear" className="mt-0.5 shrink-0 text-sm text-blue-500" />
@@ -222,12 +218,12 @@ function OgImage({ src, alt }: { src: string; alt: string }) {
 
 function LinkedInFrame({
   ogImageUrl,
-  name,
+  title,
   url,
   text,
 }: {
   ogImageUrl: string;
-  name: string;
+  title: string;
   url: string;
   text: string;
 }) {
@@ -242,9 +238,9 @@ function LinkedInFrame({
       </div>
       <p className="text-[11px] leading-relaxed text-foreground line-clamp-2">{text}</p>
       <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <OgImage src={ogImageUrl} alt={name} />
+        <OgImage src={ogImageUrl} alt={title} />
         <div className="px-3 py-2">
-          <p className="font-bold text-[11px] truncate">{name}</p>
+          <p className="font-bold text-[11px] truncate">{title}</p>
           <p className="text-[10px] text-muted-foreground truncate">{url}</p>
         </div>
       </div>
@@ -254,14 +250,14 @@ function LinkedInFrame({
 
 function TwitterFrame({
   ogImageUrl,
-  name,
+  title,
   text,
 }: {
   ogImageUrl: string;
-  name: string;
+  title: string;
   text: string;
 }) {
-  const tweetLen = `${text}\n\njobclaw.fyi/portfolio/…`.length;
+  const tweetLen = `${text}\n\njobclaw.fyi/…`.length;
   const remaining = 280 - tweetLen;
   return (
     <div className="rounded-xl border border-border bg-muted/30 p-3 text-xs space-y-2">
@@ -274,9 +270,9 @@ function TwitterFrame({
           </div>
           <p className="text-[11px] leading-relaxed whitespace-pre-line">{text}</p>
           <div className="overflow-hidden rounded-xl border border-border bg-background">
-            <OgImage src={ogImageUrl} alt={name} />
+            <OgImage src={ogImageUrl} alt={title} />
             <div className="px-2.5 py-1.5">
-              <p className="font-semibold text-[10px] truncate">{name}</p>
+              <p className="font-semibold text-[10px] truncate">{title}</p>
               <p className="text-[10px] text-muted-foreground">jobclaw.fyi</p>
             </div>
           </div>
@@ -291,11 +287,11 @@ function TwitterFrame({
 
 function FacebookFrame({
   ogImageUrl,
-  name,
+  title,
   url,
 }: {
   ogImageUrl: string;
-  name: string;
+  title: string;
   url: string;
 }) {
   return (
@@ -308,10 +304,10 @@ function FacebookFrame({
         </div>
       </div>
       <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <OgImage src={ogImageUrl} alt={name} />
+        <OgImage src={ogImageUrl} alt={title} />
         <div className="px-3 py-2 bg-muted/30">
           <p className="font-mono text-[9px] uppercase text-muted-foreground">JOBCLAW.FYI</p>
-          <p className="font-bold text-[11px] truncate">{name}</p>
+          <p className="font-bold text-[11px] truncate">{title}</p>
           <p className="text-[10px] text-muted-foreground truncate">{url}</p>
         </div>
       </div>

@@ -327,8 +327,10 @@ export default function DocumentsPage() {
 
     {sharingDoc && (
       <ShareModal
-        docId={sharingDoc.id}
-        docName={sharingDoc.name}
+        title={sharingDoc.name}
+        shareUrl={`${typeof window !== 'undefined' ? window.location.origin : 'https://jobclaw.fyi'}/portfolio/${sharingDoc.id}`}
+        ogImageUrl={`${typeof window !== 'undefined' ? window.location.origin : 'https://jobclaw.fyi'}/portfolio/${sharingDoc.id}/opengraph-image`}
+        shareText="Check out my software portfolio — built from real GitHub repos with AI-powered analysis on Jobclaw."
         onClose={() => setSharingDoc(null)}
       />
     )}

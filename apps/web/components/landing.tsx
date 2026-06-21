@@ -251,14 +251,14 @@ export function Landing() {
           </blockquote>
           <div className="flex flex-col items-center gap-4">
             <Image
-              alt="Marcus Chen"
-              src="https://randomuser.me/api/portraits/men/32.jpg"
+              alt="Luca Marchetti"
+              src="https://randomuser.me/api/portraits/men/52.jpg"
               width={64}
               height={64}
               className="size-16 rounded-full border-2 border-primary object-cover"
             />
             <div>
-              <p className="text-lg font-bold">Marcus Chen</p>
+              <p className="text-lg font-bold">Luca Marchetti</p>
               <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
                 Lead Engineer @ Vercel
               </p>

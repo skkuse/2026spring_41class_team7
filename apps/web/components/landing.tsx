@@ -3,8 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { LandingPricing } from './landing-pricing';
 
-const DASHBOARD_IMG =
-  'https://ggrhecslgdflloszjkwl.supabase.co/storage/v1/object/public/user-assets/76524ixEd5g/components/d5XWfZC6Ix7.png';
 
 export function Landing() {
   return (
@@ -92,16 +90,20 @@ export function Landing() {
               </Link>
             </div>
           </div>
-          <div className="flex-1 relative w-full max-w-xl lg:max-w-none">
-            <div className="relative z-10 p-4 bg-linear-to-b from-border/50 to-transparent rounded-[2rem] border border-border/50 shadow-2xl backdrop-blur-sm">
+          <div className="flex-1 relative w-full max-w-xl lg:max-w-none flex items-center justify-center">
+            {/* Decorative rings */}
+            <div className="absolute size-[420px] rounded-full border border-primary/10" />
+            <div className="absolute size-[320px] rounded-full border border-primary/15" />
+            <div className="absolute size-[220px] rounded-full border border-primary/20" />
+            {/* Glyph */}
+            <div className="relative z-10 flex items-center justify-center size-48 rounded-[2.5rem] bg-primary/10 border border-primary/20 shadow-[0_0_60px_rgba(201,100,66,0.2)]">
               <Image
-                alt="Jobclaw dashboard"
-                src={DASHBOARD_IMG}
-                width={1200}
-                height={900}
-                className="w-full h-auto rounded-2xl shadow-2xl border border-white/5"
+                src="/logo-glyph.png"
+                alt="Jobclaw"
+                width={96}
+                height={96}
+                className="w-24 h-24"
                 priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
             <div className="absolute -top-10 -right-10 size-40 bg-primary/30 blur-3xl -z-10 animate-pulse" />

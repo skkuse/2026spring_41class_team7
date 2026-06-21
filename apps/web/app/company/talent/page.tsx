@@ -1,11 +1,12 @@
 'use client';
 
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { useApi } from '../../../lib/api-context';
-import { useProfile } from '../../../lib/profile-context';
+import { UserMenu } from '../../user-menu';
 
 type TalentItem = {
   userId: string;
@@ -21,7 +22,6 @@ type TalentItem = {
 
 export default function TalentDirectoryPage() {
   const { get, post, delete: del } = useApi();
-  const { profile } = useProfile();
   const [items, setItems] = useState<TalentItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,16 +52,8 @@ export default function TalentDirectoryPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Icon icon="solar:bolt-bold" className="text-2xl text-primary" />
-          <span className="font-heading text-xl font-black tracking-tighter">
-            Job<span className="text-primary">claw</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-muted-foreground">{profile?.companyName}</span>
-          <Link href="/settings" className="text-sm text-muted-foreground hover:text-foreground">Settings</Link>
-        </div>
+        <Image src="/logo.svg" alt="Jobclaw" width={120} height={32} priority />
+        <UserMenu />
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-10">

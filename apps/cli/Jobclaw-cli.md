@@ -65,7 +65,11 @@ After the scan file is saved, runs the **Node.js backend** rubric (OpenAPI, Zod,
   - **`scan-result.json`** (from step 1 of **`jobclaw assess`**)
   - Latest **`*.json`** under **`.jobclaw/assessments/`** (from step 2)
 
-- The CLI does **not** upload payloads to this monorepo’s API (`apps/api` has no publish endpoint yet); it records a publish locally and prints the public URL pattern:
+- **Local AI summary generation** — The CLI uses the **developer’s own OpenAI API key** (resolved in this order: `OPENAI_API_KEY` env var → `~/.jobclaw/secrets.json` written by `init`) to call `chat.completions` directly and produce a `PortfolioSectionData` object for each assessment entry. The server’s API key is **not** used on this path. If no local key is found, publish aborts with an error pointing to `jobclaw doctor`.
+
+- **Upload** — The generated sections are submitted to **`POST /v1/portfolio/save`** on the API using the authenticated Supabase session, where they are persisted as a portfolio document under the user’s profile.
+
+- Prints the public URL pattern:
 
   **`https://jobclaw.fyi/{github-username}/{repo-name}`**
 
@@ -106,7 +110,7 @@ cd "$(jobclaw projects getpath)"
 | -------------------- | ----------------------------------------------------------------------- |
 | `init`               | OpenAI API key, terms & privacy acceptance                              |
 | `assess`             | Repo scan (`scan-result.json`) **then** backend assessment (`assessments/`) |
-| `publish`            | Requires **scan + assessment** artifacts; local record + jobclaw.fyi URL |
+| `publish`            | Requires **scan + assessment** artifacts; generates portfolio summary with **local OpenAI key**; uploads to API; prints jobclaw.fyi URL |
 | `publish-scan`       | **Scan-only** publish record (same quota as `publish`)                   |
 | `doctor`             | Validate `init` configuration and surface gaps                          |
 | `projects`           | Bookmark & open saved folders or URLs (`~/.jobclaw/jobclaw-projects.json`) |

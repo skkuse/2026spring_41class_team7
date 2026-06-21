@@ -178,7 +178,7 @@ Major capabilities (logical view—not screen design):
 | **Web (`apps/web`)** | Next.js UI; Supabase Auth (email/password, OAuth); session via cookies (`@supabase/ssr`); `Authorization: Bearer` to API; middleware refresh; RevenueCat wired via auth bridge for billing user id. |
 | **API (`apps/api`)** | OpenAPI-described Hono routes; public `/health`, `/example`, `/doc`, `/ui`; **`/v1/*` protected** by `requireAuth` (Supabase JWT). Bootstrap, profile (`/v1/me`), documents list, invoices list, **`POST /v1/resume/parse`**, **`POST /v1/projects/analyze-github`**. |
 | **Data** | PostgreSQL via Prisma (`Profile`, `Project`, `Document`, `Invoice`—see §3.4). Optional Cloudflare R2 for document bytes; Postgres remains authoritative for listings and metadata (including a future object key field). |
-| **Jobclaw CLI** | `init` (legal + OpenAI key in `~/.jobclaw/secrets.json`); `assess` → `.jobclaw/scan-result.json` then `.jobclaw/assessments/*.json`; `publish` / `publish-scan`; `doctor`; `projects` bookmarks under `~/.jobclaw/jobclaw-projects.json`. |
+| **Jobclaw CLI** | `init` (legal + OpenAI key in `~/.jobclaw/secrets.json`); `assess` → `.jobclaw/scan-result.json` then `.jobclaw/assessments/*.json`; `publish` (reads local artifacts, **generates portfolio summary using the local OpenAI key**, then calls `POST /v1/portfolio/save`); `publish-scan`; `doctor`; `projects` bookmarks under `~/.jobclaw/jobclaw-projects.json`. |
 | **Assessment prompts** | A **local codebase agent** instruction set defines behavior for bundled-repo AI workflows (explore first, narrow reads, safe edits, optional JSON footer). A **Node backend assessment** instruction set defines **0–10** scores per dimension and a JSON scorecard (OpenAPI, Zod, rate limits, caching, Prisma). |
 
 ```mermaid
@@ -228,7 +228,8 @@ The standalone **`project-management`** package stores bookmark/open commands fo
 
 - **Stack:** TypeScript monorepo; **pnpm** + **Turbo**; **Next.js** (web), **Hono** + **Prisma** (api), **Ink/React** (jobclaw CLI).
 - **Authentication:** API validates **Supabase user JWT** with `SUPABASE_URL` + `SUPABASE_ANON_KEY`; web must use the **same Supabase project** as the API so tokens minted for the browser validate server-side.
-- **AI features:** `OPENAI_API_KEY` required for resume/GitHub routes; otherwise **503**. Default model **`gpt-4o-mini`** unless `OPENAI_MODEL` is set.
+- **AI features (server):** `OPENAI_API_KEY` required on the server for resume/GitHub routes and the web builder's `POST /v1/portfolio/generate`; otherwise **503**. Default model **`gpt-4o-mini`** unless `OPENAI_MODEL` is set.
+- **AI features (CLI publish):** `jobclaw publish` calls OpenAI **directly from the local machine** using the developer's own key (`OPENAI_API_KEY` env wins over `~/.jobclaw/secrets.json`). The server's key is **not** used for this path. Missing local key → publish aborts and directs the user to `jobclaw doctor`.
 - **Resume upload:** Base64 JSON body; **max decoded size 6 MiB** (HTTP 413); `.pdf`/`.docx` only for extraction path; legacy `.doc` unsupported (415).
 - **GitHub analysis:** Public `github.com` URLs; optional **`GITHUB_TOKEN`** improves GitHub REST rate limits and access.
 - **Jobclaw:** Requires **git** checkout; secrets file mode **600**; publish quota (**5** successful publishes) before subscription prompt.
@@ -257,7 +258,9 @@ The standalone **`project-management`** package stores bookmark/open commands fo
 | **API ↔ OpenAI** | Chat completions `json_object` for resume/profile and GitHub tech inference | Out/in | `OPENAI_API_KEY`; missing key → **503**; upstream/parse failures → **502** / **4xx** as applicable. |
 | **API ↔ GitHub REST** | Repo metadata, languages, topics, README | Out/in | For `POST /v1/projects/analyze-github`. |
 | **API ↔ Cloudflare R2** | Object storage for document bytes (when enabled) | Out/in | S3-compatible endpoint; presigned PUT/GET for direct browser or server uploads. |
-| **CLI ↔ OpenAI** | Evaluation + backend assessment | Out/in | Key from **`OPENAI_API_KEY`** or **`~/.jobclaw/secrets.json`** (env wins). |
+| **CLI ↔ OpenAI (assess)** | General evaluation + backend assessment during `jobclaw assess` | Out/in | Key from **`OPENAI_API_KEY`** or **`~/.jobclaw/secrets.json`** (env wins). |
+| **CLI ↔ OpenAI (publish)** | Portfolio resume summary generation during `jobclaw publish` | Out/in | Same local key resolution as assess. CLI calls `chat.completions` directly — the server's key is **not** involved. Missing key → publish aborts. |
+| **CLI ↔ Hono `POST /v1/portfolio/save`** | Upload generated portfolio sections after local summary generation | Out/in | Bearer JWT required; CLI must be authenticated via stored Supabase session. |
 | **CLI ↔ JOBCLAW_API_URL** | Fetch evaluation prompt | In | Optional; offline fallback in CLI. |
 
 ### 3.2 Function requirement
@@ -352,7 +355,7 @@ Jobclaw is a command-line tool for **repository profiling**: dependency/skill si
 |---------|---------|
 | **`init`** | User accepts Terms of Service and Privacy Policy in the TTY UI; OpenAI setup prints official links then prompts for an API key stored in **`~/.jobclaw/secrets.json`** (file mode **600**). **`OPENAI_API_KEY`** in the environment overrides the file. **`~/.jobclaw/config.json`** records flags (e.g. legal acceptance, publish count). Refusing legal blocks setup; user may skip key entry and fix gaps later via **`doctor`**. |
 | **`assess`** | Runs on a **git** checkout (requires `.git`). **Step 1:** Writes **`<repo>/.jobclaw/scan-result.json`** — timeline from `.git` history; manifest scan (`package.json`, etc.) for skills/libraries; optional fetch of evaluation prompt from **`JOBCLAW_API_URL`** (default `https://api.jobclaw.fyi/evaluation-prompt`) with fallback if offline; OpenAI general evaluation. **Step 2:** Node backend rubric → **`<repo>/.jobclaw/assessments/<timestamp>.json`**. Interactive TTY can pick assessment type; non-TTY uses **`--type node-backend`**. Optional **`--out`** for Markdown or JSON reports. |
-| **`publish`** | Requires **`scan-result.json`** (from assess step 1) **and** latest **`*.json`** under **`.jobclaw/assessments/`**. Records publish locally; prints URL pattern **`https://jobclaw.fyi/{github-username}/{repo-name}`**. This monorepo’s **`apps/api`** does not expose an upload endpoint for publish payloads yet. After **five** successful publishes (shared with **`publish-scan`**), subscription prompt appears. |
+| **`publish`** | Requires **`scan-result.json`** (from assess step 1) **and** latest **`*.json`** under **`.jobclaw/assessments/`**. Uses the **local OpenAI key** (`OPENAI_API_KEY` env wins over `~/.jobclaw/secrets.json`) to generate a `PortfolioSectionData[]` summary for each assessment entry, then uploads the result to **`POST /v1/portfolio/save`** (authenticated via stored Supabase session). Prints the public URL pattern **`https://jobclaw.fyi/{github-username}/{repo-name}`**. Missing local key → aborts and suggests `jobclaw doctor`. After **five** successful publishes (shared with **`publish-scan`**), subscription prompt appears. |
 | **`publish-scan`** | Same quota as **`publish`** but uses **only** **`scan-result.json`** (produced at start of **`assess`**). |
 | **`doctor`** | Reports missing/invalid configuration (OpenAI, legal acceptance, etc.). |
 | **`projects`** | Bookmarks/opens local dirs or URLs; list file **`~/.jobclaw/jobclaw-projects.json`**; **`jobclaw projects edit`** opens JSON in default editor. |
@@ -410,12 +413,16 @@ CLI flags: **`--out report.md`**, **`--out report.json`**, **`--json`**. Monorep
 
 #### A.6 OpenAI resume and GitHub extraction (`docs/ai-openai-hono-extraction.md`)
 
-- **Auth:** All described routes under **`/v1/*`** require **`Authorization: Bearer <supabase_access_token>`**. **`OPENAI_API_KEY`** required; missing → **503**. Optional **`OPENAI_MODEL`**, default **`gpt-4o-mini`**.
-- **Pattern:** System + user messages → **`chat.completions.create`** with **`response_format: { type: 'json_object' }`**, low temperature (~0.2); parse assistant content as JSON; validate with **Zod** **`safeParse`**; parse failures → **502**.
+- **Auth:** All described routes under **`/v1/*`** require **`Authorization: Bearer <supabase_access_token>`**. **`OPENAI_API_KEY`** required on the server; missing → **503**. Optional **`OPENAI_MODEL`**, default **`gpt-4o-mini`**.
+- **Pattern (server routes):** System + user messages → **`chat.completions.create`** with **`response_format: { type: 'json_object' }`**, low temperature (~0.2); parse assistant content as JSON; validate with **Zod** **`safeParse`**; parse failures → **502**.
 - **Resume — `POST /v1/resume/parse`:** Body **`ResumeParseRequest`**: **`fileBase64`** (standard base64, no data-URL prefix), **`fileName`** (**.pdf** or **.docx**). Decode → extract: PDF via **`pdf-parse`** v2; DOCX via **`mammoth`**; **`.doc`** not supported → **415**; max decoded **6 MiB** → **413**; empty/unreadable → **422**/**415** as applicable; truncate text ~**48k** chars; response includes **`truncated`**, **`detectedKind`**, **`profile`** (**`ResumeProfile`**).
 - **GitHub — `POST /v1/projects/analyze-github`:** Body **`{ repoUrl }`** valid **`https://github.com/...`** URL. Fetch repo metadata, languages (byte counts), topics, README via GitHub REST; optional **`GITHUB_TOKEN`**; build JSON context for model; response merges **`github`** snapshot and **`tech`** (**`ProjectTechProfile`**).
+- **Portfolio generate (web builder) — `POST /v1/portfolio/generate`:** Body `{ assessmentIds: string[] }`. Server fetches assessment rows from DB (ownership-checked), calls OpenAI with **server key** per section in parallel, returns **`PortfolioSectionData[]`**; missing server key → **503**.
+- **Portfolio save — `POST /v1/portfolio/save`:** Body `{ sections: PortfolioSectionData[] }`. Persists sections as a Document under the user's profile project; called by both the web builder and **`jobclaw publish`** (which passes sections generated locally with the developer's own key).
+- **CLI local portfolio generation (`jobclaw publish`):** CLI calls OpenAI **directly** using `OPENAI_API_KEY` env or `~/.jobclaw/secrets.json` — same prompt/shape as the server generate handler. Result is submitted to `POST /v1/portfolio/save`. The server's `OPENAI_API_KEY` is **not** used on this path.
 - **Representative HTTP outcomes — resume:** **200** success; **400** validation; **401** auth; **413** size; **415** type; **422** no usable text; **502** OpenAI/parse/schema failure; **503** no OpenAI key.
 - **Representative HTTP outcomes — GitHub:** **200** success; **400** bad URL; **401** auth; **404** repo missing; **502** GitHub/OpenAI/schema failure; **503** no OpenAI key.
+- **Representative HTTP outcomes — portfolio save:** **200** success `{ documentId }`; **400** invalid sections; **401** auth; **404** no profile; **500** unhandled error.
 
 ---
 
@@ -445,6 +452,9 @@ Use this table to locate **source files and markdown** in the repo. **§§1–3*
 | Example route using shared types | `apps/api/src/routes/example/get-example.handler.ts` |
 | Document list handler (auth scoping pattern) | `apps/api/src/routes/documents/list-documents.handler.ts` |
 | Jobclaw backend assessment JSON consumer | `apps/cli/src/lib/backend-assessment.ts` |
+| Jobclaw publish logic (local AI + save) | `apps/cli/src/lib/publish-logic.ts` |
+| Portfolio generate handler (server/web builder) | `apps/api/src/routes/portfolio/post-generate.handler.ts` |
+| Portfolio save handler | `apps/api/src/routes/portfolio/post-save.handler.ts` |
 | Jobclaw CLI guide | `apps/cli/Jobclaw-cli.md` |
 | Local repository agent prompt | `apps/cli/prompts/agents/local-repository-agent.prompt.md` |
 | Node backend assessment prompt | `apps/cli/prompts/assessments/node-backend-assessment.prompt.md` |

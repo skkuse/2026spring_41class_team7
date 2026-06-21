@@ -151,7 +151,7 @@ export function Landing() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-card border border-border p-10 rounded-[2.5rem] group hover:border-primary/50 transition-colors">
             <div className="size-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-              <Icon icon="solar:github-bold" className="text-primary text-3xl" />
+              <Icon icon="mdi:github" className="text-primary text-3xl" />
             </div>
             <h3 className="font-heading text-2xl font-bold mb-4">GitHub Deep-Sync</h3>
             <p className="text-muted-foreground leading-relaxed">

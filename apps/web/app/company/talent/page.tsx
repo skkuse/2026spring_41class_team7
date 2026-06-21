@@ -82,25 +82,42 @@ export default function TalentDirectoryPage() {
                   <th className="px-4 py-3 text-left font-semibold">Location</th>
                   <th className="px-4 py-3 text-center font-semibold">Best Score</th>
                   <th className="px-4 py-3 text-center font-semibold">Assessments</th>
-                  <th className="px-4 py-3 text-center font-semibold">Save</th>
+                  <th className="px-4 py-3 text-center font-semibold">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((item, idx) => (
+                {items.map((item, idx) => {
+                  const rank = idx + 1;
+                  const topPct = items.length > 1
+                    ? Math.round(((items.length - rank) / (items.length - 1)) * 100)
+                    : null;
+                  return (
                   <tr
                     key={item.userId}
                     className={`border-b border-border last:border-0 transition-colors hover:bg-secondary/20 ${idx % 2 === 0 ? '' : 'bg-secondary/10'}`}
                   >
                     <td className="px-4 py-3">
-                      <Link
-                        href={`/company/talent/${item.userId}`}
-                        className="font-medium hover:text-primary hover:underline"
-                      >
-                        {item.fullName}
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary font-mono text-[10px] text-muted-foreground">
+                          #{rank}
+                        </span>
+                        <div>
+                          <Link
+                            href={`/company/talent/${item.userId}`}
+                            className="font-medium hover:text-primary hover:underline"
+                          >
+                            {item.fullName || 'Anonymous Developer'}
+                          </Link>
+                          {topPct !== null && (
+                            <p className="text-[10px] text-muted-foreground font-mono">
+                              Top {topPct}%
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{item.role}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{item.location}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{item.role || '—'}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{item.location || '—'}</td>
                     <td className="px-4 py-3 text-center">
                       {item.bestScore != null ? (
                         <span className={`font-mono font-bold text-lg ${scoreColor(item.bestScore)}`}>
@@ -111,21 +128,30 @@ export default function TalentDirectoryPage() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-center text-muted-foreground">{item.assessmentCount}</td>
-                    <td className="px-4 py-3 text-center">
-                      <button
-                        type="button"
-                        onClick={() => toggleShortlist(item)}
-                        className="transition-colors hover:text-primary"
-                        title={item.isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
-                      >
-                        <Icon
-                          icon={item.isShortlisted ? 'solar:bookmark-bold' : 'solar:bookmark-linear'}
-                          className={`text-xl ${item.isShortlisted ? 'text-primary' : 'text-muted-foreground'}`}
-                        />
-                      </button>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          href={`/company/talent/${item.userId}`}
+                          className="rounded-lg border border-border px-3 py-1 font-mono text-xs text-foreground transition-colors hover:border-primary hover:text-primary"
+                        >
+                          View
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => toggleShortlist(item)}
+                          className="transition-colors hover:text-primary"
+                          title={item.isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
+                        >
+                          <Icon
+                            icon={item.isShortlisted ? 'solar:bookmark-bold' : 'solar:bookmark-linear'}
+                            className={`text-xl ${item.isShortlisted ? 'text-primary' : 'text-muted-foreground'}`}
+                          />
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

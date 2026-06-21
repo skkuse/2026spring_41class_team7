@@ -2,7 +2,26 @@ import { Icon } from '@iconify/react';
 
 import type { SettingsFormProps } from './settings-types';
 
-export function SettingsDesktop({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact }: SettingsFormProps) {
+function Skeleton({ className }: { className?: string }) {
+  return <div className={`animate-pulse rounded bg-muted ${className ?? ''}`} />;
+}
+
+export function SettingsDesktop({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact, loading }: SettingsFormProps) {
+  if (loading) {
+    return (
+      <main className="mx-auto min-h-screen max-w-4xl p-6 md:p-10">
+        <Skeleton className="mb-8 h-9 w-52" />
+        <div className="grid gap-4 md:grid-cols-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className={`h-12 ${i === 4 ? 'md:col-span-2' : ''}`} />
+          ))}
+        </div>
+        <Skeleton className="mt-6 h-14 w-full" />
+        <Skeleton className="mt-6 h-10 w-36" />
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-4xl p-6 md:p-10">
       <h1 className="mb-8 text-3xl font-bold">Identity Settings</h1>

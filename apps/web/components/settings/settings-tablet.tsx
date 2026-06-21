@@ -2,7 +2,27 @@ import { Icon } from '@iconify/react';
 
 import type { SettingsFormProps } from './settings-types';
 
-export function SettingsTablet({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact }: SettingsFormProps) {
+function Skeleton({ className }: { className?: string }) {
+  return <div className={`animate-pulse rounded bg-muted ${className ?? ''}`} />;
+}
+
+export function SettingsTablet({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact, loading }: SettingsFormProps) {
+  if (loading) {
+    return (
+      <main className="mx-auto min-h-screen max-w-2xl border-x border-border px-8 py-10 pb-nav-safe">
+        <Skeleton className="mb-2 h-7 w-48" />
+        <Skeleton className="mb-8 h-4 w-72" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className={`h-12 ${i === 4 ? 'sm:col-span-2' : ''}`} />
+          ))}
+        </div>
+        <Skeleton className="mt-6 h-14 w-full" />
+        <Skeleton className="mt-8 h-12 w-full sm:w-48" />
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-2xl border-x border-border px-8 py-10 pb-nav-safe">
       <h1 className="mb-2 font-home-heading text-2xl font-bold uppercase tracking-tight">

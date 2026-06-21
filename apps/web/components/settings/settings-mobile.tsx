@@ -2,7 +2,24 @@ import { Icon } from '@iconify/react';
 
 import type { SettingsFormProps } from './settings-types';
 
-export function SettingsMobile({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact }: SettingsFormProps) {
+function Skeleton({ className }: { className?: string }) {
+  return <div className={`animate-pulse rounded bg-muted ${className ?? ''}`} />;
+}
+
+export function SettingsMobile({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact, loading }: SettingsFormProps) {
+  if (loading) {
+    return (
+      <main className="mx-auto min-h-screen max-w-md border-x border-border p-5 pb-nav-safe">
+        <Skeleton className="mb-6 h-8 w-40" />
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+        </div>
+        <Skeleton className="mt-4 h-14 w-full" />
+        <Skeleton className="mt-6 h-12 w-full" />
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-md border-x border-border p-5 pb-nav-safe">
       <h1 className="mb-6 text-2xl font-black">Edit Identity</h1>

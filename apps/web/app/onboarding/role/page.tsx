@@ -9,7 +9,7 @@ import { useProfile } from '../../../lib/profile-context';
 
 export default function RoleSelectionPage() {
   const router = useRouter();
-  const { patch } = useApi();
+  const { patch, post } = useApi();
   const { profile, isLoading, refetch } = useProfile();
   const [selected, setSelected] = useState<'DEVELOPER' | 'COMPANY' | null>(null);
   const [companyName, setCompanyName] = useState('');
@@ -27,13 +27,18 @@ export default function RoleSelectionPage() {
     if (selected === 'COMPANY' && !companyName.trim()) return;
     setSubmitting(true);
     try {
-      await patch('/v1/me', {
-        userType: selected,
-        ...(selected === 'COMPANY' && { companyName: companyName.trim(), industry: industry.trim() || undefined }),
-      });
-      refetch();
-      if (selected === 'DEVELOPER') router.push('/home');
-      else router.push('/company/talent');
+      if (selected === 'DEVELOPER') {
+        await patch('/v1/me', { userType: 'DEVELOPER' });
+        refetch();
+        router.push('/home');
+      } else {
+        await post('/v1/companies', {
+          name: companyName.trim(),
+          industry: industry.trim() || undefined,
+        });
+        refetch();
+        router.push('/company/talent');
+      }
     } finally {
       setSubmitting(false);
     }

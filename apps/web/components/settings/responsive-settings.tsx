@@ -17,6 +17,8 @@ export function ResponsiveSettings() {
   const { get, patch, authToken } = useApi();
   const [form, setForm] = useState<ProfileForm>(EMPTY_FORM);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [savingContact, setSavingContact] = useState(false);
   const [saved, setSaved] = useState('');
 
   useEffect(() => {
@@ -40,13 +42,19 @@ export function ResponsiveSettings() {
 
   const toggleAllowContact = async (value: boolean) => {
     setForm((f) => ({ ...f, allowContact: value }));
-    patch('/v1/me', { allowContact: value }).catch((err: unknown) => {
+    setSavingContact(true);
+    try {
+      await patch('/v1/me', { allowContact: value });
+    } catch (err: unknown) {
       console.error('Failed to save visibility:', err);
       setForm((f) => ({ ...f, allowContact: !value }));
-    });
+    } finally {
+      setSavingContact(false);
+    }
   };
 
   const onSave = async () => {
+    setSaving(true);
     try {
       await patch('/v1/me', {
         fullName: form.name,
@@ -54,16 +62,19 @@ export function ResponsiveSettings() {
         location: form.location,
         website: form.website || null,
         allowContact: form.allowContact,
+        userType: 'DEVELOPER',
       });
       setSaved('Saved');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
       setSaved(`Save failed: ${msg}`);
+    } finally {
+      setSaving(false);
+      setTimeout(() => setSaved(''), 4000);
     }
-    setTimeout(() => setSaved(''), 4000);
   };
 
-  const props = { form, update, onToggleAllowContact: toggleAllowContact, saved, onSave, loading };
+  const props = { form, update, onToggleAllowContact: toggleAllowContact, saved, onSave, saving, savingContact, loading };
 
   const nav =
     bp === 'mobile' || bp === 'tablet' ? (

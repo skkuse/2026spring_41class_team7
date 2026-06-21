@@ -15,7 +15,7 @@ type TalentItem = {
   location: string;
   website: string | null;
   allowContact: boolean;
-  bestScore: number;
+  bestScore: number | null;
   assessmentCount: number;
   isShortlisted: boolean;
 };
@@ -52,7 +52,7 @@ export default function TalentDirectoryPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <Image src="/logo.svg" alt="Jobclaw" width={120} height={32} priority />
+        <Image src="/logo.png" alt="Jobclaw" width={120} height={32} priority />
         <UserMenu />
       </header>
 
@@ -102,9 +102,13 @@ export default function TalentDirectoryPage() {
                     <td className="px-4 py-3 text-muted-foreground">{item.role}</td>
                     <td className="px-4 py-3 text-muted-foreground">{item.location}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`font-mono font-bold text-lg ${scoreColor(item.bestScore)}`}>
-                        {item.bestScore}
-                      </span>
+                      {item.bestScore != null ? (
+                        <span className={`font-mono font-bold text-lg ${scoreColor(item.bestScore)}`}>
+                          {item.bestScore}
+                        </span>
+                      ) : (
+                        <span className="font-mono text-sm text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center text-muted-foreground">{item.assessmentCount}</td>
                     <td className="px-4 py-3 text-center">

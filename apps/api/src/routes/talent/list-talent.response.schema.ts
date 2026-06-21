@@ -7,7 +7,7 @@ export const talentSummarySchema = z.object({
   location: z.string(),
   website: z.string().nullable(),
   allowContact: z.boolean(),
-  bestScore: z.number().int(),
+  bestScore: z.number().int().nullable(),
   assessmentCount: z.number().int(),
   isShortlisted: z.boolean(),
 });

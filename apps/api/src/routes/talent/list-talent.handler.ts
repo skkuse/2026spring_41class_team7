@@ -11,7 +11,7 @@ type TalentRow = {
   location: string;
   website: string | null;
   allowContact: boolean;
-  bestScore: number;
+  bestScore: number | null;
   assessmentCount: bigint;
 };
 
@@ -30,10 +30,11 @@ export const listTalentHandler: RouteHandler<typeof listTalentRoute, Env> = asyn
         MAX(a."overallScore")::int AS "bestScore",
         COUNT(a.id) AS "assessmentCount"
       FROM "Profile" p
-      JOIN "Assessment" a ON a."userId" = p."userId"
+      LEFT JOIN "Assessment" a ON a."userId" = p."userId"
       WHERE p."userType" = 'DEVELOPER'::"UserType"
+        AND p."allowContact" = true
       GROUP BY p."userId", p."fullName", p.role, p.location, p.website, p."allowContact"
-      ORDER BY "bestScore" DESC
+      ORDER BY "bestScore" DESC NULLS LAST
     `,
     prisma.shortlist.findMany({
       where: { companyUserId },

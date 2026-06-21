@@ -271,21 +271,57 @@ export function UserMenu() {
                 </button>
               </>
             ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  if (companies.length > 0) {
-                    void switchToCompany(companies[0].id);
-                  } else {
-                    setOpen(false);
-                    router.push('/onboarding/company');
-                  }
-                }}
-                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
-              >
-                <Icon icon="solar:buildings-linear" className="text-base text-muted-foreground" />
-                {companies.length > 0 ? 'Switch to Company' : 'Set up Company'}
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (companies.length === 0) {
+                      setOpen(false);
+                      router.push('/onboarding/company');
+                    } else if (companies.length === 1) {
+                      void switchToCompany(companies[0].id);
+                    } else {
+                      setCompanySubmenu((s) => !s);
+                    }
+                  }}
+                  className="flex w-full items-center justify-between gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Icon icon="solar:buildings-linear" className="text-base text-muted-foreground" />
+                    {companies.length === 0 ? 'Set up Company' : 'Switch to Company'}
+                  </span>
+                  {companies.length > 1 && (
+                    <Icon
+                      icon="solar:alt-arrow-right-linear"
+                      className={`text-xs text-muted-foreground transition-transform ${companySubmenu ? 'rotate-90' : ''}`}
+                    />
+                  )}
+                </button>
+
+                {companySubmenu && companies.length > 1 && (
+                  <div className="mx-1.5 mb-1 rounded-lg border border-border bg-background">
+                    {companies.map((co) => (
+                      <button
+                        key={co.id}
+                        type="button"
+                        onClick={() => void switchToCompany(co.id)}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-left font-mono text-xs text-foreground transition-colors hover:bg-muted first:rounded-t-lg"
+                      >
+                        <Icon icon="solar:buildings-linear" className="shrink-0 text-sm text-muted-foreground" />
+                        <span className="truncate">{co.name}</span>
+                      </button>
+                    ))}
+                    <Link
+                      href="/onboarding/company"
+                      onClick={() => { setOpen(false); setCompanySubmenu(false); }}
+                      className="flex w-full items-center gap-2 rounded-b-lg border-t border-border px-3 py-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    >
+                      <Icon icon="solar:add-circle-linear" className="shrink-0 text-sm" />
+                      Add company
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
 
             <div className="my-1 border-t border-border" />

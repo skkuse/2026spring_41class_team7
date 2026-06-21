@@ -102,23 +102,22 @@ export default function TalentDetailPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/80 px-6 py-3 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-          <div className="flex items-center gap-4 min-w-0">
-            <Link href="/company/talent">
-              <Image src="/logo.png" alt="Jobclaw" width={100} height={28} priority />
-            </Link>
-            <nav className="hidden sm:flex items-center gap-1.5 font-mono text-xs text-muted-foreground min-w-0">
-              <Link href="/company/talent" className="hover:text-foreground transition-colors whitespace-nowrap">
-                Talent Directory
-              </Link>
-              <Icon icon="solar:alt-arrow-right-linear" className="shrink-0 text-[10px]" />
-              <span className="truncate text-foreground">{loading ? '…' : displayName}</span>
-            </nav>
-          </div>
+          <Link href="/company/talent">
+            <Image src="/logo.png" alt="Jobclaw" width={100} height={28} priority />
+          </Link>
           <UserMenu />
         </div>
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-10">
+        <nav className="mb-6 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
+          <Link href="/company/talent" className="hover:text-foreground transition-colors">
+            Talent Directory
+          </Link>
+          <Icon icon="solar:alt-arrow-right-linear" className="shrink-0 text-[10px]" />
+          <span className="text-foreground">{loading ? '…' : displayName}</span>
+        </nav>
+
         {loading ? (
           <div className="flex justify-center py-20">
             <Icon icon="solar:spinner-bold" className="animate-spin text-4xl text-primary" />

@@ -51,9 +51,11 @@ export default function TalentDirectoryPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <Image src="/logo.png" alt="Jobclaw" width={120} height={32} priority />
-        <UserMenu />
+      <header className="border-b border-border px-6 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between">
+          <Image src="/logo.png" alt="Jobclaw" width={120} height={32} priority />
+          <UserMenu />
+        </div>
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-10">

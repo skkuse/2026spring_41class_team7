@@ -51,11 +51,8 @@ import { postShortlistHandler } from './shortlist/post-shortlist.handler.js';
 import { postShortlistRoute } from './shortlist/post-shortlist.route.js';
 import { deleteShortlistHandler } from './shortlist/delete-shortlist.handler.js';
 import { deleteShortlistRoute } from './shortlist/delete-shortlist.route.js';
-import { postTruncateHandler } from './admin/post-truncate.js';
 
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
-  // TEMPORARY: one-shot admin truncate — remove after use
-  app.post('/admin/truncate', postTruncateHandler);
   app.openapi(getExampleRoute, getExampleHandler);
   app.openapi(getHealthRoute, getHealthHandler);
   app.openapi(getPublicAssessmentRoute, getPublicAssessmentHandler);

@@ -278,8 +278,6 @@ export function UserMenu() {
                     if (companies.length === 0) {
                       setOpen(false);
                       router.push('/onboarding/company');
-                    } else if (companies.length === 1) {
-                      void switchToCompany(companies[0].id);
                     } else {
                       setCompanySubmenu((s) => !s);
                     }
@@ -290,7 +288,7 @@ export function UserMenu() {
                     <Icon icon="solar:buildings-linear" className="text-base text-muted-foreground" />
                     {companies.length === 0 ? 'Set up Company' : 'Switch to Company'}
                   </span>
-                  {companies.length > 1 && (
+                  {companies.length > 0 && (
                     <Icon
                       icon="solar:alt-arrow-right-linear"
                       className={`text-xs text-muted-foreground transition-transform ${companySubmenu ? 'rotate-90' : ''}`}
@@ -298,7 +296,7 @@ export function UserMenu() {
                   )}
                 </button>
 
-                {companySubmenu && companies.length > 1 && (
+                {companySubmenu && (
                   <div className="mx-1.5 mb-1 rounded-lg border border-border bg-background">
                     {companies.map((co) => (
                       <button

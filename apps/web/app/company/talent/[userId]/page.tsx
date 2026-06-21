@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -85,12 +86,7 @@ export default function TalentDetailPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Icon icon="solar:bolt-bold" className="text-2xl text-primary" />
-          <span className="font-heading text-xl font-black tracking-tighter">
-            Job<span className="text-primary">claw</span>
-          </span>
-        </div>
+        <Image src="/logo.png" alt="Jobclaw" width={120} height={32} priority />
         <Link
           href="/company/talent"
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"

@@ -22,7 +22,11 @@ export const contactTalentHandler: RouteHandler<typeof contactTalentRoute, Env> 
   const [companyProfile, devProfile] = await Promise.all([
     prisma.profile.findUnique({
       where: { userId: companyUserId },
-      select: { userType: true, companyName: true },
+      select: {
+        userType: true,
+        activeCompanyId: true,
+        companies: { select: { id: true, name: true } },
+      },
     }),
     prisma.profile.findUnique({
       where: { userId: devUserId },
@@ -42,28 +46,27 @@ export const contactTalentHandler: RouteHandler<typeof contactTalentRoute, Env> 
     return c.json({ message: 'Developer has not enabled contact.' }, 403);
   }
 
-  const resend = getResendClient();
-  if (!resend) {
-    return c.json({ message: 'Email service unavailable.' }, 503);
-  }
-
-  const companyName = companyProfile.companyName ?? 'A company';
+  const activeCompany = companyProfile.companies.find((co) => co.id === companyProfile.activeCompanyId);
+  const companyName = activeCompany?.name ?? 'A company';
   const safeCompanyName = escapeHtml(companyName);
   const safeMessage = escapeHtml(message);
 
-  const { error: sendError } = await resend.emails.send({
-    from: 'Jobclaw <noreply@jobclaw.fyi>',
-    to: devProfile.email,
-    subject: `[Jobclaw] ${safeCompanyName} is interested in your work`,
-    html: `
-      <p>Hi,</p>
-      <p><strong>${safeCompanyName}</strong> found your Jobclaw profile and wants to connect.</p>
-      <blockquote style="border-left:3px solid #ccc;padding-left:1em;color:#555">${safeMessage}</blockquote>
-      <p>You can manage contact preferences in your <a href="https://jobclaw.fyi/settings">Jobclaw settings</a>.</p>
-    `,
-  });
-  if (sendError) {
-    return c.json({ message: 'Email service unavailable.' }, 503);
+  const resend = getResendClient();
+  if (resend) {
+    const { error: sendError } = await resend.emails.send({
+      from: 'Jobclaw <noreply@jobclaw.fyi>',
+      to: devProfile.email,
+      subject: `[Jobclaw] ${safeCompanyName} is interested in your work`,
+      html: `
+        <p>Hi,</p>
+        <p><strong>${safeCompanyName}</strong> found your Jobclaw profile and wants to connect.</p>
+        <blockquote style="border-left:3px solid #ccc;padding-left:1em;color:#555">${safeMessage}</blockquote>
+        <p>You can manage contact preferences in your <a href="https://jobclaw.fyi/settings">Jobclaw settings</a>.</p>
+      `,
+    });
+    if (sendError) {
+      return c.json({ message: 'Email service unavailable.' }, 503);
+    }
   }
 
   return c.json({ sent: true }, 200);

@@ -9,7 +9,7 @@ function Skeleton({ className }: { className?: string }) {
 export function SettingsDesktop({ form, update, onToggleAllowContact, saved, onSave, saving, savingContact, loading }: SettingsFormProps) {
   if (loading) {
     return (
-      <main className="mx-auto min-h-screen max-w-4xl p-6 md:p-10">
+      <main className="mx-auto min-h-screen max-w-4xl px-6 py-10">
         <Skeleton className="mb-8 h-9 w-52" />
         <div className="grid gap-4 md:grid-cols-2">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -23,7 +23,7 @@ export function SettingsDesktop({ form, update, onToggleAllowContact, saved, onS
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-4xl p-6 md:p-10">
+    <main className="mx-auto min-h-screen max-w-4xl px-6 py-10">
       <h1 className="mb-8 text-3xl font-bold">Identity Settings</h1>
       <div className="grid gap-4 md:grid-cols-2">
         <input

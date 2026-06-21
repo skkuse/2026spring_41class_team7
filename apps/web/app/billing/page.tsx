@@ -116,7 +116,7 @@ export default function BillingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground p-6 md:p-10">
+    <main className="min-h-screen bg-background text-foreground px-6 py-10">
       <div className="max-w-3xl mx-auto space-y-6">
         <h1 className="text-3xl font-bold">Jobclaw Billing</h1>
 

@@ -5,51 +5,45 @@ export const contentType = 'image/png';
 export const size = { width: 1200, height: 630 };
 export const alt = 'Jobclaw — AI portfolio for developers';
 
-const APP_BASE = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.jobclaw.fyi';
-
-async function fetchLogoBase64(): Promise<string | null> {
-  try {
-    const r = await fetch(`${APP_BASE}/logo.png`, { cache: 'no-store' });
-    if (!r.ok) return null;
-    const buf = await r.arrayBuffer();
-    const bytes = new Uint8Array(buf);
-    let bin = '';
-    for (let i = 0; i < bytes.byteLength; i++) bin += String.fromCharCode(bytes[i]);
-    return `data:image/png;base64,${btoa(bin)}`;
-  } catch {
-    return null;
-  }
-}
-
 const SCORE = 94;
 const R = 80;
 const CIRC = 2 * Math.PI * R;
 const FILLED = (SCORE / 100) * CIRC;
 
-export default async function OGImage() {
-  const logoSrc = await fetchLogoBase64();
-
+export default function OGImage() {
   return new ImageResponse(
     (
       <div
         style={{
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(140deg, #09090f 0%, #0e0e1a 60%, #09090f 100%)',
+          background: '#faf9f7',
           display: 'flex',
           fontFamily: 'monospace',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {/* Grid */}
+        {/* Subtle dot grid */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
+            backgroundImage: 'radial-gradient(circle, rgba(17,17,24,0.08) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+
+        {/* Warm glow top-right */}
+        <div
+          style={{
+            position: 'absolute',
+            top: -100,
+            right: -60,
+            width: 460,
+            height: 460,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(201,100,66,0.10) 0%, transparent 70%)',
           }}
         />
 
@@ -64,32 +58,24 @@ export default async function OGImage() {
             position: 'relative',
           }}
         >
-          {/* Logo — always show text wordmark; overlay image if available */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {logoSrc ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={logoSrc}
-                alt="Jobclaw"
-                style={{ height: '30px', width: 'auto', filter: 'brightness(0) invert(1)' }}
-              />
-            ) : (
-              <span
-                style={{
-                  color: '#f0f0f8',
-                  fontSize: 20,
-                  fontWeight: 800,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                JOBCLAW
-              </span>
-            )}
+          {/* Logo — text wordmark */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#c96442', flexShrink: 0 }} />
+            <span
+              style={{
+                fontSize: 18,
+                fontWeight: 800,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#111118',
+              }}
+            >
+              JOB<span style={{ color: '#c96442' }}>CLAW</span>
+            </span>
           </div>
 
           {/* Middle */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Badge */}
             <div
               style={{
@@ -98,17 +84,17 @@ export default async function OGImage() {
                 gap: 7,
                 width: 'fit-content',
                 padding: '5px 14px',
-                border: '1px solid rgba(201,100,66,0.35)',
+                border: '1px solid rgba(201,100,66,0.4)',
                 borderRadius: 3,
                 background: 'rgba(201,100,66,0.08)',
-                color: '#e07a52',
+                color: '#c96442',
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
               }}
             >
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#c96442', flexShrink: 0 }} />
+              <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#c96442', flexShrink: 0 }} />
               AI Code Assessment
             </div>
 
@@ -121,7 +107,7 @@ export default async function OGImage() {
                 letterSpacing: '-0.03em',
                 display: 'flex',
                 flexDirection: 'column',
-                color: '#f0f0f8',
+                color: '#111118',
               }}
             >
               <span>Your code,</span>
@@ -130,7 +116,7 @@ export default async function OGImage() {
             </div>
 
             {/* Subline */}
-            <div style={{ fontSize: 16, color: 'rgba(240,240,248,0.4)', lineHeight: 1.5 }}>
+            <div style={{ fontSize: 16, color: 'rgba(17,17,24,0.45)', lineHeight: 1.5 }}>
               Connect GitHub · run an AI assessment · land in the talent directory.
             </div>
           </div>
@@ -145,10 +131,10 @@ export default async function OGImage() {
                   alignItems: 'center',
                   gap: 6,
                   padding: '8px 16px',
-                  border: '1px solid rgba(240,240,248,0.08)',
+                  border: '1px solid rgba(17,17,24,0.12)',
                   borderRadius: 4,
-                  background: 'rgba(255,255,255,0.03)',
-                  color: 'rgba(240,240,248,0.55)',
+                  background: 'rgba(17,17,24,0.04)',
+                  color: 'rgba(17,17,24,0.5)',
                   fontSize: 12,
                   fontWeight: 600,
                   letterSpacing: '0.06em',
@@ -165,7 +151,7 @@ export default async function OGImage() {
         <div
           style={{
             width: 1,
-            background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent)',
+            background: 'linear-gradient(to bottom, transparent, rgba(17,17,24,0.1) 20%, rgba(17,17,24,0.1) 80%, transparent)',
             flexShrink: 0,
           }}
         />
@@ -184,26 +170,10 @@ export default async function OGImage() {
             gap: 20,
           }}
         >
-          {/* Glow */}
-          <div
-            style={{
-              position: 'absolute',
-              width: 280,
-              height: 280,
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(201,100,66,0.15) 0%, transparent 70%)',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              margin: 'auto',
-            }}
-          />
-
           {/* Score ring */}
           <div style={{ position: 'relative', width: 180, height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="180" height="180" style={{ position: 'absolute', top: 0, left: 0, transform: 'rotate(-90deg)' }}>
-              <circle cx="90" cy="90" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" />
+              <circle cx="90" cy="90" r={R} fill="none" stroke="rgba(201,100,66,0.15)" strokeWidth="10" />
               <circle
                 cx="90"
                 cy="90"
@@ -228,16 +198,16 @@ export default async function OGImage() {
                 justifyContent: 'center',
               }}
             >
-              <span style={{ fontSize: 52, fontWeight: 800, color: '#f0f0f8', lineHeight: 1, letterSpacing: '-0.04em' }}>
+              <span style={{ fontSize: 52, fontWeight: 800, color: '#111118', lineHeight: 1, letterSpacing: '-0.04em' }}>
                 {SCORE}
               </span>
-              <span style={{ fontSize: 13, color: 'rgba(240,240,248,0.38)', letterSpacing: '0.06em', fontWeight: 600, marginTop: 4 }}>
+              <span style={{ fontSize: 13, color: 'rgba(17,17,24,0.38)', letterSpacing: '0.06em', fontWeight: 600, marginTop: 4 }}>
                 / 100
               </span>
             </div>
           </div>
 
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,240,248,0.35)', textAlign: 'center' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(17,17,24,0.35)', textAlign: 'center' }}>
             Overall Score
           </div>
 
@@ -255,10 +225,10 @@ export default async function OGImage() {
               width: '100%',
             }}
           >
-            <span style={{ fontSize: 20, fontWeight: 800, color: '#e07a52', letterSpacing: '-0.01em' }}>
+            <span style={{ fontSize: 20, fontWeight: 800, color: '#c96442', letterSpacing: '-0.01em' }}>
               Top 3%
             </span>
-            <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(224,122,82,0.5)', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(201,100,66,0.5)', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
               Global Rank
             </span>
           </div>
@@ -271,7 +241,7 @@ export default async function OGImage() {
             bottom: 24,
             right: 28,
             fontSize: 11,
-            color: 'rgba(240,240,248,0.15)',
+            color: 'rgba(17,17,24,0.2)',
             letterSpacing: '0.06em',
           }}
         >

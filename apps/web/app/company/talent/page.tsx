@@ -1,12 +1,11 @@
 'use client';
 
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { CompanyHeader } from '../../../components/company/company-header';
 import { useApi } from '../../../lib/api-context';
-import { UserMenu } from '../../user-menu';
 
 type TalentItem = {
   userId: string;
@@ -51,12 +50,7 @@ export default function TalentDirectoryPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <Image src="/logo.png" alt="Jobclaw" width={120} height={32} priority />
-          <UserMenu />
-        </div>
-      </header>
+      <CompanyHeader />
 
       <main className="mx-auto max-w-5xl px-6 py-10">
         <div className="mb-8">

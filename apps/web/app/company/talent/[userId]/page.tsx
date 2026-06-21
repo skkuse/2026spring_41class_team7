@@ -1,13 +1,12 @@
 'use client';
 
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { CompanyHeader } from '../../../../components/company/company-header';
 import { useApi } from '../../../../lib/api-context';
-import { UserMenu } from '../../../user-menu';
 
 type Assessment = {
   id: string;
@@ -99,15 +98,7 @@ export default function TalentDetailPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-border bg-background/80 px-6 py-3 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-          <Link href="/company/talent">
-            <Image src="/logo.png" alt="Jobclaw" width={100} height={28} priority />
-          </Link>
-          <UserMenu />
-        </div>
-      </header>
+      <CompanyHeader />
 
       <main className="mx-auto max-w-3xl px-6 py-10">
         <nav className="mb-6 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">

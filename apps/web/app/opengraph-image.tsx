@@ -21,11 +21,11 @@ async function fetchLogoBase64(): Promise<string | null> {
   }
 }
 
-const PILLS = [
-  { label: 'GitHub-powered', icon: '⚡' },
-  { label: 'AI Assessment', icon: '🤖' },
-  { label: 'Talent Directory', icon: '🎯' },
-];
+const SCORE = 94;
+const SCORE_PCT = SCORE / 100;
+const R = 80;
+const CIRC = 2 * Math.PI * R;
+const FILLED = SCORE_PCT * CIRC;
 
 export default async function OGImage() {
   const logoSrc = await fetchLogoBase64();
@@ -36,163 +36,236 @@ export default async function OGImage() {
         style={{
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(140deg, #0d0d14 0%, #121220 55%, #0d0d14 100%)',
+          background: 'linear-gradient(140deg, #09090f 0%, #0e0e1a 60%, #09090f 100%)',
           display: 'flex',
-          flexDirection: 'column',
-          padding: '56px 72px',
-          fontFamily: 'sans-serif',
+          fontFamily: 'monospace',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {/* Grid background */}
+        {/* Grid */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+              'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
             backgroundSize: '60px 60px',
           }}
         />
 
-        {/* Glow accent */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-120px',
-            right: '-80px',
-            width: '500px',
-            height: '500px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(201,100,66,0.18) 0%, transparent 70%)',
-          }}
-        />
-
-        {/* Logo top-left */}
-        <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-          {logoSrc ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={logoSrc}
-              alt="Jobclaw"
-              style={{ height: '34px', width: 'auto', filter: 'brightness(0) invert(1)' }}
-            />
-          ) : (
-            <span
-              style={{
-                color: 'white',
-                fontSize: '20px',
-                fontWeight: 800,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-              }}
-            >
-              JOBCLAW
-            </span>
-          )}
-        </div>
-
-        {/* Center content */}
+        {/* Left panel */}
         <div
           style={{
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
+            padding: '56px 64px',
             position: 'relative',
-            gap: '24px',
           }}
         >
-          {/* Badge */}
-          <div style={{ display: 'flex' }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#c96442', flexShrink: 0 }} />
+            {logoSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoSrc}
+                alt="Jobclaw"
+                style={{ height: '28px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+              />
+            ) : (
+              <span style={{ color: '#f0f0f8', fontSize: 18, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                JOB<span style={{ color: '#c96442' }}>CLAW</span>
+              </span>
+            )}
+          </div>
+
+          {/* Middle */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            {/* Badge */}
             <div
               style={{
-                background: 'rgba(201,100,66,0.15)',
-                border: '1px solid rgba(201,100,66,0.4)',
-                borderRadius: '100px',
-                padding: '6px 18px',
-                color: '#e87a52',
-                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 7,
+                width: 'fit-content',
+                padding: '5px 14px',
+                border: '1px solid rgba(201,100,66,0.35)',
+                borderRadius: 3,
+                background: 'rgba(201,100,66,0.08)',
+                color: '#e07a52',
+                fontSize: 11,
                 fontWeight: 700,
-                letterSpacing: '0.1em',
+                letterSpacing: '0.14em',
                 textTransform: 'uppercase',
               }}
             >
-              For Developers
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#c96442', flexShrink: 0 }} />
+              AI Code Assessment
+            </div>
+
+            {/* Headline */}
+            <div
+              style={{
+                fontSize: 62,
+                fontWeight: 800,
+                color: '#f0f0f8',
+                lineHeight: 1.05,
+                letterSpacing: '-0.03em',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <span>Your code,</span>
+              <span style={{ color: '#c96442' }}>scored.</span>
+              <span>Get hired.</span>
+            </div>
+
+            {/* Subline */}
+            <div style={{ fontSize: 16, color: 'rgba(240,240,248,0.4)', lineHeight: 1.5, letterSpacing: '0.01em' }}>
+              Connect GitHub · run an AI assessment · land in the talent directory.
             </div>
           </div>
 
-          {/* Headline */}
-          <div
-            style={{
-              fontSize: '68px',
-              fontWeight: 800,
-              color: 'white',
-              lineHeight: 1.05,
-              letterSpacing: '-0.03em',
-            }}
-          >
-            Your code, scored.{'\n'}
-            <span style={{ color: '#c96442' }}>Get hired faster.</span>
-          </div>
-
-          {/* Subline */}
-          <div
-            style={{
-              fontSize: '22px',
-              color: 'rgba(255,255,255,0.45)',
-              fontWeight: 400,
-              letterSpacing: '-0.01em',
-              lineHeight: 1.4,
-            }}
-          >
-            Connect GitHub · run AI assessments · land in the talent directory.
-          </div>
-
-          {/* Pills */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
-            {PILLS.map((p) => (
+          {/* Chips */}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {['⚡ GitHub-powered', '🤖 AI Assessment', '🎯 Talent Directory'].map((label) => (
               <div
-                key={p.label}
+                key={label}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '10px',
-                  padding: '10px 20px',
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '15px',
+                  gap: 6,
+                  padding: '8px 16px',
+                  border: '1px solid rgba(240,240,248,0.08)',
+                  borderRadius: 4,
+                  background: 'rgba(255,255,255,0.03)',
+                  color: 'rgba(240,240,248,0.55)',
+                  fontSize: 12,
                   fontWeight: 600,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
                 }}
               >
-                <span style={{ fontSize: '18px' }}>{p.icon}</span>
-                {p.label}
+                {label}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Bottom URL */}
+        {/* Divider */}
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
+            width: 1,
+            background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent)',
+            flexShrink: 0,
             position: 'relative',
           }}
+        />
+
+        {/* Right panel — score ring */}
+        <div
+          style={{
+            width: 320,
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '56px 40px',
+            position: 'relative',
+            gap: 20,
+          }}
         >
-          <span
+          {/* Glow */}
+          <div
             style={{
-              color: 'rgba(255,255,255,0.2)',
-              fontSize: '14px',
-              letterSpacing: '0.04em',
+              position: 'absolute',
+              width: 280,
+              height: 280,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%)',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+
+          {/* Score ring via SVG */}
+          <div style={{ position: 'relative', width: 180, height: 180, display: 'flex' }}>
+            <svg width="180" height="180" style={{ transform: 'rotate(-90deg)' }}>
+              <circle cx="90" cy="90" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" />
+              <circle
+                cx="90"
+                cy="90"
+                r={R}
+                fill="none"
+                stroke="#6c63ff"
+                strokeWidth="10"
+                strokeDasharray={`${FILLED} ${CIRC - FILLED}`}
+                strokeLinecap="round"
+              />
+            </svg>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ fontSize: 52, fontWeight: 800, color: '#f0f0f8', lineHeight: 1, letterSpacing: '-0.04em' }}>
+                {SCORE}
+              </span>
+              <span style={{ fontSize: 13, color: 'rgba(240,240,248,0.38)', letterSpacing: '0.06em', fontWeight: 600 }}>
+                / 100
+              </span>
+            </div>
+          </div>
+
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,240,248,0.38)', textAlign: 'center' }}>
+            Overall Score
+          </div>
+
+          {/* Rank chip */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 3,
+              padding: '12px 24px',
+              border: '1px solid rgba(108,99,255,0.3)',
+              borderRadius: 4,
+              background: 'rgba(108,99,255,0.07)',
+              width: '100%',
             }}
           >
-            jobclaw.fyi
-          </span>
+            <span style={{ fontSize: 20, fontWeight: 800, color: '#9d98f5', letterSpacing: '-0.01em' }}>
+              Top 3%
+            </span>
+            <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(157,152,245,0.5)', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+              Global Rank
+            </span>
+          </div>
+        </div>
+
+        {/* Bottom-right watermark */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 24,
+            right: 28,
+            fontSize: 11,
+            color: 'rgba(240,240,248,0.15)',
+            letterSpacing: '0.06em',
+          }}
+        >
+          jobclaw.fyi
         </div>
       </div>
     ),

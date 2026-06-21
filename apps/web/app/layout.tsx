@@ -49,6 +49,20 @@ export const metadata = {
     icon: '/logo-glyph.png',
     apple: '/logo-glyph.png',
   },
+  openGraph: {
+    title: 'Jobclaw — AI portfolio for developers',
+    description: 'Connect GitHub · run AI assessments · land in the talent directory.',
+    url: 'https://www.jobclaw.fyi',
+    siteName: 'Jobclaw',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jobclaw — AI portfolio for developers',
+    description: 'Connect GitHub · run AI assessments · land in the talent directory.',
+    images: ['/opengraph-image'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -71,23 +71,20 @@ export default async function OGImage() {
               <img
                 src={logoSrc}
                 alt="Jobclaw"
-                style={{ height: 30, width: 'auto' }}
+                style={{ height: '30px', width: 'auto', filter: 'brightness(0) invert(1)' }}
               />
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#6c63ff', flexShrink: 0 }} />
-                <span
-                  style={{
-                    color: '#f0f0f8',
-                    fontSize: 20,
-                    fontWeight: 800,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  JOB<span style={{ color: '#6c63ff' }}>CLAW</span>
-                </span>
-              </div>
+              <span
+                style={{
+                  color: '#f0f0f8',
+                  fontSize: 20,
+                  fontWeight: 800,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                JOBCLAW
+              </span>
             )}
           </div>
 
@@ -101,17 +98,17 @@ export default async function OGImage() {
                 gap: 7,
                 width: 'fit-content',
                 padding: '5px 14px',
-                border: '1px solid rgba(108,99,255,0.35)',
+                border: '1px solid rgba(201,100,66,0.35)',
                 borderRadius: 3,
-                background: 'rgba(108,99,255,0.08)',
-                color: '#9d98f5',
+                background: 'rgba(201,100,66,0.08)',
+                color: '#e07a52',
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
               }}
             >
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#6c63ff', flexShrink: 0 }} />
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#c96442', flexShrink: 0 }} />
               AI Code Assessment
             </div>
 
@@ -128,7 +125,7 @@ export default async function OGImage() {
               }}
             >
               <span>Your code,</span>
-              <span style={{ color: '#6c63ff' }}>scored.</span>
+              <span style={{ color: '#c96442' }}>scored.</span>
               <span>Get hired.</span>
             </div>
 
@@ -194,7 +191,7 @@ export default async function OGImage() {
               width: 280,
               height: 280,
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(201,100,66,0.15) 0%, transparent 70%)',
               top: 0,
               left: 0,
               right: 0,
@@ -212,7 +209,7 @@ export default async function OGImage() {
                 cy="90"
                 r={R}
                 fill="none"
-                stroke="#6c63ff"
+                stroke="#c96442"
                 strokeWidth="10"
                 strokeDasharray={`${FILLED} ${CIRC - FILLED}`}
                 strokeLinecap="round"
@@ -252,16 +249,16 @@ export default async function OGImage() {
               alignItems: 'center',
               gap: 3,
               padding: '12px 24px',
-              border: '1px solid rgba(108,99,255,0.3)',
+              border: '1px solid rgba(201,100,66,0.3)',
               borderRadius: 4,
-              background: 'rgba(108,99,255,0.07)',
+              background: 'rgba(201,100,66,0.07)',
               width: '100%',
             }}
           >
-            <span style={{ fontSize: 20, fontWeight: 800, color: '#9d98f5', letterSpacing: '-0.01em' }}>
+            <span style={{ fontSize: 20, fontWeight: 800, color: '#e07a52', letterSpacing: '-0.01em' }}>
               Top 3%
             </span>
-            <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(157,152,245,0.5)', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(224,122,82,0.5)', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
               Global Rank
             </span>
           </div>

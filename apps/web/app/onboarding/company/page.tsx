@@ -2,40 +2,26 @@
 
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useApi } from '../../../lib/api-context';
 import { useProfile } from '../../../lib/profile-context';
 
 export default function CompanyOnboardingPage() {
   const router = useRouter();
-  const { patch } = useApi();
-  const { profile, isLoading, refetch } = useProfile();
+  const { post } = useApi();
+  const { isLoading, refetch } = useProfile();
   const [companyName, setCompanyName] = useState('');
   const [industry, setIndustry] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
-  // Already a company — go straight to talent
-  useEffect(() => {
-    if (!isLoading && profile?.userType === 'COMPANY') {
-      router.replace('/company/talent');
-    }
-  }, [isLoading, profile, router]);
-
-  // Pre-fill if they have a company name already
-  useEffect(() => {
-    if (profile?.companyName) setCompanyName(profile.companyName);
-    if (profile?.industry) setIndustry(profile.industry);
-  }, [profile]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!companyName.trim()) return;
     setSubmitting(true);
     try {
-      await patch('/v1/me', {
-        userType: 'COMPANY',
-        companyName: companyName.trim(),
+      await post('/v1/companies', {
+        name: companyName.trim(),
         industry: industry.trim() || undefined,
       });
       refetch();

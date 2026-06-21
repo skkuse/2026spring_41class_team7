@@ -48,6 +48,7 @@ export function UserMenu() {
   const { patch } = useApi();
   const [email, setEmail] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [companySubmenu, setCompanySubmenu] = useState(false);
   const [switching, setSwitching] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -72,7 +73,10 @@ export function UserMenu() {
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+        setCompanySubmenu(false);
+      }
     }
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
@@ -80,7 +84,7 @@ export function UserMenu() {
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') { setOpen(false); setCompanySubmenu(false); }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -108,6 +112,19 @@ export function UserMenu() {
     }
   }
 
+  async function switchToCompany(companyId: string) {
+    setSwitching(true);
+    setOpen(false);
+    setCompanySubmenu(false);
+    try {
+      await patch('/v1/me', { userType: 'COMPANY', activeCompanyId: companyId });
+      refetch();
+      router.push('/company/talent');
+    } finally {
+      setSwitching(false);
+    }
+  }
+
   if (!email) {
     return (
       <div className="flex items-center gap-2">
@@ -122,18 +139,21 @@ export function UserMenu() {
   }
 
   const isCompany = profile?.userType === 'COMPANY';
-  const displayName = isCompany ? (profile?.companyName || profile?.fullName) : profile?.fullName || email.split('@')[0];
+  const companies = profile?.companies ?? [];
+  const displayName = isCompany
+    ? (profile?.activeCompany?.name || profile?.fullName)
+    : profile?.fullName || email.split('@')[0];
 
   return (
     <div ref={ref} className="relative">
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => { setOpen((o) => !o); setCompanySubmenu(false); }}
         disabled={switching}
         className="flex items-center gap-1.5 rounded-full border border-transparent p-1 pr-2 transition-colors hover:border-border hover:bg-muted disabled:opacity-60"
         aria-label="Account menu"
       >
-        <Avatar avatarUrl={profile?.avatarUrl} fullName={isCompany ? (profile?.companyName || profile?.fullName) : profile?.fullName} size={28} />
+        <Avatar avatarUrl={profile?.avatarUrl} fullName={isCompany ? (profile?.activeCompany?.name || profile?.fullName) : profile?.fullName} size={28} />
         {switching ? (
           <Icon icon="solar:spinner-bold" className="animate-spin text-xs text-muted-foreground" />
         ) : (
@@ -148,7 +168,7 @@ export function UserMenu() {
         <div className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-border bg-card shadow-2xl">
           {/* Identity header */}
           <div className="flex items-center gap-3 border-b border-border px-4 py-3">
-            <Avatar avatarUrl={profile?.avatarUrl} fullName={isCompany ? (profile?.companyName || profile?.fullName) : profile?.fullName} size={38} />
+            <Avatar avatarUrl={profile?.avatarUrl} fullName={isCompany ? (profile?.activeCompany?.name || profile?.fullName) : profile?.fullName} size={38} />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
                 <p className="truncate font-mono text-xs font-bold text-foreground">{displayName}</p>
@@ -164,8 +184,8 @@ export function UserMenu() {
                 )}
               </div>
               <p className="truncate font-mono text-[10px] text-muted-foreground">{email}</p>
-              {isCompany && profile?.industry && (
-                <p className="truncate font-mono text-[10px] text-muted-foreground/60">{profile.industry}</p>
+              {isCompany && profile?.activeCompany?.industry && (
+                <p className="truncate font-mono text-[10px] text-muted-foreground/60">{profile.activeCompany.industry}</p>
               )}
             </div>
           </div>
@@ -194,23 +214,78 @@ export function UserMenu() {
             <div className="my-1 border-t border-border" />
 
             {isCompany ? (
+              <>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setCompanySubmenu((s) => !s)}
+                    className="flex w-full items-center justify-between gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Icon icon="solar:buildings-linear" className="text-base text-muted-foreground" />
+                      Switch Company
+                    </span>
+                    <Icon
+                      icon="solar:alt-arrow-right-linear"
+                      className={`text-xs text-muted-foreground transition-transform ${companySubmenu ? 'rotate-90' : ''}`}
+                    />
+                  </button>
+
+                  {companySubmenu && (
+                    <div className="mx-1.5 mb-1 rounded-lg border border-border bg-background">
+                      {companies.map((co) => (
+                        <button
+                          key={co.id}
+                          type="button"
+                          onClick={() => void switchToCompany(co.id)}
+                          className={`flex w-full items-center gap-2 px-3 py-2 text-left font-mono text-xs transition-colors hover:bg-muted first:rounded-t-lg ${
+                            co.id === profile?.activeCompanyId ? 'text-primary' : 'text-foreground'
+                          }`}
+                        >
+                          {co.id === profile?.activeCompanyId
+                            ? <Icon icon="solar:check-circle-bold" className="shrink-0 text-sm text-primary" />
+                            : <Icon icon="solar:buildings-linear" className="shrink-0 text-sm text-muted-foreground" />
+                          }
+                          <span className="truncate">{co.name}</span>
+                        </button>
+                      ))}
+                      <Link
+                        href="/onboarding/company"
+                        onClick={() => { setOpen(false); setCompanySubmenu(false); }}
+                        className="flex w-full items-center gap-2 rounded-b-lg border-t border-border px-3 py-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                      >
+                        <Icon icon="solar:add-circle-linear" className="shrink-0 text-sm" />
+                        Add company
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => void switchToDeveloper()}
+                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
+                >
+                  <Icon icon="solar:code-linear" className="text-base text-muted-foreground" />
+                  Switch to Developer
+                </button>
+              </>
+            ) : (
               <button
                 type="button"
-                onClick={() => void switchToDeveloper()}
+                onClick={() => {
+                  if (companies.length > 0) {
+                    void switchToCompany(companies[0].id);
+                  } else {
+                    setOpen(false);
+                    router.push('/onboarding/company');
+                  }
+                }}
                 className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
               >
-                <Icon icon="solar:code-linear" className="text-base text-muted-foreground" />
-                Switch to Developer
-              </button>
-            ) : (
-              <Link
-                href="/onboarding/company"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
-              >
                 <Icon icon="solar:buildings-linear" className="text-base text-muted-foreground" />
-                Switch to Company
-              </Link>
+                {companies.length > 0 ? 'Switch to Company' : 'Set up Company'}
+              </button>
             )}
 
             <div className="my-1 border-t border-border" />

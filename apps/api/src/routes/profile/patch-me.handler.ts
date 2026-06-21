@@ -25,14 +25,14 @@ export const patchMeHandler: RouteHandler<typeof patchMeRoute, Env> = async (c) 
     where: { userId },
     data: {
       ...(body.userType !== undefined && { userType: body.userType }),
-      ...(body.companyName !== undefined && { companyName: body.companyName }),
-      ...(body.industry !== undefined && { industry: body.industry }),
+      ...(body.activeCompanyId !== undefined && { activeCompanyId: body.activeCompanyId }),
+      // Clear activeCompanyId when switching back to developer
+      ...(body.userType === 'DEVELOPER' && { activeCompanyId: null }),
       ...(body.allowContact !== undefined && { allowContact: body.allowContact }),
     },
     select: {
       userType: true,
-      companyName: true,
-      industry: true,
+      activeCompanyId: true,
       allowContact: true,
     },
   });

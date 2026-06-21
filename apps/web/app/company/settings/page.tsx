@@ -19,20 +19,22 @@ export default function CompanySettingsPage() {
 
   useEffect(() => {
     if (!profile) return;
-    setCompanyName(profile.companyName ?? '');
-    setIndustry(profile.industry ?? '');
+    setCompanyName(profile.activeCompany?.name ?? '');
+    setIndustry(profile.activeCompany?.industry ?? '');
     setAllowContact(profile.allowContact);
   }, [profile]);
 
   async function handleSave() {
-    if (!companyName.trim()) return;
+    if (!companyName.trim() || !profile?.activeCompanyId) return;
     setSaving(true);
     try {
-      await patch('/v1/me', {
-        companyName: companyName.trim(),
-        industry: industry.trim() || undefined,
-        allowContact,
-      });
+      await Promise.all([
+        patch(`/v1/companies/${profile.activeCompanyId}`, {
+          name: companyName.trim(),
+          industry: industry.trim() || undefined,
+        }),
+        patch('/v1/me', { allowContact }),
+      ]);
       refetch();
       setSaved(`Saved at ${new Date().toLocaleTimeString()}`);
     } finally {

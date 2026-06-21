@@ -157,6 +157,16 @@ export function UserMenu() {
               <Icon icon="hugeicons:settings-01" className="text-base text-muted-foreground" />
               Settings
             </Link>
+            {profile?.userType !== 'COMPANY' && (
+              <Link
+                href="/onboarding/company"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 font-mono text-xs text-foreground transition-colors hover:bg-muted"
+              >
+                <Icon icon="solar:buildings-linear" className="text-base text-muted-foreground" />
+                Switch to Company
+              </Link>
+            )}
             <div className="my-1 border-t border-border" />
             <button
               type="button"

@@ -45,7 +45,7 @@ export default function CompanySettingsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <Image src="/logo.svg" alt="Jobclaw" width={120} height={32} priority />
+        <Image src="/logo.png" alt="Jobclaw" width={120} height={32} priority />
         <UserMenu />
       </header>
 

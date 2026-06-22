@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { CompanyHeader } from '../../../../components/company/company-header';
 import { useApi } from '../../../../lib/api-context';
 
 type Assessment = {
@@ -29,6 +30,22 @@ type TalentDetail = {
   isShortlisted: boolean;
   assessments: Assessment[];
 };
+
+function initials(name: string) {
+  return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('') || '?';
+}
+
+function scoreColor(score: number) {
+  if (score >= 80) return 'text-green-400';
+  if (score >= 60) return 'text-yellow-400';
+  return 'text-red-400';
+}
+
+function scoreBorderColor(score: number) {
+  if (score >= 80) return 'border-green-400/40';
+  if (score >= 60) return 'border-yellow-400/40';
+  return 'border-red-400/40';
+}
 
 export default function TalentDetailPage() {
   const { userId } = useParams<{ userId: string }>();
@@ -76,164 +93,180 @@ export default function TalentDetailPage() {
     }
   }
 
-  function scoreColor(score: number) {
-    if (score >= 80) return 'text-green-400';
-    if (score >= 60) return 'text-yellow-400';
-    return 'text-red-400';
-  }
+  const displayName = talent?.fullName || 'Anonymous Developer';
+  const bestScore = talent?.assessments[0]?.overallScore ?? null;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Icon icon="solar:bolt-bold" className="text-2xl text-primary" />
-          <span className="font-heading text-xl font-black tracking-tighter">
-            Job<span className="text-primary">claw</span>
-          </span>
-        </div>
-        <Link
-          href="/company/talent"
-          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <Icon icon="solar:arrow-left-linear" />
-          Back to directory
-        </Link>
-      </header>
+      <CompanyHeader />
 
       <main className="mx-auto max-w-3xl px-6 py-10">
+        <nav className="mb-6 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
+          <Link href="/company/talent" className="hover:text-foreground transition-colors">
+            Talent Directory
+          </Link>
+          <Icon icon="solar:alt-arrow-right-linear" className="shrink-0 text-[10px]" />
+          <span className="text-foreground">{loading ? '…' : displayName}</span>
+        </nav>
+
         {loading ? (
           <div className="flex justify-center py-20">
             <Icon icon="solar:spinner-bold" className="animate-spin text-4xl text-primary" />
           </div>
         ) : notFound || !talent ? (
-          <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
-            Developer not found.
+          <div className="rounded-xl border border-border bg-card p-12 text-center">
+            <Icon icon="solar:user-cross-linear" className="mx-auto mb-3 text-4xl text-muted-foreground" />
+            <p className="text-muted-foreground">Developer not found.</p>
+            <Link href="/company/talent" className="mt-4 inline-block font-mono text-xs text-primary hover:underline">
+              ← Back to Talent Directory
+            </Link>
           </div>
         ) : (
-          <div className="space-y-8">
-            {/* Profile card */}
-            <div className="rounded-xl border border-border bg-card p-6 flex items-start justify-between gap-4">
-              <div className="space-y-1">
-                <h1 className="text-2xl font-bold">{talent.fullName}</h1>
-                <p className="text-muted-foreground">{talent.role}</p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  {talent.location && (
-                    <span className="flex items-center gap-1">
-                      <Icon icon="solar:map-point-linear" />
-                      {talent.location}
-                    </span>
+          <div className="space-y-6">
+            {/* Profile hero */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+                {/* Avatar */}
+                <div className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-primary/15 font-mono text-2xl font-black text-primary">
+                  {initials(displayName)}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0 space-y-1">
+                  <h1 className="text-2xl font-bold leading-tight">{displayName}</h1>
+                  {talent.role && (
+                    <p className="text-muted-foreground">{talent.role}</p>
                   )}
-                  {talent.website && (
-                    <a
-                      href={talent.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 hover:text-primary"
-                    >
-                      <Icon icon="solar:link-linear" />
-                      {talent.website.replace(/^https?:\/\//, '')}
-                    </a>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-sm text-muted-foreground">
+                    {talent.location && (
+                      <span className="flex items-center gap-1">
+                        <Icon icon="solar:map-point-linear" className="shrink-0" />
+                        {talent.location}
+                      </span>
+                    )}
+                    {talent.website && (
+                      <a
+                        href={talent.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 hover:text-primary transition-colors"
+                      >
+                        <Icon icon="solar:link-linear" className="shrink-0" />
+                        {talent.website.replace(/^https?:\/\//, '')}
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                {/* Score + actions */}
+                <div className="flex shrink-0 items-center gap-3 sm:flex-col sm:items-end">
+                  {bestScore !== null && (
+                    <div className={`flex flex-col items-center justify-center rounded-xl border-2 bg-card p-4 w-24 ${scoreBorderColor(bestScore)}`}>
+                      <span className={`font-mono text-3xl font-black leading-none ${scoreColor(bestScore)}`}>
+                        {bestScore}
+                      </span>
+                      <span className="mt-1 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                        Best Score
+                      </span>
+                    </div>
                   )}
+                  <button
+                    type="button"
+                    onClick={toggleShortlist}
+                    className={`flex items-center gap-2 rounded-lg border px-4 py-2 font-mono text-xs transition-colors ${
+                      talent.isShortlisted
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
+                    }`}
+                  >
+                    <Icon
+                      icon={talent.isShortlisted ? 'solar:bookmark-bold' : 'solar:bookmark-linear'}
+                      className="text-base"
+                    />
+                    {talent.isShortlisted ? 'Saved' : 'Shortlist'}
+                  </button>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={toggleShortlist}
-                className="flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:bg-secondary"
-              >
-                <Icon
-                  icon={talent.isShortlisted ? 'solar:bookmark-bold' : 'solar:bookmark-linear'}
-                  className={talent.isShortlisted ? 'text-primary' : ''}
-                />
-                {talent.isShortlisted ? 'Shortlisted' : 'Save'}
-              </button>
             </div>
 
             {/* Assessments */}
             <section>
-              <h2 className="mb-4 text-lg font-semibold">Assessments</h2>
+              <h2 className="mb-3 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Assessments ({talent.assessments.length})
+              </h2>
               {talent.assessments.length === 0 ? (
-                <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground text-sm">
+                <div className="rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
                   No assessments yet.
                 </div>
               ) : (
-                <div className="overflow-hidden rounded-xl border border-border">
-                  <table className="w-full text-sm">
-                    <thead className="border-b border-border bg-secondary/30">
-                      <tr>
-                        <th className="px-4 py-3 text-left font-semibold">Repository</th>
-                        <th className="px-4 py-3 text-left font-semibold">Type</th>
-                        <th className="px-4 py-3 text-center font-semibold">Score</th>
-                        <th className="px-4 py-3 text-left font-semibold">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {talent.assessments.map((a, idx) => (
-                        <tr
-                          key={a.id}
-                          className={`border-b border-border last:border-0 transition-colors hover:bg-secondary/20 ${idx % 2 === 0 ? '' : 'bg-secondary/10'}`}
-                        >
-                          <td className="px-4 py-3">
-                            <a
-                              href={a.repoUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1 hover:text-primary"
-                            >
-                              <Icon icon="solar:code-square-linear" className="shrink-0" />
-                              {a.repoOwner}/{a.repoName}
-                            </a>
-                          </td>
-                          <td className="px-4 py-3 text-muted-foreground capitalize">
-                            {a.assessmentType.toLowerCase()}
-                          </td>
-                          <td className="px-4 py-3 text-center">
-                            <span className={`font-mono font-bold text-lg ${scoreColor(a.overallScore)}`}>
-                              {a.overallScore}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-muted-foreground">
-                            {new Date(a.generatedAt).toLocaleDateString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="space-y-2">
+                  {talent.assessments.map((a) => (
+                    <div
+                      key={a.id}
+                      className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:bg-secondary/20"
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary">
+                          <Icon icon="solar:code-square-linear" className="text-base text-muted-foreground" />
+                        </div>
+                        <div className="min-w-0">
+                          <a
+                            href={a.repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block truncate font-mono text-sm font-medium hover:text-primary transition-colors"
+                          >
+                            {a.repoOwner}/{a.repoName}
+                          </a>
+                          <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                            {a.assessmentType.toLowerCase()} · {new Date(a.generatedAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <span className={`shrink-0 font-mono text-2xl font-black ${scoreColor(a.overallScore)}`}>
+                        {a.overallScore}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               )}
             </section>
 
-            {/* Contact form */}
+            {/* Contact */}
             {talent.allowContact && (
               <section>
-                <h2 className="mb-4 text-lg font-semibold">Contact Developer</h2>
+                <h2 className="mb-3 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Send a Message
+                </h2>
                 <div className="rounded-xl border border-border bg-card p-6">
                   {sent ? (
                     <div className="flex items-center gap-2 text-green-400">
-                      <Icon icon="solar:check-circle-bold" />
-                      Message sent successfully.
+                      <Icon icon="solar:check-circle-bold" className="text-xl" />
+                      <span className="font-mono text-sm">Message sent successfully.</span>
                     </div>
                   ) : (
                     <form onSubmit={sendContact} className="space-y-4">
                       <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Write your message (10–2000 characters)..."
+                        placeholder={`Write your message to ${displayName}…`}
                         rows={5}
                         minLength={10}
                         maxLength={2000}
                         required
-                        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                        className="w-full resize-none rounded-lg border border-border bg-background px-4 py-3 font-mono text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none"
                       />
                       {sendError && (
-                        <p className="text-sm text-red-400">{sendError}</p>
+                        <p className="font-mono text-xs text-red-400">{sendError}</p>
                       )}
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">{message.length}/2000</span>
+                        <span className="font-mono text-xs text-muted-foreground">
+                          {message.length}/2000
+                        </span>
                         <button
                           type="submit"
                           disabled={sending || message.length < 10}
-                          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity disabled:opacity-50"
+                          className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 font-mono text-xs font-bold text-primary-foreground transition-opacity disabled:opacity-50"
                         >
                           {sending && <Icon icon="solar:spinner-bold" className="animate-spin" />}
                           Send Message

@@ -24,15 +24,22 @@ export const patchMeHandler: RouteHandler<typeof patchMeRoute, Env> = async (c) 
   const updated = await prisma.profile.update({
     where: { userId },
     data: {
+      ...(body.fullName !== undefined && { fullName: body.fullName }),
+      ...(body.role !== undefined && { role: body.role }),
+      ...(body.location !== undefined && { location: body.location }),
+      ...(body.website !== undefined && { website: body.website }),
       ...(body.userType !== undefined && { userType: body.userType }),
-      ...(body.companyName !== undefined && { companyName: body.companyName }),
-      ...(body.industry !== undefined && { industry: body.industry }),
+      ...(body.activeCompanyId !== undefined && { activeCompanyId: body.activeCompanyId }),
+      ...(body.userType === 'DEVELOPER' && { activeCompanyId: null }),
       ...(body.allowContact !== undefined && { allowContact: body.allowContact }),
     },
     select: {
+      fullName: true,
+      role: true,
+      location: true,
+      website: true,
       userType: true,
-      companyName: true,
-      industry: true,
+      activeCompanyId: true,
       allowContact: true,
     },
   });

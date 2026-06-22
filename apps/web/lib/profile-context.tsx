@@ -6,6 +6,13 @@ import { useApi } from './api-context';
 
 export type UserType = 'DEVELOPER' | 'COMPANY';
 
+export type CompanySummary = {
+  id: string;
+  name: string;
+  industry: string | null;
+  createdAt: string;
+};
+
 type Profile = {
   userId: string;
   fullName: string;
@@ -16,8 +23,9 @@ type Profile = {
   avatarUrl?: string | null;
   isPro: boolean;
   userType: UserType | null;
-  companyName: string | null;
-  industry: string | null;
+  activeCompanyId: string | null;
+  activeCompany: CompanySummary | null;
+  companies: CompanySummary[];
   allowContact: boolean;
 };
 

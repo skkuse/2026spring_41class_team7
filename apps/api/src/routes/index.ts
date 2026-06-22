@@ -51,6 +51,12 @@ import { postShortlistHandler } from './shortlist/post-shortlist.handler.js';
 import { postShortlistRoute } from './shortlist/post-shortlist.route.js';
 import { deleteShortlistHandler } from './shortlist/delete-shortlist.handler.js';
 import { deleteShortlistRoute } from './shortlist/delete-shortlist.route.js';
+import { postCompanyHandler } from './companies/post-company.handler.js';
+import { postCompanyRoute } from './companies/post-company.route.js';
+import { listCompaniesHandler } from './companies/list-companies.handler.js';
+import { listCompaniesRoute } from './companies/list-companies.route.js';
+import { patchCompanyHandler } from './companies/patch-company.handler.js';
+import { patchCompanyRoute } from './companies/patch-company.route.js';
 
 export const registerRoutes = (app: OpenAPIHono<Env>) => {
   app.openapi(getExampleRoute, getExampleHandler);
@@ -83,6 +89,11 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
 
   // Contact (company only — handler enforces)
   app.openapi(contactTalentRoute, contactTalentHandler);
+
+  // Companies
+  app.openapi(listCompaniesRoute, listCompaniesHandler);
+  app.openapi(postCompanyRoute, postCompanyHandler);
+  app.openapi(patchCompanyRoute, patchCompanyHandler);
 
   // Shortlist (company only — middleware enforces)
   app.use('/v1/shortlist*', requireCompany);

@@ -216,7 +216,7 @@ export default function DocumentsPage() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl p-6">
+      <section className="mx-auto max-w-6xl px-6 py-10">
         {loading && (
           <p className="font-mono text-xs text-muted-foreground">Loading documents…</p>
         )}

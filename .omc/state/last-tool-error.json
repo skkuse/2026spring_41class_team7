@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git checkout --ours .omc/state/hud-stdin-cache.json .omc/state/last-tool-error.json .omc/state/subagent-tracking.json .omc/project-memory.json Dockerfile railway.toml && git checkout --the...",
-  "error": "Exit code 1\nUpdated 6 paths from the index\nUpdated 2 paths from the index\nThe following paths are ignored by one of your .gitignore files:\n.omc\nhint: Use -f if you really want to add them.\nhint: Disable this message with \"git config set advice.addIgnoredFile false\"",
-  "timestamp": "2026-06-12T02:22:42.688Z",
+  "tool_input_preview": "{\"command\":\"git add apps/web/app/company/talent/\\\\[userId\\\\]/page.tsx && git commit -m \\\"refactor(talent): extract CompanyHeader component in detail page\\\" && git push\",\"description\":\"Commit linter re...",
+  "error": "Exit code 1\nOn branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   .omc/project-memory.json\n\tmodified:   .omc/state/hud-stdin-cache.json\n\tmodified:   .omc/state/last-tool-error.json\n\tmodified:   .omc/state/subagent-tracking.json\n\tmodified:   apps/cli/.omc/state/last-tool-error.json\n\tmodified:   apps/cli/.omc/state/...",
+  "timestamp": "2026-06-21T20:23:56.822Z",
   "retry_count": 1
 }

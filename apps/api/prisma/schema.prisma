@@ -4,8 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserType {
@@ -14,23 +15,35 @@ enum UserType {
 }
 
 model Profile {
-  id           String    @id @default(cuid())
-  userId       String    @unique
-  fullName     String
-  email        String
-  role         String
-  location     String
-  website      String?
-  avatarUrl    String?
-  isPro        Boolean   @default(false)
-  userType     UserType?
-  companyName  String?
-  industry     String?
-  allowContact Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  projects     Project[]
-  invoices     Invoice[]
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  fullName        String
+  email           String
+  role            String
+  location        String
+  website         String?
+  avatarUrl       String?
+  isPro           Boolean   @default(false)
+  userType        UserType?
+  activeCompanyId String?
+  allowContact    Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  projects        Project[]
+  invoices        Invoice[]
+  companies       Company[]
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  industry  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
 }
 
 model Project {

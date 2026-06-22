@@ -4,8 +4,8 @@ import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { CompanyHeader } from '../../../components/company/company-header';
 import { useApi } from '../../../lib/api-context';
-import { useProfile } from '../../../lib/profile-context';
 
 type TalentItem = {
   userId: string;
@@ -14,14 +14,13 @@ type TalentItem = {
   location: string;
   website: string | null;
   allowContact: boolean;
-  bestScore: number;
+  bestScore: number | null;
   assessmentCount: number;
   isShortlisted: boolean;
 };
 
 export default function TalentDirectoryPage() {
   const { get, post, delete: del } = useApi();
-  const { profile } = useProfile();
   const [items, setItems] = useState<TalentItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,18 +50,7 @@ export default function TalentDirectoryPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Icon icon="solar:bolt-bold" className="text-2xl text-primary" />
-          <span className="font-heading text-xl font-black tracking-tighter">
-            Job<span className="text-primary">claw</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-muted-foreground">{profile?.companyName}</span>
-          <Link href="/settings" className="text-sm text-muted-foreground hover:text-foreground">Settings</Link>
-        </div>
-      </header>
+      <CompanyHeader />
 
       <main className="mx-auto max-w-5xl px-6 py-10">
         <div className="mb-8">
@@ -90,46 +78,76 @@ export default function TalentDirectoryPage() {
                   <th className="px-4 py-3 text-left font-semibold">Location</th>
                   <th className="px-4 py-3 text-center font-semibold">Best Score</th>
                   <th className="px-4 py-3 text-center font-semibold">Assessments</th>
-                  <th className="px-4 py-3 text-center font-semibold">Save</th>
+                  <th className="px-4 py-3 text-center font-semibold">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((item, idx) => (
+                {items.map((item, idx) => {
+                  const rank = idx + 1;
+                  const topPct = items.length > 1
+                    ? Math.round(((items.length - rank) / (items.length - 1)) * 100)
+                    : null;
+                  return (
                   <tr
                     key={item.userId}
                     className={`border-b border-border last:border-0 transition-colors hover:bg-secondary/20 ${idx % 2 === 0 ? '' : 'bg-secondary/10'}`}
                   >
                     <td className="px-4 py-3">
-                      <Link
-                        href={`/company/talent/${item.userId}`}
-                        className="font-medium hover:text-primary hover:underline"
-                      >
-                        {item.fullName}
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary font-mono text-[10px] text-muted-foreground">
+                          #{rank}
+                        </span>
+                        <div>
+                          <Link
+                            href={`/company/talent/${item.userId}`}
+                            className="font-medium hover:text-primary hover:underline"
+                          >
+                            {item.fullName || 'Anonymous Developer'}
+                          </Link>
+                          {topPct !== null && (
+                            <p className="text-[10px] text-muted-foreground font-mono">
+                              Top {topPct}%
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{item.role}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{item.location}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{item.role || '—'}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{item.location || '—'}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`font-mono font-bold text-lg ${scoreColor(item.bestScore)}`}>
-                        {item.bestScore}
-                      </span>
+                      {item.bestScore != null ? (
+                        <span className={`font-mono font-bold text-lg ${scoreColor(item.bestScore)}`}>
+                          {item.bestScore}
+                        </span>
+                      ) : (
+                        <span className="font-mono text-sm text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center text-muted-foreground">{item.assessmentCount}</td>
-                    <td className="px-4 py-3 text-center">
-                      <button
-                        type="button"
-                        onClick={() => toggleShortlist(item)}
-                        className="transition-colors hover:text-primary"
-                        title={item.isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
-                      >
-                        <Icon
-                          icon={item.isShortlisted ? 'solar:bookmark-bold' : 'solar:bookmark-linear'}
-                          className={`text-xl ${item.isShortlisted ? 'text-primary' : 'text-muted-foreground'}`}
-                        />
-                      </button>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          href={`/company/talent/${item.userId}`}
+                          className="rounded-lg border border-border px-3 py-1 font-mono text-xs text-foreground transition-colors hover:border-primary hover:text-primary"
+                        >
+                          View
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => toggleShortlist(item)}
+                          className="transition-colors hover:text-primary"
+                          title={item.isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
+                        >
+                          <Icon
+                            icon={item.isShortlisted ? 'solar:bookmark-bold' : 'solar:bookmark-linear'}
+                            className={`text-xl ${item.isShortlisted ? 'text-primary' : 'text-muted-foreground'}`}
+                          />
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

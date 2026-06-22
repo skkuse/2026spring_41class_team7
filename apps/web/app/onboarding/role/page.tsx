@@ -9,9 +9,10 @@ import { useProfile } from '../../../lib/profile-context';
 
 export default function RoleSelectionPage() {
   const router = useRouter();
-  const { patch } = useApi();
+  const { patch, post } = useApi();
   const { profile, isLoading, refetch } = useProfile();
   const [selected, setSelected] = useState<'DEVELOPER' | 'COMPANY' | null>(null);
+  const [devName, setDevName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [industry, setIndustry] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -27,13 +28,18 @@ export default function RoleSelectionPage() {
     if (selected === 'COMPANY' && !companyName.trim()) return;
     setSubmitting(true);
     try {
-      await patch('/v1/me', {
-        userType: selected,
-        ...(selected === 'COMPANY' && { companyName: companyName.trim(), industry: industry.trim() || undefined }),
-      });
-      refetch();
-      if (selected === 'DEVELOPER') router.push('/home');
-      else router.push('/company/talent');
+      if (selected === 'DEVELOPER') {
+        await patch('/v1/me', { userType: 'DEVELOPER', fullName: devName.trim() });
+        refetch();
+        router.push('/home');
+      } else {
+        await post('/v1/companies', {
+          name: companyName.trim(),
+          industry: industry.trim() || undefined,
+        });
+        refetch();
+        router.push('/company/talent');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -92,6 +98,19 @@ export default function RoleSelectionPage() {
           </button>
         </div>
 
+        {selected === 'DEVELOPER' && (
+          <div className="mb-6 rounded-xl border border-border bg-card p-4">
+            <p className="mb-3 font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground">How should we call you?</p>
+            <input
+              value={devName}
+              onChange={(e) => setDevName(e.target.value)}
+              placeholder="Your full name"
+              autoFocus
+              className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:border-primary focus:outline-none"
+            />
+          </div>
+        )}
+
         {selected === 'COMPANY' && (
           <div className="mb-6 space-y-3 rounded-xl border border-border bg-card p-4">
             <input
@@ -112,7 +131,7 @@ export default function RoleSelectionPage() {
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!selected || submitting || (selected === 'COMPANY' && !companyName.trim())}
+          disabled={!selected || submitting || (selected === 'COMPANY' && !companyName.trim()) || (selected === 'DEVELOPER' && !devName.trim())}
           className="w-full rounded-xl bg-primary px-6 py-4 font-bold text-primary-foreground transition-opacity disabled:opacity-40"
         >
           {submitting ? 'Setting up…' : 'Continue'}

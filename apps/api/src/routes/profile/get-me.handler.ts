@@ -1,4 +1,3 @@
-
 import type { RouteHandler } from '@hono/zod-openapi';
 
 import type { Env } from '../../types.js';
@@ -19,10 +18,13 @@ export const getMeHandler: RouteHandler<typeof getMeRoute, Env> = async (c) => {
       website: true,
       isPro: true,
       userType: true,
-      companyName: true,
-      industry: true,
+      activeCompanyId: true,
       allowContact: true,
       avatarUrl: true,
+      companies: {
+        select: { id: true, name: true, industry: true, createdAt: true },
+        orderBy: { createdAt: 'asc' },
+      },
     },
   });
 
@@ -30,5 +32,16 @@ export const getMeHandler: RouteHandler<typeof getMeRoute, Env> = async (c) => {
     return c.json({ message: 'Profile not found.' }, 404);
   }
 
-  return c.json(profile, 200);
+  const companies = profile.companies.map((c) => ({
+    ...c,
+    createdAt: c.createdAt.toISOString(),
+  }));
+
+  const activeCompany = companies.find((c) => c.id === profile.activeCompanyId) ?? null;
+
+  return c.json({
+    ...profile,
+    companies,
+    activeCompany,
+  }, 200);
 };

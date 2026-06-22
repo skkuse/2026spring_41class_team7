@@ -266,6 +266,91 @@ curl -sS -X POST "${API_BASE:-http://localhost:3001}/v1/projects/analyze-github"
 
 ---
 
+---
+
+## 3. Local portfolio generation (CLI `publish`)
+
+### Motivation
+
+`POST /v1/portfolio/generate` is designed for the **web builder**: it relies on the server's `OPENAI_API_KEY` and operates on assessment records already stored in the database. The **CLI `publish` command** takes a different path — it reads assessment artifacts from the local filesystem and uses the **developer's own OpenAI API key** (resolved from the local machine) to generate portfolio section summaries before uploading them to the server.
+
+This keeps server-side API costs out of the publish path and lets each developer use the model tier they prefer.
+
+### Key resolution order (CLI)
+
+1. `OPENAI_API_KEY` environment variable (wins if set).
+2. `~/.jobclaw/secrets.json` — written by `jobclaw init`.
+3. If neither is present → publish aborts with an error directing the user to `jobclaw doctor`.
+
+### End-to-end flow
+
+1. **`jobclaw publish`** reads the two local artifacts:
+   - **`<repo>/.jobclaw/scan-result.json`** (from `assess` step 1)
+   - **Latest `<repo>/.jobclaw/assessments/<timestamp>.json`** (from `assess` step 2)
+2. CLI resolves the local OpenAI key using the order above.
+3. For **each** assessment entry the CLI calls `chat.completions.create` directly — the same system prompt and `json_object` response format used by the server's generate handler — producing a `PortfolioSectionData` object per assessment.
+4. CLI calls **`POST /v1/portfolio/save`** (authenticated via the stored Supabase session token) with the generated `sections` array.
+5. Server persists the portfolio document under the user's profile and returns `{ documentId }`.
+6. CLI prints the public URL pattern: `https://jobclaw.fyi/{github-username}/{repo-name}`.
+
+```mermaid
+sequenceDiagram
+  participant L as Local machine (CLI)
+  participant O as OpenAI (local key)
+  participant A as Hono API (/v1/portfolio/save)
+  participant DB as PostgreSQL
+
+  L->>L: read scan-result.json + assessments/*.json
+  L->>O: chat.completions (local OPENAI_API_KEY, json_object)
+  O-->>L: PortfolioSectionData[] (JSON)
+  L->>A: POST /v1/portfolio/save (Bearer, { sections })
+  A->>DB: upsert Document (content = sections)
+  A-->>L: 200 { documentId }
+  L-->>L: print jobclaw.fyi URL
+```
+
+### Output shape (per section)
+
+Same as the server generate path — the CLI uses the identical system prompt:
+
+```ts
+type PortfolioSectionData = {
+  assessmentId: string;
+  repoOwner: string;
+  repoName: string;
+  overallScore: number;
+  headline: string;   // 8–14 words, punchy, past-tense
+  summary: string;    // 2–3 first-person sentences
+  role: string;       // inferred engineering role
+  duration: string;   // e.g. "~6 months"
+  techStack: string[];
+  highlights: { title: string; description: string }[];
+  impact: string;
+};
+```
+
+### Comparison: server generate vs. CLI local generate
+
+| Dimension | `POST /v1/portfolio/generate` (web) | `jobclaw publish` (CLI) |
+|-----------|--------------------------------------|--------------------------|
+| Who calls OpenAI | Server (uses server `OPENAI_API_KEY`) | Local machine (uses `~/.jobclaw/secrets.json` or env) |
+| Input source | Assessment rows from PostgreSQL | Local `.jobclaw/` JSON files |
+| Auth to API | Supabase JWT (browser session) | Supabase JWT (CLI stored token) |
+| Output path | Returns sections to the web builder for editing | Sends directly to `POST /v1/portfolio/save` |
+| User controls model tier | No | Yes — resolved from local key/env |
+
+### Error codes (`POST /v1/portfolio/save`)
+
+| Code | When |
+|------|------|
+| **200** | Portfolio saved; returns `{ documentId }`. |
+| **400** | Invalid or empty `sections` array. |
+| **401** | Missing / expired bearer token. |
+| **404** | Authenticated user has no `Profile` row yet. |
+| **500** | Unhandled server error. |
+
+---
+
 ## Source of truth in the repo
 
 | Concern | Location |
@@ -278,6 +363,9 @@ curl -sS -X POST "${API_BASE:-http://localhost:3001}/v1/projects/analyze-github"
 | PDF/DOCX extraction | `apps/api/src/lib/extract-document-text.ts` |
 | GitHub snapshot fetch | `apps/api/src/lib/github-repo-metadata.ts` |
 | OpenAI client + model | `apps/api/src/lib/openai-client.ts` |
+| Portfolio generate handler (server-side) | `apps/api/src/routes/portfolio/post-generate.handler.ts` |
+| Portfolio save handler | `apps/api/src/routes/portfolio/post-save.handler.ts` |
+| CLI publish logic | `apps/cli/src/lib/publish-logic.ts` |
 | Env examples | `apps/api/.env.example` |
 
 If you need **shared TypeScript types** in the Next.js app, consider re-exporting or duplicating these shapes in `packages/shared-types` so web and API stay aligned with the same field names as in `ai-extract.schema.ts`.

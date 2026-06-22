@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1781210151503,
-  "projectRoot": "/Users/hyungsukkang/hskang9/2026spring_41class_team7",
+  "lastScanned": 1782057727279,
+  "projectRoot": "/home/hskan/hskang9/2026spring_41class_team7",
   "techStack": {
     "languages": [
       {
@@ -18,7 +18,7 @@
     "runtime": null
   },
   "build": {
-    "buildCommand": "pnpm build",
+    "buildCommand": "pnpm --filter @jobclaw/web exec tsc --noEmit 2>&1 | head -30",
     "testCommand": null,
     "lintCommand": "pnpm lint",
     "devCommand": "pnpm dev",
@@ -30,7 +30,8 @@
       "lint": "turbo run lint",
       "typecheck": "turbo run typecheck",
       "jobclaw": "jobclaw",
-      "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts"
+      "projects": "pnpm --filter @jobclaw/project-management exec tsx src/cli.ts",
+      "export-pdf": "node export-pdf.mjs"
     }
   },
   "conventions": {
@@ -45,10 +46,7 @@
     "mainDirectories": [
       "docs"
     ],
-    "gitBranches": {
-      "defaultBranch": "main",
-      "branchingStrategy": null
-    }
+    "gitBranches": null
   },
   "customNotes": [],
   "directoryMap": {
@@ -56,14 +54,14 @@
       "path": "apps",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1781210151484,
+      "lastAccessed": 1782057727268,
       "keyFiles": []
     },
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 4,
-      "lastAccessed": 1781210151484,
+      "lastAccessed": 1782057727269,
       "keyFiles": [
         "SRS.md",
         "ai-openai-hono-extraction.md",
@@ -71,198 +69,327 @@
         "supabase-auth.md"
       ]
     },
+    "example-backend": {
+      "path": "example-backend",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1782057727274,
+      "keyFiles": [
+        "package-lock.json",
+        "package.json",
+        "tsconfig.json"
+      ]
+    },
     "packages": {
       "path": "packages",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1781210151487,
+      "lastAccessed": 1782057727275,
       "keyFiles": []
     },
     "apps/api": {
       "path": "apps/api",
       "purpose": "API routes",
       "fileCount": 4,
-      "lastAccessed": 1781210151488,
+      "lastAccessed": 1782057727276,
       "keyFiles": [
         "package.json",
         "tsconfig.json",
         "vitest.config.ts"
       ]
+    },
+    "example-backend/src": {
+      "path": "example-backend/src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1782057727277,
+      "keyFiles": [
+        "index.ts",
+        "types.ts"
+      ]
     }
   },
   "hotPaths": [
     {
-      "path": "apps/cli/src/commands/assess.tsx",
-      "accessCount": 10,
-      "lastAccessed": 1781215278677,
+      "path": "apps/web/app/company/talent/page.tsx",
+      "accessCount": 18,
+      "lastAccessed": 1782074066897,
       "type": "file"
     },
     {
-      "path": "Dockerfile",
+      "path": "apps/web/app/company/talent/[userId]/page.tsx",
+      "accessCount": 13,
+      "lastAccessed": 1782073985087,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/opengraph-image.tsx",
+      "accessCount": 12,
+      "lastAccessed": 1782077679921,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/settings/responsive-settings.tsx",
+      "accessCount": 11,
+      "lastAccessed": 1782073992549,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/settings/settings-desktop.tsx",
+      "accessCount": 11,
+      "lastAccessed": 1782074126449,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/company/settings/page.tsx",
+      "accessCount": 9,
+      "lastAccessed": 1782074068367,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/settings/settings-mobile.tsx",
+      "accessCount": 9,
+      "lastAccessed": 1782074104394,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/settings/settings-tablet.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1782074104932,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/user-menu.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1782069688461,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/onboarding/role/page.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1782071867672,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/talent/contact-talent.handler.ts",
+      "accessCount": 6,
+      "lastAccessed": 1782072102009,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/settings/settings-types.ts",
       "accessCount": 5,
-      "lastAccessed": 1781220416475,
-      "type": "file"
-    },
-    {
-      "path": "railway.toml",
-      "accessCount": 4,
-      "lastAccessed": 1781220426783,
+      "lastAccessed": 1782069056662,
       "type": "file"
     },
     {
       "path": "apps/web/components/landing.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1781212107305,
+      "accessCount": 5,
+      "lastAccessed": 1782078448395,
       "type": "file"
     },
     {
-      "path": "apps/web/components/onboarding.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1781212109176,
+      "path": "apps/api/src/routes/talent/list-talent.handler.ts",
+      "accessCount": 4,
+      "lastAccessed": 1782070564129,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/commands/publish.tsx",
+      "path": "apps/web/app/company/layout.tsx",
       "accessCount": 3,
-      "lastAccessed": 1781215299485,
+      "lastAccessed": 1782073228958,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/commands/publish-assessment.tsx",
+      "path": "apps/web/app/settings/page.tsx",
       "accessCount": 3,
-      "lastAccessed": 1781215315409,
+      "lastAccessed": 1782074065974,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/lib/publish-assessment-logic.ts",
+      "path": "apps/web/app/documents/page.tsx",
       "accessCount": 3,
-      "lastAccessed": 1781216674483,
+      "lastAccessed": 1782074131051,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/billing/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1782074134276,
       "type": "file"
     },
     {
       "path": "apps/web/app/layout.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1782074937850,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/prisma/schema.prisma",
       "accessCount": 2,
-      "lastAccessed": 1781212101320,
+      "lastAccessed": 1782065118428,
       "type": "file"
     },
     {
-      "path": "apps/cli/package.json",
+      "path": "apps/api/src/routes/profile/get-me.handler.ts",
       "accessCount": 2,
-      "lastAccessed": 1781216434955,
+      "lastAccessed": 1782069679473,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/index.ts",
+      "path": "apps/web/app/onboarding/company/page.tsx",
       "accessCount": 2,
-      "lastAccessed": 1781217414023,
+      "lastAccessed": 1782069746476,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/lib/backend-assessment.ts",
-      "accessCount": 1,
-      "lastAccessed": 1781214921875,
+      "path": "apps/web/app/home/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782074064579,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/lib/assessment-kinds.ts",
-      "accessCount": 1,
-      "lastAccessed": 1781215009794,
+      "path": "apps/web/app/dev/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782074065070,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/commands/assess-result.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1781215042316,
+      "path": "apps/web/app/profile/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782074065475,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/commands/init.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1781215153356,
+      "path": "apps/web/components/home/home-desktop.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782074072749,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/ui/index.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1781215233993,
+      "path": "apps/web/components/company/company-header.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782074074284,
       "type": "file"
     },
     {
-      "path": "apps/cli/src/lib/publish-logic.ts",
-      "accessCount": 1,
-      "lastAccessed": 1781216325862,
+      "path": "apps/web/components/profile/profile-desktop.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782074074694,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/assessments/post-assessment.handler.ts",
+      "path": "apps/api/src/routes/talent/list-talent.response.schema.ts",
       "accessCount": 1,
-      "lastAccessed": 1781216338041,
+      "lastAccessed": 1782063089065,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/assessments/get-assessment.handler.ts",
+      "path": "apps/api/src/routes/profile/get-me.response.schema.ts",
       "accessCount": 1,
-      "lastAccessed": 1781217356299,
+      "lastAccessed": 1782065032621,
       "type": "file"
     },
     {
-      "path": "apps/web/app/projects/[id]/page.tsx",
+      "path": "apps/api/src/routes/profile/patch-me.handler.ts",
       "accessCount": 1,
-      "lastAccessed": 1781217356413,
+      "lastAccessed": 1782065032850,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/assessments/get-assessment.route.ts",
+      "path": "apps/api/src/routes/profile/patch-me.request.schema.ts",
       "accessCount": 1,
-      "lastAccessed": 1781217370687,
+      "lastAccessed": 1782065033070,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/shortlist/post-shortlist.handler.ts",
+      "accessCount": 1,
+      "lastAccessed": 1782065033251,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/profile/patch-me.route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1782067685998,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/lib/profile-context.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1782069683749,
+      "type": "file"
+    },
+    {
+      "path": "apps/api/src/routes/companies/post-company.handler.ts",
+      "accessCount": 1,
+      "lastAccessed": 1782069730003,
       "type": "file"
     },
     {
       "path": "apps/web/lib/api-context.tsx",
       "accessCount": 1,
-      "lastAccessed": 1781217371158,
+      "lastAccessed": 1782070114749,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/assessments/get-assessment.response.schema.ts",
+      "path": "apps/web/lib/supabase-auth-bridge.tsx",
       "accessCount": 1,
-      "lastAccessed": 1781217378948,
+      "lastAccessed": 1782070157898,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/assessments/get-public-assessment.route.ts",
+      "path": "apps/web/middleware.ts",
       "accessCount": 1,
-      "lastAccessed": 1781217400500,
+      "lastAccessed": 1782070231334,
       "type": "file"
     },
     {
-      "path": "apps/api/src/routes/assessments/get-public-assessment.handler.ts",
+      "path": "apps/api/src/routes/talent/get-talent.handler.ts",
       "accessCount": 1,
-      "lastAccessed": 1781217405928,
+      "lastAccessed": 1782071712162,
       "type": "file"
     },
     {
-      "path": "apps/web/app/[username]/[repo]/page.tsx",
+      "path": "apps/api/src/routes/talent/contact-talent.request.schema.ts",
       "accessCount": 1,
-      "lastAccessed": 1781217449752,
+      "lastAccessed": 1782072037350,
       "type": "file"
     },
     {
-      "path": ".dockerignore",
+      "path": "apps/web/components/home/dashboard-desktop-header.tsx",
       "accessCount": 1,
-      "lastAccessed": 1781218728991,
+      "lastAccessed": 1782073255067,
       "type": "file"
     },
     {
-      "path": "apps/api/src/index.ts",
+      "path": "apps/web/app/onboarding/page.tsx",
       "accessCount": 1,
-      "lastAccessed": 1781220235585,
+      "lastAccessed": 1782073986463,
       "type": "file"
     },
     {
-      "path": "apps/api/src/middlewares/auth.ts",
+      "path": "apps/web/components/home/responsive-home.tsx",
       "accessCount": 1,
-      "lastAccessed": 1781220343438,
+      "lastAccessed": 1782073991856,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/profile/responsive-profile.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1782073992072,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/components/home/home-mobile.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1782074073269,
+      "type": "file"
+    },
+    {
+      "path": "apps/web/app/company/talent/[userId]/opengraph-image.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1782074897496,
       "type": "file"
     }
   ],

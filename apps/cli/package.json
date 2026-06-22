@@ -9,6 +9,9 @@
   "bin": {
     "jobclaw": "dist/index.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "tsx watch src/index.tsx",
     "build": "tsc -p tsconfig.json && chmod +x dist/index.js",

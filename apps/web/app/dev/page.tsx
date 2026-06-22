@@ -9,7 +9,7 @@ const routes = [
   '/onboarding',
   '/builder',
   '/preview',
-  '/documents',
+  '/portfolios',
   '/profile',
   '/settings',
   '/billing',

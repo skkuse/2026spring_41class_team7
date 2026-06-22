@@ -4,6 +4,8 @@ import path from "node:path";
 import { Box, Text, useInput } from "ink";
 import { attemptPublishAssessment } from "../lib/publish-assessment-logic.js";
 import { FREE_PUBLISH_LIMIT, recordSubscription } from "../lib/publish-logic.js";
+import { runOAuthFlow } from "../lib/browser-auth.js";
+import { saveSession } from "../lib/auth-store.js";
 import { ErrorBox, Spinner, SuccessBox, WarningBox } from "../ui/index.js";
 
 const SUBSCRIBE_URL = "https://jobclaw.fyi/subscribe";
@@ -27,6 +29,7 @@ function parsePublishAssessmentArgs(cwd: string, argv: string[]): {
 
 type View =
   | { phase: "working" }
+  | { phase: "logging-in" }
   | { phase: "blocked" }
   | { phase: "done"; url: string; detail: string }
   | { phase: "error"; message: string };
@@ -52,6 +55,37 @@ export default function PublishAssessmentCommand({
 
   const run = useCallback(async () => {
     const out = await attemptPublishAssessment({ cwd, projectRoot });
+    if (out.kind === "needs-login") {
+      setView({ phase: "logging-in" });
+      const result = await runOAuthFlow((url) => {
+        console.error(`Opening browser for GitHub login…\nIf it did not open, visit:\n  ${url}\n`);
+      });
+      if (!result.ok) {
+        setView({ phase: "error", message: `Login failed: ${result.error}` });
+        finish(1);
+        return;
+      }
+      await saveSession(result.session);
+      setView({ phase: "working" });
+      const retryOut = await attemptPublishAssessment({ cwd, projectRoot });
+      if (retryOut.kind === "blocked") {
+        setView({ phase: "blocked" });
+        return;
+      }
+      if (retryOut.kind === "error") {
+        setView({ phase: "error", message: retryOut.message });
+        finish(1);
+        return;
+      }
+      if (retryOut.kind === "needs-login") {
+        setView({ phase: "error", message: "Login succeeded but session was not saved. Try again." });
+        finish(1);
+        return;
+      }
+      setView({ phase: "done", url: retryOut.url, detail: retryOut.detail });
+      finish(0);
+      return;
+    }
     if (out.kind === "blocked") {
       setView({ phase: "blocked" });
       return;
@@ -101,6 +135,11 @@ export default function PublishAssessmentCommand({
             setView({ phase: "blocked" });
             return;
           }
+          if (out.kind === "needs-login") {
+            setView({ phase: "error", message: "Session expired. Run jobclaw publish again to log in." });
+            finish(1);
+            return;
+          }
           setView({ phase: "done", url: out.url, detail: out.detail });
           finish(0);
         } else {
@@ -133,6 +172,11 @@ export default function PublishAssessmentCommand({
             setView({ phase: "blocked" });
             return;
           }
+          if (out.kind === "needs-login") {
+            setView({ phase: "error", message: "Session expired. Run jobclaw publish again to log in." });
+            finish(1);
+            return;
+          }
           setView({ phase: "done", url: out.url, detail: out.detail });
           finish(0);
         })();
@@ -151,6 +195,14 @@ export default function PublishAssessmentCommand({
         <Box marginLeft={2} marginTop={1}>
           <Text dimColor>{projectRoot}</Text>
         </Box>
+      </Box>
+    );
+  }
+
+  if (view.phase === "logging-in") {
+    return (
+      <Box flexDirection="column" marginTop={1}>
+        <Spinner label="Waiting for GitHub login…" />
       </Box>
     );
   }

@@ -19,10 +19,10 @@ export const dashboardNavItems: readonly DashboardNavItem[] = [
     match: (p) => p.startsWith('/builder'),
   },
   {
-    href: '/documents',
+    href: '/portfolios',
     label: 'Portfolios',
     icon: 'hugeicons:folder-01',
-    match: (p) => p.startsWith('/documents'),
+    match: (p) => p.startsWith('/portfolios'),
   },
   {
     href: '/profile',
@@ -35,7 +35,7 @@ export const dashboardNavItems: readonly DashboardNavItem[] = [
 const DASHBOARD_PATH_PREFIXES = [
   '/home',
   '/builder',
-  '/documents',
+  '/portfolios',
   '/profile',
   '/settings',
   '/preview',

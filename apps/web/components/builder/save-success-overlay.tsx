@@ -66,7 +66,7 @@ export function SaveSuccessOverlay({
         {/* CTAs */}
         <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
           <Link
-            href="/documents"
+            href="/portfolios"
             className="flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-mono text-xs font-black uppercase tracking-widest text-primary-foreground shadow-[0_0_40px_rgba(201,100,66,0.3)] transition-opacity hover:opacity-90"
           >
             <Icon icon="solar:document-bold" className="text-base" />

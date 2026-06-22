@@ -6,7 +6,7 @@ import { latestAssessmentFile } from "./assessment-record.js";
 import type { AssessmentRecordFile } from "./assessment-record.js";
 import { FREE_PUBLISH_LIMIT } from "./publish-logic.js";
 import type { ScanResultFile } from "./scan-types.js";
-import { getSession } from "./auth-store.js";
+import { getSession, clearSession } from "./auth-store.js";
 
 const JOBCLAW_API_URL =
   process.env.JOBCLAW_API_URL?.replace(/\/$/, "") ??
@@ -14,6 +14,7 @@ const JOBCLAW_API_URL =
 
 export type PublishAssessmentOutcome =
   | { kind: "blocked" }
+  | { kind: "needs-login" }
   | { kind: "error"; message: string }
   | {
       kind: "ok";
@@ -85,7 +86,7 @@ export async function attemptPublishAssessment(input: {
 
   const session = await getSession();
   if (!session) {
-    return { kind: "error", message: "Run jobclaw login first to publish assessments." };
+    return { kind: "needs-login" };
   }
 
   const slug = await gitOriginSlug(input.cwd);
@@ -120,6 +121,10 @@ export async function attemptPublishAssessment(input: {
       },
       body: JSON.stringify(payload),
     });
+    if (res.status === 401) {
+      await clearSession();
+      return { kind: "needs-login" };
+    }
     if (!res.ok) {
       const text = await res.text().catch(() => res.statusText);
       return { kind: "error", message: `API error ${res.status}: ${text}` };

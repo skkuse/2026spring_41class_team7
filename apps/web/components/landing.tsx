@@ -25,7 +25,7 @@ export function Landing() {
               <a href="#templates" className="hover:text-primary transition-colors">
                 Templates
               </a>
-              <Link href="/documents" className="hover:text-primary transition-colors">
+              <Link href="/portfolios" className="hover:text-primary transition-colors">
                 Portfolios
               </Link>
             </div>
@@ -85,7 +85,7 @@ export function Landing() {
                 />
               </Link>
               <Link
-                href="/documents"
+                href="/portfolios"
                 className="bg-secondary text-secondary-foreground border border-border px-8 py-5 rounded-2xl font-bold hover:bg-muted active:scale-95 transition-all text-lg inline-flex items-center justify-center"
               >
                 View Live Examples
@@ -329,7 +329,7 @@ export function Landing() {
               Build My Portfolio Free
             </Link>
             <Link
-              href="/documents"
+              href="/portfolios"
               className="bg-primary-foreground/10 backdrop-blur-md border border-primary-foreground/20 text-primary-foreground px-12 py-5 rounded-2xl font-bold hover:bg-primary-foreground/20 transition-all text-xl inline-flex items-center justify-center"
             >
               View Demo
@@ -410,7 +410,7 @@ export function Landing() {
             </h5>
             <ul className="space-y-4 text-sm text-muted-foreground font-medium">
               <li>
-                <Link href="/documents" className="hover:text-primary transition-colors">
+                <Link href="/portfolios" className="hover:text-primary transition-colors">
                   Portfolios
                 </Link>
               </li>
@@ -420,7 +420,7 @@ export function Landing() {
                 </a>
               </li>
               <li>
-                <Link href="/documents" className="hover:text-primary transition-colors">
+                <Link href="/portfolios" className="hover:text-primary transition-colors">
                   API Reference
                 </Link>
               </li>

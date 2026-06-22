@@ -83,6 +83,7 @@ export function SocialAuthButtons({ disabled = false, className }: Props) {
           <Icon icon="mdi:github" className="text-2xl" />
           Continue with GitHub
         </button>
+        {/* Google OAuth — not configured yet
         <button
           type="button"
           disabled={busy}
@@ -92,6 +93,8 @@ export function SocialAuthButtons({ disabled = false, className }: Props) {
           <Icon icon="logos:google-icon" className="text-xl" />
           Continue with Google
         </button>
+        */}
+        {/* LinkedIn OAuth — not configured yet
         <button
           type="button"
           disabled={busy}
@@ -101,6 +104,7 @@ export function SocialAuthButtons({ disabled = false, className }: Props) {
           <Icon icon="mdi:linkedin" className="text-2xl" />
           Continue with LinkedIn
         </button>
+        */}
       </div>
       {message ? (
         <p className="mt-4 text-center text-sm text-primary" role="alert">

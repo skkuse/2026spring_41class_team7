@@ -11,6 +11,8 @@ import { getPublicDocumentHandler } from './documents/get-public-document.handle
 import { getPublicDocumentRoute } from './documents/get-public-document.route.js';
 import { listDocumentsHandler } from './documents/list-documents.handler.js';
 import { listDocumentsRoute } from './documents/list-documents.route.js';
+import { patchDocumentHandler } from './documents/patch-document.handler.js';
+import { patchDocumentRoute } from './documents/patch-document.route.js';
 import { getExampleHandler } from './example/get-example.handler.js';
 import { getExampleRoute } from './example/get-example.route.js';
 import { getHealthHandler } from './health/get-health.handler.js';
@@ -74,6 +76,7 @@ export const registerRoutes = (app: OpenAPIHono<Env>) => {
   // Developer routes
   app.openapi(listDocumentsRoute, listDocumentsHandler);
   app.openapi(getDocumentRoute, getDocumentHandler);
+  app.openapi(patchDocumentRoute, patchDocumentHandler);
   app.openapi(listInvoicesRoute, listInvoicesHandler);
   app.openapi(postResumeParseRoute, postResumeParseHandler);
   app.openapi(postProjectGithubRoute, postProjectGithubHandler);

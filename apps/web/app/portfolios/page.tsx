@@ -113,7 +113,7 @@ function generatePortfolioHtml(name: string, sections: Section[]): string {
 }
 
 export default function DocumentsPage() {
-  const { get, authToken } = useApi();
+  const { get, patch, authToken } = useApi();
   const router = useRouter();
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -121,6 +121,8 @@ export default function DocumentsPage() {
   const [tab, setTab] = useState<Tab>('ALL');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [sharingDoc, setSharingDoc] = useState<DocumentItem | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState('');
 
   useEffect(() => {
     if (!authToken) {
@@ -169,6 +171,25 @@ export default function DocumentsPage() {
 
   function handleEdit(doc: DocumentItem) {
     router.push(`/builder?load=${doc.id}`);
+  }
+
+  function startRename(doc: DocumentItem) {
+    setEditingId(doc.id);
+    setEditingName(doc.name);
+  }
+
+  async function commitRename(doc: DocumentItem) {
+    const trimmed = editingName.trim();
+    setEditingId(null);
+    if (!trimmed || trimmed === doc.name) return;
+    try {
+      await patch(`/v1/documents/${doc.id}`, { name: trimmed });
+      setDocuments((prev) =>
+        prev.map((d) => (d.id === doc.id ? { ...d, name: trimmed } : d)),
+      );
+    } catch {
+      // silently revert — name stays as original in state
+    }
   }
 
   return (
@@ -252,13 +273,37 @@ export default function DocumentsPage() {
               <div>
                 <div className="mb-2 flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <button
-                      type="button"
-                      onClick={() => handleEdit(doc)}
-                      className="truncate font-mono text-xs font-bold hover:text-primary hover:underline text-left w-full"
-                    >
-                      {doc.name}
-                    </button>
+                    {editingId === doc.id ? (
+                      <input
+                        autoFocus
+                        value={editingName}
+                        onChange={(e) => setEditingName(e.target.value)}
+                        onBlur={() => commitRename(doc)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') commitRename(doc);
+                          if (e.key === 'Escape') setEditingId(null);
+                        }}
+                        className="w-full rounded border border-primary/40 bg-background px-1 font-mono text-xs font-bold focus:outline-none focus:ring-1 focus:ring-primary/40"
+                      />
+                    ) : (
+                      <div className="flex items-center gap-1 group">
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(doc)}
+                          className="truncate font-mono text-xs font-bold hover:text-primary hover:underline text-left"
+                        >
+                          {doc.name}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => startRename(doc)}
+                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground"
+                          title="Rename"
+                        >
+                          <Icon icon="solar:pen-linear" className="text-[11px]" />
+                        </button>
+                      </div>
+                    )}
                     <p className="mt-0.5 font-mono text-[9px] text-muted-foreground">
                       {doc.projectName}
                     </p>

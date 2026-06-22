@@ -286,7 +286,7 @@ export default function DocumentsPage() {
                         className="w-full rounded border border-primary/40 bg-background px-1 font-mono text-xs font-bold focus:outline-none focus:ring-1 focus:ring-primary/40"
                       />
                     ) : (
-                      <div className="flex items-center gap-1 group">
+                      <div className="flex items-center gap-1">
                         <button
                           type="button"
                           onClick={() => handleEdit(doc)}
@@ -297,7 +297,7 @@ export default function DocumentsPage() {
                         <button
                           type="button"
                           onClick={() => startRename(doc)}
-                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground"
+                          className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
                           title="Rename"
                         >
                           <Icon icon="solar:pen-linear" className="text-[11px]" />

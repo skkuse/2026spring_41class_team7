@@ -197,7 +197,7 @@ export function Landing() {
               </span>
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
-              What makes code &ldquo;good&rdquo; depends on the codebase. No single company can define the right metrics for every team. So we open-sourced the evaluation engine — and we need developers who&apos;ve done real code reviews to contribute the evaluators that actually matter.
+              What makes code &ldquo;good&rdquo; depends on the codebase? No single company can define the right metrics for every team. So we open-sourced the evaluation engine — and we need developers who&apos;ve done real code reviews to contribute the evaluators that actually matter.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a
@@ -216,7 +216,7 @@ export function Landing() {
                 className="bg-primary/10 border border-primary/30 text-primary px-8 py-5 rounded-2xl font-bold hover:bg-primary/20 active:scale-95 transition-all text-lg inline-flex items-center justify-center gap-3"
               >
                 <Icon icon="solar:code-bold" className="text-xl" />
-                Contribute an Evaluator
+                Contribute as Evaluator
               </a>
             </div>
           </div>

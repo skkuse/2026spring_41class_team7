@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"vercel env add NEXT_PUBLIC_API_BASE_URL preview main --value \\\"https://jobclaw-api-production.up.railway.app\\\" --yes 2>&1\",\"description\":\"Add API URL to Vercel preview env for main branch\"...",
-  "error": "Exit code 1\n<claude-code-hint v=\"1\" type=\"plugin\" value=\"vercel@claude-plugins-official\" />\n{\n  \"status\": \"error\",\n  \"reason\": \"not_linked\",\n  \"message\": \"Your codebase isn't linked to a project on Vercel. Run vercel link to begin. Use --yes for non-interactive; use --scope or --project to specify team or project. Then run your env add command.\",\n  \"next\": [\n    {\n      \"command\": \"vercel link --scope <scope> --yes\"\n    },\n    {\n      \"command\": \"vercel env add NEXT_PUBLIC_API_BASE_URL preview m...",
-  "timestamp": "2026-05-25T16:24:28.430Z",
+  "tool_input_preview": "{\"command\":\"npm publish --access public 2>&1\",\"description\":\"Publish jobclaw@0.2.1 to npm\"}",
+  "error": "Exit code 1\nnpm notice\nnpm notice 📦  jobclaw@0.2.1\nnpm notice Tarball Contents\nnpm notice 214B dist/app.js\nnpm notice 4.7kB dist/cli.js\nnpm notice 684B dist/commands/ascii-mascot.js\nnpm notice 4.2kB dist/commands/assess-result.js\nnpm notice 8.8kB dist/commands/assess.js\nnpm notice 341B dist/commands/banner-static.js\nnpm notice 1.7kB dist/commands/doctor.js\nnpm notice 4.2kB dist/commands/evaluate-result.js\nnpm notice 8.8kB dist/commands/evaluate.js\nnpm notice 1.1kB dist/commands/filled-logo.js\nn...",
+  "timestamp": "2026-06-21T14:25:43.320Z",
   "retry_count": 1
 }

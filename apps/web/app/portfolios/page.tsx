@@ -123,6 +123,7 @@ export default function DocumentsPage() {
   const [sharingDoc, setSharingDoc] = useState<DocumentItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
+  const [savingId, setSavingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authToken) {
@@ -182,6 +183,7 @@ export default function DocumentsPage() {
     const trimmed = editingName.trim();
     setEditingId(null);
     if (!trimmed || trimmed === doc.name) return;
+    setSavingId(doc.id);
     try {
       await patch(`/v1/documents/${doc.id}`, { name: trimmed });
       setDocuments((prev) =>
@@ -189,6 +191,8 @@ export default function DocumentsPage() {
       );
     } catch {
       // silently revert — name stays as original in state
+    } finally {
+      setSavingId(null);
     }
   }
 
@@ -274,17 +278,39 @@ export default function DocumentsPage() {
                 <div className="mb-2 flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     {editingId === doc.id ? (
-                      <input
-                        autoFocus
-                        value={editingName}
-                        onChange={(e) => setEditingName(e.target.value)}
-                        onBlur={() => commitRename(doc)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') commitRename(doc);
-                          if (e.key === 'Escape') setEditingId(null);
-                        }}
-                        className="w-full rounded border border-primary/40 bg-background px-1 font-mono text-xs font-bold focus:outline-none focus:ring-1 focus:ring-primary/40"
-                      />
+                      <div className="flex items-center gap-1">
+                        <input
+                          autoFocus
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') commitRename(doc);
+                            if (e.key === 'Escape') setEditingId(null);
+                          }}
+                          className="min-w-0 flex-1 rounded border border-primary/40 bg-background px-1 font-mono text-xs font-bold focus:outline-none focus:ring-1 focus:ring-primary/40"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => commitRename(doc)}
+                          className="shrink-0 text-primary hover:text-primary/80 transition-colors"
+                          title="Confirm"
+                        >
+                          <Icon icon="solar:check-circle-linear" className="text-base" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingId(null)}
+                          className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                          title="Cancel"
+                        >
+                          <Icon icon="solar:close-circle-linear" className="text-base" />
+                        </button>
+                      </div>
+                    ) : savingId === doc.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <Icon icon="solar:spinner-linear" className="animate-spin text-xs text-muted-foreground" />
+                        <span className="truncate font-mono text-xs font-bold text-muted-foreground">{doc.name}</span>
+                      </div>
                     ) : (
                       <div className="flex items-center gap-1">
                         <button
